@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pillsy", "Pillsy\Pillsy.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessObject", "BusinessObject\BusinessObject.csproj", "{DF5DDC08-5DC0-44B2-AC69-EF18753A0F7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer", "DataAcessLayer\DataAccessLayer.csproj", "{164244D2-F04A-4101-BCDD-74F1CB4F7B3E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessObject", "DataAcessLayer\DataAccessObject.csproj", "{164244D2-F04A-4101-BCDD-74F1CB4F7B3E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{60D95A65-D79F-4CCE-90EC-D851DA90D0E4}"
 EndProject
