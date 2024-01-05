@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataAcessLayer\DataAccessObject.csproj" />
+    <ProjectReference Include="..\DataAcessObject\DataAcessObject.csproj" />
   </ItemGroup>
 
 </Project>
