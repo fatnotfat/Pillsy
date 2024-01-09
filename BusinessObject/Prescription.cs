@@ -18,6 +18,7 @@ namespace BusinessObject
         public Patient Patient { get; set; }
         public Doctor Doctor { get; set; }
         public string Image { get; set; }
+        public int Index { get; set; }
         public List<Pill> Pills { get; set; }
     }
 }

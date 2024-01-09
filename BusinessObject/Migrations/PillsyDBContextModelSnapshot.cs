@@ -65,26 +65,32 @@ namespace BusinessObject.Migrations
                     b.HasData(
                         new
                         {
-                            AccountId = new Guid("e07bcd98-b2dc-417d-947d-428c44a8f10b"),
+                            AccountId = new Guid("1b7a0741-07bd-4100-ab14-60471fc7f300"),
+                            CreatedDate = new DateTime(2024, 1, 6, 9, 38, 48, 569, DateTimeKind.Utc).AddTicks(1662),
                             Email = "nguyenphat2711@gmail.com",
+                            LastModifiedDate = new DateTime(2024, 1, 6, 9, 38, 48, 569, DateTimeKind.Utc).AddTicks(1665),
                             Password = "@@admin@@",
                             Role = 0,
                             Status = 1
                         },
                         new
                         {
-                            AccountId = new Guid("5e28a4ac-1e0a-4396-b07e-8fb46ebbfe6e"),
+                            AccountId = new Guid("0e4c3efe-e9c7-4c16-ad63-8bf8d13f2426"),
+                            CreatedDate = new DateTime(2024, 1, 6, 9, 38, 48, 569, DateTimeKind.Utc).AddTicks(1668),
                             Email = "dungnvse160223@fpt.edu.vn",
+                            LastModifiedDate = new DateTime(2024, 1, 6, 9, 38, 48, 569, DateTimeKind.Utc).AddTicks(1669),
                             Password = "@@patient@@",
                             Role = 2,
                             Status = 1
                         },
                         new
                         {
-                            AccountId = new Guid("54f2a9ae-4ccc-43ec-9f46-414236155f21"),
+                            AccountId = new Guid("306c1109-46c0-4131-b3cb-cdba5db21fc9"),
+                            CreatedDate = new DateTime(2024, 1, 6, 9, 38, 48, 569, DateTimeKind.Utc).AddTicks(1671),
                             Email = "khoatruong2509@fpt.edu.vn",
+                            LastModifiedDate = new DateTime(2024, 1, 6, 9, 38, 48, 569, DateTimeKind.Utc).AddTicks(1672),
                             Password = "@@doctor@@",
-                            Role = 3,
+                            Role = 1,
                             Status = 1
                         });
                 });

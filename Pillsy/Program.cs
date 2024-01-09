@@ -2,7 +2,11 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Pillsy.Helpers;
+using Repository;
 using Repository.Interfaces;
+using Service;
+using Service.Interfaces;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -18,6 +22,10 @@ namespace Pillsy
 
             builder.Services.AddControllers().AddJsonOptions(options =>
                             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Conventions.Add(new LowercaseControllerModelConvention());
+            });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(option =>
@@ -50,8 +58,10 @@ namespace Pillsy
             //Add DI for repo and service
             //builder.Services.AddTransient<IDoctorRepository, DoctorRepository>();
             //builder.Services.AddTransient<IDoctorService, DoctorService>();
-            //builder.Services.AddTransient<IAccountRepository, AccountRepository>();
-            //builder.Services.AddTransient<IAccountService, AccountService>();
+            builder.Services.AddTransient<IAccountRepository, AccountRepository>();
+            builder.Services.AddTransient<IAccountService, AccountService>();
+            builder.Services.AddTransient<IPatientRepository, PatientRepository>();
+            builder.Services.AddTransient<IPatientService, PatientService>();
             //
 
 
@@ -83,6 +93,10 @@ namespace Pillsy
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
                 };
             });
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Pillsy API", Version = "v1" });
+            });
 
             var app = builder.Build();
 
@@ -92,6 +106,15 @@ namespace Pillsy
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            // Configure method
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Pillsy API V1");
+                c.RoutePrefix = string.Empty; // Set the root path for Swagger UI
+            });
+
 
             app.UseAuthentication();
             app.UseHttpsRedirection();

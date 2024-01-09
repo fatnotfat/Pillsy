@@ -20,5 +20,6 @@ namespace BusinessObject
         public Prescription Prescription { get; set; }
         public Guid ScheduleId { get; set; }
         public Schedule Schedule { get; set; }
+        public int Index { get; set; }
     }
 }

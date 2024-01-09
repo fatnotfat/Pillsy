@@ -66,7 +66,11 @@ namespace BusinessObject
                     Email = "nguyenphat2711@gmail.com",
                     Password = "@@admin@@",
                     Role = 0,
-                    Status = 1
+                    Status = 1,
+                    CreatedBy = null,
+                    CreatedDate = DateTime.UtcNow,
+                    LastModifiedDate = DateTime.UtcNow,
+                    ModifiedBy = null
                 },
                 new Account
                 {
@@ -74,16 +78,48 @@ namespace BusinessObject
                     Email = "dungnvse160223@fpt.edu.vn",
                     Password = "@@patient@@",
                     Role = 2,
-                    Status = 1
+                    Status = 1,
+                    CreatedBy = null,
+                    CreatedDate = DateTime.UtcNow,
+                    LastModifiedDate = DateTime.UtcNow,
+                    ModifiedBy = null
                 },
                 new Account
                 {
                     AccountId = accountId3,
                     Email = "khoatruong2509@fpt.edu.vn",
                     Password = "@@doctor@@",
-                    Role = 3,
-                    Status = 1
+                    Role = 1,
+                    Status = 1,
+                    CreatedBy = null,
+                    CreatedDate = DateTime.UtcNow,
+                    LastModifiedDate = DateTime.UtcNow,
+                    ModifiedBy = null
                 });
+            builder.Entity<Payment>().HasData(new Payment
+            {
+                PaymentId = paymentId1,
+                PaymentType = "Momo",
+                CreatedBy = null,
+                CreatedDate = DateTime.UtcNow,
+                LastModifiedDate = DateTime.UtcNow,
+                ModifiedBy= null
+            });
+
+            builder.Entity<Patient>().HasData(new Patient
+            {
+                PatientID = patientId1,
+                FirstName = "Dung",
+                LastName = "Nguyen",
+                DateOfBirth = DateTime.Parse("2002-30-09"),
+                Gender = 0,
+                PaymentId = paymentId1,
+                Address = "Bac Ninh",
+                CreatedBy = accountId2,
+                CreatedDate = DateTime.UtcNow,
+                LastModifiedDate = DateTime.UtcNow,
+                ModifiedBy= accountId2
+            });
 
             //Take all configurations of entities from Infrastructures.FluentAPIs
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

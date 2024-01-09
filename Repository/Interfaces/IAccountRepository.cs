@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessObject;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,10 @@ namespace Repository.Interfaces
 {
     public interface IAccountRepository
     {
+        Task<IEnumerable<Account>> GetAccounts();
+        Task<Account> GetByEmailAndPassword(string email, string password);
+        Task<Account> GetById (Guid id);
+        Task<Account> AddNew(Account account);
+        Task<Account> GetByEmail(string email);
     }
 }

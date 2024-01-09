@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Pillsy.DataTransferObjects
+namespace Pillsy.DataTransferObjects.Account.AccountDTO
 {
     public class AccountDTO
     {
