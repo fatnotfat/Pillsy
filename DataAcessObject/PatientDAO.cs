@@ -12,7 +12,7 @@ namespace DataAcessObject
     public class PatientDAO
     {
 
-        private static PatientDAO instance = null;
+        private static PatientDAO? instance = null;
 
         public static PatientDAO Instance
         {
@@ -26,24 +26,72 @@ namespace DataAcessObject
             }
         }
 
-        public async Task<IEnumerable<Patient>> GetPatients()
+        public async Task<IEnumerable<Patient>> GetPatientsAsync()
         {
             var _context = new PillsyDBContext();
             var result = await _context.Patients.ToListAsync();
-            if (result != null)
+            if (result == null)
             {
-                return result;
+                throw new Exception("Patient not found!");
             }
-            return null;
+            return result;
         }
 
-        public async Task<Patient> GetPatientById(Guid patientId)
+        public async Task<Patient> GetPatientByIdAsync(Guid patientId)
         {
-            var _context = new PillsyDBContext();
-            return await _context.Patients.FirstOrDefaultAsync(a => a.PatientID.Equals(patientId));
+            try
+            {
+                var _context = new PillsyDBContext();
+                var patient = await _context.Patients.Include(p => p.Prescriptions).FirstOrDefaultAsync(a => a.PatientID.Equals(patientId));
+                if (patient == null)
+                {
+                    throw new Exception("Patient not found!");
+                }
+
+                var prescriptions = _context.Prescriptions.Include(p => p.Pills).Where(p => p.PatientID.Equals(patient.PatientID));
+                patient.Prescriptions = prescriptions.ToList();
+
+
+                foreach (var item in patient.Prescriptions)
+                {
+                    foreach (var pill in item.Pills)
+                    {
+                        if (item.PrescriptionID.Equals(pill.PrescriptionId))
+                        {
+                            var pills = _context.Pills.Include(p => p.Schedule).Where(p => p.PrescriptionId.Equals(item.PrescriptionID));
+                            item.Pills = pills.ToList();
+                        }
+                    }
+                }
+
+
+
+                return patient;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public async Task<Patient> Add(Patient patient)
+        public async Task<bool> UpdatePatientAsync(Patient patient)
+        {
+            var isSuccess = false;
+            try
+            {
+                var _context = new PillsyDBContext();
+                _context.Entry(patient).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                isSuccess = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return isSuccess;
+        }
+
+        public async Task<Patient> AddAsync(Patient patient)
         {
             var _context = new PillsyDBContext();
             using var transaction = _context.Database.BeginTransaction();

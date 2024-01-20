@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BusinessObject.Migrations
 {
     /// <inheritdoc />
-    public partial class Initialize : Migration
+    public partial class Initialize_v10 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,7 +56,7 @@ namespace BusinessObject.Migrations
                     ScheduleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DateStart = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -184,11 +184,12 @@ namespace BusinessObject.Migrations
                 {
                     PrescriptionID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PatientID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DoctorID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DoctorID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ExaminationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Diagnosis = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Diagnosis = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Index = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -255,10 +256,16 @@ namespace BusinessObject.Migrations
                     PillId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PillName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PillDescription = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Frequency = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    Period = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DosagePerDay = table.Column<int>(type: "int", nullable: true, defaultValue: 0),
+                    Quantity = table.Column<int>(type: "int", nullable: true),
+                    QuantityPerDose = table.Column<int>(type: "int", nullable: true, defaultValue: 0),
+                    Period = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    Index = table.Column<int>(type: "int", nullable: false),
+                    Morning = table.Column<int>(type: "int", nullable: false),
+                    Afternoon = table.Column<int>(type: "int", nullable: false),
+                    Evening = table.Column<int>(type: "int", nullable: false),
                     PrescriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ScheduleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -287,9 +294,43 @@ namespace BusinessObject.Migrations
                 columns: new[] { "AccountId", "CreatedBy", "CreatedDate", "Email", "LastModifiedDate", "ModifiedBy", "Password", "Role", "Status" },
                 values: new object[,]
                 {
-                    { new Guid("0e4c3efe-e9c7-4c16-ad63-8bf8d13f2426"), null, new DateTime(2024, 1, 6, 9, 38, 48, 569, DateTimeKind.Utc).AddTicks(1668), "dungnvse160223@fpt.edu.vn", new DateTime(2024, 1, 6, 9, 38, 48, 569, DateTimeKind.Utc).AddTicks(1669), null, "@@patient@@", 2, 1 },
-                    { new Guid("1b7a0741-07bd-4100-ab14-60471fc7f300"), null, new DateTime(2024, 1, 6, 9, 38, 48, 569, DateTimeKind.Utc).AddTicks(1662), "nguyenphat2711@gmail.com", new DateTime(2024, 1, 6, 9, 38, 48, 569, DateTimeKind.Utc).AddTicks(1665), null, "@@admin@@", 0, 1 },
-                    { new Guid("306c1109-46c0-4131-b3cb-cdba5db21fc9"), null, new DateTime(2024, 1, 6, 9, 38, 48, 569, DateTimeKind.Utc).AddTicks(1671), "khoatruong2509@fpt.edu.vn", new DateTime(2024, 1, 6, 9, 38, 48, 569, DateTimeKind.Utc).AddTicks(1672), null, "@@doctor@@", 1, 1 }
+                    { new Guid("5fcc8b0e-4969-407b-9db0-6e01490500fd"), null, new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(5957), "dungnvse160223@fpt.edu.vn", new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(5958), null, "@@patient@@", 2, 1 },
+                    { new Guid("8ad40f75-c57a-4fec-98c2-ef229ddbe571"), null, new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(6023), "khoatruong2509@fpt.edu.vn", new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(6023), null, "@@doctor@@", 1, 1 },
+                    { new Guid("f52a1617-1265-4054-80f2-649e43b87b89"), null, new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(5950), "nguyenphat2711@gmail.com", new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(5954), null, "@@admin@@", 0, 1 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Payment",
+                columns: new[] { "PaymentId", "CreatedBy", "CreatedDate", "LastModifiedDate", "ModifiedBy", "PaymentType", "Status" },
+                values: new object[] { new Guid("96eb0644-ce19-4ebe-9b6d-481f6720560e"), null, new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(6184), new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(6185), null, "Momo", 0 });
+
+            migrationBuilder.InsertData(
+                table: "Schedule",
+                columns: new[] { "ScheduleId", "CreatedBy", "CreatedDate", "DateEnd", "DateStart", "LastModifiedDate", "ModifiedBy", "Notes", "Status" },
+                values: new object[] { new Guid("be9b3d2e-e848-48ae-acdb-7c1398c0d502"), new Guid("5fcc8b0e-4969-407b-9db0-6e01490500fd"), new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(6477), new DateTime(2024, 1, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(6461), new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(6478), new Guid("5fcc8b0e-4969-407b-9db0-6e01490500fd"), "Dung 3 lieu, moi ngay 1 lieu", 1 });
+
+            migrationBuilder.InsertData(
+                table: "Doctor",
+                columns: new[] { "DoctorID", "AccountId", "CreatedBy", "CreatedDate", "FirstName", "LastModifiedDate", "LastName", "ModifiedBy", "PhoneNumber", "Specialty" },
+                values: new object[] { new Guid("162fb2ec-d66a-41d1-9f2f-d6a352600a5e"), new Guid("8ad40f75-c57a-4fec-98c2-ef229ddbe571"), new Guid("8ad40f75-c57a-4fec-98c2-ef229ddbe571"), new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(6202), "Khoa", new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(6203), "Truong", new Guid("8ad40f75-c57a-4fec-98c2-ef229ddbe571"), "0987654321", "Khoa noi" });
+
+            migrationBuilder.InsertData(
+                table: "Patient",
+                columns: new[] { "PatientID", "AccountId", "Address", "CreatedBy", "CreatedDate", "DateOfBirth", "FirstName", "Gender", "LastModifiedDate", "LastName", "ModifiedBy", "PaymentId", "PhoneNumber" },
+                values: new object[] { new Guid("82babafb-13af-4a17-82f4-70cf44487c35"), new Guid("5fcc8b0e-4969-407b-9db0-6e01490500fd"), "Bac Ninh", new Guid("5fcc8b0e-4969-407b-9db0-6e01490500fd"), new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(6405), new DateTime(2002, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "Dung", 0, new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(6405), "Nguyen", new Guid("5fcc8b0e-4969-407b-9db0-6e01490500fd"), new Guid("96eb0644-ce19-4ebe-9b6d-481f6720560e"), "0123456789" });
+
+            migrationBuilder.InsertData(
+                table: "Prescription",
+                columns: new[] { "PrescriptionID", "CreatedBy", "CreatedDate", "Diagnosis", "DoctorID", "ExaminationDate", "Image", "Index", "LastModifiedDate", "ModifiedBy", "PatientID", "Status" },
+                values: new object[] { new Guid("52fda784-d359-4af2-80d2-65f8cc655614"), new Guid("5fcc8b0e-4969-407b-9db0-6e01490500fd"), new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(6501), "viem da day", new Guid("162fb2ec-d66a-41d1-9f2f-d6a352600a5e"), new DateTime(2024, 1, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), "test", 1, new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(6501), new Guid("5fcc8b0e-4969-407b-9db0-6e01490500fd"), new Guid("82babafb-13af-4a17-82f4-70cf44487c35"), 1 });
+
+            migrationBuilder.InsertData(
+                table: "Pill",
+                columns: new[] { "PillId", "Afternoon", "CreatedBy", "CreatedDate", "DosagePerDay", "Evening", "Index", "LastModifiedDate", "ModifiedBy", "Morning", "Period", "PillDescription", "PillName", "PrescriptionId", "Quantity", "QuantityPerDose", "ScheduleId", "Status", "Unit" },
+                values: new object[,]
+                {
+                    { new Guid("5f7ab433-1a11-4f5a-830a-15500aebbaa2"), 0, new Guid("5fcc8b0e-4969-407b-9db0-6e01490500fd"), new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(6519), 1, 0, 1, new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(6519), new Guid("5fcc8b0e-4969-407b-9db0-6e01490500fd"), 1, "ngay", "1 ngay uong 1 vien 30 phut sau khi an", "Nexium mup", new Guid("52fda784-d359-4af2-80d2-65f8cc655614"), 30, 1, new Guid("be9b3d2e-e848-48ae-acdb-7c1398c0d502"), 1, "vien" },
+                    { new Guid("f2ae4b54-003a-441e-ba5f-c1ab2c679b94"), 0, new Guid("5fcc8b0e-4969-407b-9db0-6e01490500fd"), new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(6534), 2, 1, 1, new DateTime(2024, 1, 19, 6, 31, 23, 263, DateTimeKind.Utc).AddTicks(6534), new Guid("5fcc8b0e-4969-407b-9db0-6e01490500fd"), 1, "ngay", "1 ngay uong 2 vien chia lam 2 lan(sang, toi - sau khi an)", "Amoxycilin", new Guid("52fda784-d359-4af2-80d2-65f8cc655614"), 20, 1, new Guid("be9b3d2e-e848-48ae-acdb-7c1398c0d502"), 1, "vien" }
                 });
 
             migrationBuilder.CreateIndex(

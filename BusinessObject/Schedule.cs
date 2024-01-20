@@ -12,7 +12,7 @@ namespace BusinessObject
         public Guid ScheduleId { get; set; }
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
         public int Status { get; set; }
 
     }

@@ -14,11 +14,11 @@ namespace BusinessObject.FluentAPIs
         {
             builder.ToTable("Prescription");
             builder.HasKey(x => x.PrescriptionID);
-            builder.Property(x => x.Diagnosis).HasMaxLength(255).IsRequired();
-            builder.Property(x => x.ExaminationDate).IsRequired();
-            builder.Property(x => x.DoctorID).IsRequired();
-            builder.Property(x => x.PatientID).IsRequired();
-            builder.Property(x => x.Status).IsRequired();
+            builder.Property(x => x.Diagnosis).HasMaxLength(255);
+            builder.Property(x => x.ExaminationDate);
+            builder.Property(x => x.DoctorID);
+            builder.Property(x => x.PatientID);
+            builder.Property(x => x.Status);
 
             builder.HasMany(x => x.Pills)
                 .WithOne(x => x.Prescription)

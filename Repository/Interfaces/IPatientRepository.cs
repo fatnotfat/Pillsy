@@ -9,8 +9,9 @@ namespace Repository.Interfaces
 {
     public interface IPatientRepository
     {
-        Task<IEnumerable<Patient>> GetPatients();
-        Task<Patient> GetById(Guid id);
-        Task<Patient> AddNew(Patient patient);
+        public Task<IEnumerable<Patient>> GetPatients();
+        public Task<Patient> GetById(Guid id);
+        public Task<Patient> AddNew(Patient patient);
+        public Task<bool> Update(Patient patient);
     }
 }

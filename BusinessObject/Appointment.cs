@@ -13,7 +13,7 @@ namespace BusinessObject
         public Guid PatientID { get; set; }
         public Guid DoctorID { get; set; }
         public DateTime AppointmentDate { get; set; }
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
         public int Status { get; set; }
         public Patient Patient { get; set; }
         public Doctor Doctor { get; set; }

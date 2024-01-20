@@ -9,8 +9,9 @@ namespace Service.Interfaces
 {
     public interface IPatientService
     {
-        Task<IEnumerable<Patient>> GetAllPatients();
-        Task<Patient> GetPatientById(Guid id);
-        Task<Patient> AddNewPatient(Patient patient);
+        public Task<IEnumerable<Patient>> GetAllPatients();
+        public Task<Patient> GetPatientById(Guid id);
+        public Task<Patient> AddNewPatient(Patient patient);
+        public Task<bool> UpdatePatientAsync(Patient patient);
     }
 }

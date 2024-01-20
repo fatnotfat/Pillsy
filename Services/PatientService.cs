@@ -28,7 +28,12 @@ namespace Service
 
         public async Task<Patient> GetPatientById(Guid id)
         {
-            throw new NotImplementedException();
+            return await _repository.GetById(id);
+        }
+
+        public async Task<bool> UpdatePatientAsync(Patient patient)
+        {
+            return await _repository.Update(patient);
         }
     }
 }

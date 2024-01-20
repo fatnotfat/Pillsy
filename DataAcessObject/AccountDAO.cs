@@ -63,7 +63,7 @@ namespace DataAcessObject
                 account.ModifiedBy = account.AccountId;
                 account.Status = 0;
 
-                _context.Accounts.AddAsync(account);
+                await _context.Accounts.AddAsync(account);
                 await _context.SaveChangesAsync();
                 transaction.Commit();
                 return account;
@@ -71,7 +71,7 @@ namespace DataAcessObject
             catch (Exception ex)
             {
                 transaction.Rollback();
-                return null;
+                throw ex;
             }
         }
     }

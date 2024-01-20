@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Pillsy.Helpers;
 using Repository;
 using Repository.Interfaces;
@@ -54,14 +55,25 @@ namespace Pillsy
                     }
                 });
             });
+            builder.Services.AddMvc()
+                    .AddNewtonsoftJson(
+                            options => { options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; }
+            );
 
             //Add DI for repo and service
-            //builder.Services.AddTransient<IDoctorRepository, DoctorRepository>();
-            //builder.Services.AddTransient<IDoctorService, DoctorService>();
+            builder.Services.AddTransient<IDoctorRepository, DoctorRepository>();
+            builder.Services.AddTransient<IDoctorService, DoctorService>();
             builder.Services.AddTransient<IAccountRepository, AccountRepository>();
             builder.Services.AddTransient<IAccountService, AccountService>();
             builder.Services.AddTransient<IPatientRepository, PatientRepository>();
             builder.Services.AddTransient<IPatientService, PatientService>();
+            builder.Services.AddTransient<IPillRepository, PillRepository>();
+            builder.Services.AddTransient<IPillService, PillService>();
+            builder.Services.AddTransient<IScheduleRepository, ScheduleRepository>();
+            builder.Services.AddTransient<IScheduleService, ScheduleService>();
+            builder.Services.AddTransient<IPrescriptionRepository, PrescriptionRepository>();
+            builder.Services.AddTransient<IPrescriptionService, PrescriptionService>();
+
             //
 
 

@@ -21,27 +21,50 @@ namespace Repository
         {
             try
             {
-                var result = await patientDAO.Add(patient);
-                if (result != null)
-                {
-                    return result;
-                }
-                return null;
+                var result = await patientDAO.AddAsync(patient);
+                return result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
-        public Task<Patient> GetById(Guid id)
+        public async Task<Patient> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await patientDAO.GetPatientByIdAsync(id);
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<IEnumerable<Patient>> GetPatients()
         {
-            return await patientDAO.GetPatients();
+            try
+            {
+                return await patientDAO.GetPatientsAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> Update(Patient patient)
+        {
+            try
+            {
+                return await patientDAO.UpdatePatientAsync(patient);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
