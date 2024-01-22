@@ -138,8 +138,6 @@ namespace Pillsy
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
-
-
             app.MapControllers();
             app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 

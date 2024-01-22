@@ -39,6 +39,16 @@ namespace BusinessObject
             optionsBuilder.UseSqlServer(GetConnectionString());
         }
 
+#if DEBUG
+        private string GetConnectionString()
+        {
+            IConfiguration config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.Development.json", true, true)
+                .Build();
+            return config["ConnectionStrings:DB"]!;
+        }
+#else
         private string GetConnectionString()
         {
             IConfiguration config = new ConfigurationBuilder()
@@ -47,6 +57,7 @@ namespace BusinessObject
                 .Build();
             return config["ConnectionStrings:DB"]!;
         }
+#endif
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
