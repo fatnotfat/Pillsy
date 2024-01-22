@@ -53,7 +53,7 @@ namespace Pillsy.Mappers
                 opt => opt.MapFrom(src => src.Evening)
             );
 
-            CreateMap<Pill, Medication_Records>()
+            CreateMap<Pill, Medication_records>()
             .ForMember(
                 dest => dest.Record_id,
                 opt => opt.MapFrom(src => src.PillId)

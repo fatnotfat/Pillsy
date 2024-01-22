@@ -11,5 +11,6 @@ namespace Repository.Interfaces
     {
         public Task<IEnumerable<Prescription>> GetAllPrescriptionsAsync();
         public Task<Prescription> GetPrescriptionsByPrescriptionIdAsync(Guid prescriptionId);
+        public Task<byte[]> AddAsync(Prescription prescription);
     }
 }

@@ -29,6 +29,12 @@ namespace Pillsy
             });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+#if DEBUG
+            builder.Configuration.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
+#else
+            builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+#endif
+
             builder.Services.AddSwaggerGen(option =>
             {
                 option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
@@ -61,16 +67,16 @@ namespace Pillsy
             );
 
             //Add DI for repo and service
-            builder.Services.AddTransient<IDoctorRepository, DoctorRepository>();
-            builder.Services.AddTransient<IDoctorService, DoctorService>();
+            //builder.Services.AddTransient<IDoctorRepository, DoctorRepository>();
+            //builder.Services.AddTransient<IDoctorService, DoctorService>();
             builder.Services.AddTransient<IAccountRepository, AccountRepository>();
             builder.Services.AddTransient<IAccountService, AccountService>();
             builder.Services.AddTransient<IPatientRepository, PatientRepository>();
             builder.Services.AddTransient<IPatientService, PatientService>();
-            builder.Services.AddTransient<IPillRepository, PillRepository>();
-            builder.Services.AddTransient<IPillService, PillService>();
-            builder.Services.AddTransient<IScheduleRepository, ScheduleRepository>();
-            builder.Services.AddTransient<IScheduleService, ScheduleService>();
+            //builder.Services.AddTransient<IPillRepository, PillRepository>();
+            //builder.Services.AddTransient<IPillService, PillService>();
+            //builder.Services.AddTransient<IScheduleRepository, ScheduleRepository>();
+            //builder.Services.AddTransient<IScheduleService, ScheduleService>();
             builder.Services.AddTransient<IPrescriptionRepository, PrescriptionRepository>();
             builder.Services.AddTransient<IPrescriptionService, PrescriptionService>();
 

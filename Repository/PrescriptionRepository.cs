@@ -16,6 +16,12 @@ namespace Repository
         {
             prescriptionDAO = new PrescriptionDAO();
         }
+
+        public async Task<byte[]> AddAsync(Prescription prescription)
+        {
+            return await prescriptionDAO.AddAsync(prescription);
+        }
+
         public async Task<IEnumerable<Prescription>> GetAllPrescriptionsAsync()
         {
             return await prescriptionDAO.GetAll();

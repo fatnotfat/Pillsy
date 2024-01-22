@@ -77,6 +77,7 @@ namespace Pillsy.Controllers.Accounts
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                         new Claim(ClaimTypes.Role, account.Role.ToString()),
+                        new Claim("AccountId", data.AccountId.ToString()),
                         new Claim("Email", account.Email),
                         new Claim("Role", account.Role.ToString())};
                     //create claims details based on the user information
@@ -97,65 +98,6 @@ namespace Pillsy.Controllers.Accounts
             return BadRequest("The value input should not be empty!");
         }
 
-        // GET: api/Accounts/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Account>> GetAccount(Guid id)
-        //{
-        //  if (_context.Accounts == null)
-        //  {
-        //      return NotFound();
-        //  }
-        //    var account = await _context.Accounts.FindAsync(id);
-
-        //    if (account == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return account;
-        //}
-
-        //// PUT: api/Accounts/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> UpdateAccount(Guid id, Account account)
-        //{
-        //    if (id != account.AccountId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(account).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!AccountExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
-        // POST: api/Accounts
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-
-
-        /// <summary>
-        /// Get values based on enum, array, or multi-value parameters.
-        /// </summary>
-        /// <param name="myEnum">Enum parameter.</param>
-        /// <param name="values">Array or multi-value parameter.</param>
-        /// <returns>Returns the result.</returns>
 
 
         [HttpPost]
@@ -172,29 +114,5 @@ namespace Pillsy.Controllers.Accounts
             return Ok("user " + account.AccountId + " was created");
         }
 
-        //// DELETE: api/Accounts/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteAccount(Guid id)
-        //{
-        //    if (_context.Accounts == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var account = await _context.Accounts.FindAsync(id);
-        //    if (account == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.Accounts.Remove(account);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        //private bool AccountExists(Guid id)
-        //{
-        //    return (_context.Accounts?.Any(e => e.AccountId == id)).GetValueOrDefault();
-        //}
     }
 }

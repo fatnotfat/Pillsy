@@ -74,6 +74,24 @@ namespace DataAcessObject
             }
         }
 
+        public async Task<Patient> GetPatientByAccountIdAsync(Guid accountId)
+        {
+            try
+            {
+                var _context = new PillsyDBContext();
+                var patient = await _context.Patients.FirstOrDefaultAsync(p => p.AccountId.Equals(accountId));
+                if (patient == null)
+                {
+                    throw new Exception("Patient not found!");
+                }
+                return patient;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<bool> UpdatePatientAsync(Patient patient)
         {
             var isSuccess = false;

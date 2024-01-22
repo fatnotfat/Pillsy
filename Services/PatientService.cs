@@ -26,6 +26,11 @@ namespace Service
             return await _repository.GetPatients();
         }
 
+        public async Task<Patient> GetPatientByAccountIdAsync(Guid id)
+        {
+            return await _repository.GetByAccountId(id);
+        }
+
         public async Task<Patient> GetPatientById(Guid id)
         {
             return await _repository.GetById(id);

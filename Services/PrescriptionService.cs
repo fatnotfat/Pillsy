@@ -1,5 +1,6 @@
 ﻿
 using BusinessObject;
+using Repository.Interfaces;
 using Service.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,14 +12,25 @@ namespace Service
 {
     public class PrescriptionService : IPrescriptionService
     {
-        public Task<IEnumerable<Prescription>> GetAllPrescriptionsAsync()
+        private readonly IPrescriptionRepository _prescriptionRepository;
+        public PrescriptionService(IPrescriptionRepository repo)
         {
-            throw new NotImplementedException();
+            _prescriptionRepository = repo;
         }
 
-        public Task<Prescription> GetPrescriptionsByPrescriptionIdAsync(Guid prescriptionId)
+        public async Task<byte[]> AddAsync(Prescription prescription)
         {
-            throw new NotImplementedException();
+            return await _prescriptionRepository.AddAsync(prescription);
+        }
+
+        public async Task<IEnumerable<Prescription>> GetAllPrescriptionsAsync()
+        {
+            return await _prescriptionRepository.GetAllPrescriptionsAsync();
+        }
+
+        public async Task<Prescription> GetPrescriptionsByPrescriptionIdAsync(Guid prescriptionId)
+        {
+            return await _prescriptionRepository.GetPrescriptionsByPrescriptionIdAsync(prescriptionId);
         }
     }
 }

@@ -1,12 +1,13 @@
-﻿using Pillsy.DataTransferObjects.Patient.PatientDetailDto;
-using Pillsy.DataTransferObjects.Prescription.PrescriptionCreateDto;
+﻿using Pillsy.DataTransferObjects.Prescription.PrescriptionCreateDto;
 
 
 namespace Pillsy.DataTransferObjects.Prescription.PrescriptionCreateDto
 {
     public class PrescriptionCreateDto
     {
-        public Userdata? Userdata { get; set; }
-        public Metadata? Metadata { get; set; }
+        public string? Status {  get; set; }
+        public User_data? User_data { get; set; }
+        public Metadata? Meta_data { get; set; }
+        public string? Error { get; set; }
     }
 }

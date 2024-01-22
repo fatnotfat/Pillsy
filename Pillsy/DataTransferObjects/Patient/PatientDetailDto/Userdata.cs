@@ -1,7 +1,7 @@
 ﻿namespace Pillsy.DataTransferObjects.Patient.PatientDetailDto
 {
-    public class Userdata
+    public class User_data
     {
-        public List<Medication_Records> Medication_records { get; set; }
+        public List<Medication_records> Medication_records { get; set; }
     }
 }

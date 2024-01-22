@@ -13,5 +13,7 @@ namespace Service.Interfaces
         public Task<Patient> GetPatientById(Guid id);
         public Task<Patient> AddNewPatient(Patient patient);
         public Task<bool> UpdatePatientAsync(Patient patient);
+        public Task<Patient> GetPatientByAccountIdAsync(Guid id);
+            
     }
 }

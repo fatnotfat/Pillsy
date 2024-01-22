@@ -2,7 +2,7 @@
 {
     public class PatientDetailDto
     {
-        public Userdata? Userdata { get; set; }
+        public User_data? User_data { get; set; }
         public Metadata? Metadata { get; set; }
     }
 }

@@ -133,64 +133,64 @@ namespace Pillsy.Controllers.Patients
             return Ok("Patient " + result.PatientID + " was created!");
         }
 
-        [HttpGet("{patientId}/prescriptions/detail")]
-        public async Task<ActionResult<PatientDetailDto>> GetPatientDetail(Guid id)
-        {
-            if (await _patientService.GetAllPatients() == null)
-            {
-                return NotFound();
-            }
-            var patient = await _patientService.GetPatientById(id);
+        //[HttpGet("{patientId}/prescriptions/detail")]
+        //public async Task<ActionResult<PatientDetailDto>> GetPatientDetail(Guid id)
+        //{
+        //    if (await _patientService.GetAllPatients() == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var patient = await _patientService.GetPatientById(id);
 
-            if (patient == null)
-            {
-                return NotFound();
-            }
+        //    if (patient == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var dataPres = patient.Prescriptions;
-            var patientDto = new PatientDetailDto
-            {
-                Userdata = new Userdata
-                {
-                    Medication_records = new List<Medication_Records>
-                    {
-                        new Medication_Records
-                        {
-                            Medication = new List<Medication>()
-                        }
-                    }
-                },
-                Metadata = new Metadata
-                {
+        //    var dataPres = patient.Prescriptions;
+        //    var patientDto = new PatientDetailDto
+        //    {
+        //        Userdata = new Userdata
+        //        {
+        //            Medication_records = new List<Medication_Records>
+        //            {
+        //                new Medication_Records
+        //                {
+        //                    Medication = new List<Medication>()
+        //                }
+        //            }
+        //        },
+        //        Metadata = new Metadata
+        //        {
 
-                }
-            };
-
-
-            var medRecords = new List<Medication_Records>();
+        //        }
+        //    };
 
 
-            foreach (var pres in dataPres)
-            {
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.AddProfile(new PillProfile());
-                    cfg.AddProfile(new ScheduleProfile());
-                    cfg.AddProfile(new PatientProfile());
-                });
-                var mapper = config.CreateMapper();
-                medRecords = pres.Pills.Select(mapper.Map<Pill, Medication_Records>).ToList();
-                foreach (var med in medRecords)
-                {
-                    med.Medication = pres.Pills.Where(p => p.PillId.Equals(med.Record_id)).Select(mapper.Map<Pill, Medication>).ToList();
-                }
-            }
+        //    var medRecords = new List<Medication_Records>();
 
-            patientDto.Userdata.Medication_records = medRecords;
 
-            return patientDto;
+        //    foreach (var pres in dataPres)
+        //    {
+        //        var config = new MapperConfiguration(cfg =>
+        //        {
+        //            cfg.AddProfile(new PillProfile());
+        //            cfg.AddProfile(new ScheduleProfile());
+        //            cfg.AddProfile(new PatientProfile());
+        //        });
+        //        var mapper = config.CreateMapper();
+        //        medRecords = pres.Pills.Select(mapper.Map<Pill, Medication_Records>).ToList();
+        //        foreach (var med in medRecords)
+        //        {
+        //            med.Medication = pres.Pills.Where(p => p.PillId.Equals(med.Record_id)).Select(mapper.Map<Pill, Medication>).ToList();
+        //        }
+        //    }
 
-        }
+        //    patientDto.Userdata.Medication_records = medRecords;
+
+        //    return patientDto;
+
+        //}
 
         // DELETE: api/Patients/5
         //[HttpDelete("{id}")]

@@ -67,25 +67,23 @@ namespace DataAcessObject
         }
 
 
-        public async Task<bool> AddAsync(Prescription prescription)
+        public async Task<byte[]> AddAsync(Prescription prescription)
         {
             var _context = new PillsyDBContext();
             using var transaction = _context.Database.BeginTransaction();
-            var result = false;
             try
             {
                 _context.Prescriptions.AddAsync(prescription);
                 await _context.SaveChangesAsync();
 
                 transaction.Commit();
-                result = true;
             }
             catch (Exception)
             {
                 transaction.Rollback();
                 throw;
             }
-            return result;
+            return prescription.ImageBase64;
         }
     }
 }

@@ -13,5 +13,7 @@ namespace Repository.Interfaces
         public Task<Patient> GetById(Guid id);
         public Task<Patient> AddNew(Patient patient);
         public Task<bool> Update(Patient patient);
+        public Task<Patient> GetByAccountId(Guid id);
+
     }
 }

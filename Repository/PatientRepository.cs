@@ -30,6 +30,19 @@ namespace Repository
             }
         }
 
+        public async Task<Patient> GetByAccountId(Guid id)
+        {
+            try
+            {
+                var result = await patientDAO.GetPatientByAccountIdAsync(id);
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<Patient> GetById(Guid id)
         {
             try
@@ -66,5 +79,7 @@ namespace Repository
                 throw;
             }
         }
+
+
     }
 }
