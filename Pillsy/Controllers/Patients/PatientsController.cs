@@ -192,29 +192,23 @@ namespace Pillsy.Controllers.Patients
 
         //}
 
-        // DELETE: api/Patients/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeletePatient(Guid id)
-        //{
-        //    if (_context.Patients == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var patient = await _context.Patients.FindAsync(id);
-        //    if (patient == null)
-        //    {
-        //        return NotFound();
-        //    }
+        //DELETE: api/Patients/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePatient(Guid id)
+        {
+            if (await _patientService.GetAllPatients() == null)
+            {
+                return NotFound();
+            }
+            var patient = await _patientService.GetPatientById(id);
+            if (patient == null)
+            {
+                return NotFound();
+            }
 
-        //    _context.Patients.Remove(patient);
-        //    await _context.SaveChangesAsync();
+            
 
-        //    return NoContent();
-        //}
-
-        //private bool PatientExists(Guid id)
-        //{
-        //    return (_context.Patients?.Any(e => e.PatientID == id)).GetValueOrDefault();
-        //}
+            return NoContent();
+        }
     }
 }
