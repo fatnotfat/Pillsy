@@ -26,14 +26,16 @@ namespace Pillsy.Controllers.Accounts
     public class AccountsController : ControllerBase
     {
         private readonly IAccountService _accountService;
+        private readonly IPatientService _patientService;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
-        public AccountsController(IAccountService accountService, IConfiguration configuration, IMapper mapper)
+        public AccountsController(IAccountService accountService, IConfiguration configuration, IMapper mapper, IPatientService patientService)
         {
             _accountService = accountService;
             _configuration = configuration;
             _mapper = mapper;
+            _patientService = patientService;
         }
 
         // GET: api/Accounts
@@ -72,6 +74,7 @@ namespace Pillsy.Controllers.Accounts
                 if (data != null)
                 {
                     var account = _mapper.Map<AccountDTO>(data);
+                    var patient = await _patientService.GetPatientByAccountIdAsync(data.AccountId);
                     var claims = new[] {
                         new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
@@ -79,7 +82,9 @@ namespace Pillsy.Controllers.Accounts
                         new Claim(ClaimTypes.Role, account.Role.ToString()),
                         new Claim("AccountId", data.AccountId.ToString()),
                         new Claim("Email", account.Email),
-                        new Claim("Role", account.Role.ToString())};
+                        new Claim("Role", account.Role.ToString()),
+                        new Claim("Username", patient.FirstName + " " + patient.LastName)
+                    };
                     //create claims details based on the user information
 
                     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
