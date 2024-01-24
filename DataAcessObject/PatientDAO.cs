@@ -48,21 +48,21 @@ namespace DataAcessObject
                     throw new Exception("Patient not found!");
                 }
 
-                var prescriptions = _context.Prescriptions.Include(p => p.Pills).Where(p => p.PatientID.Equals(patient.PatientID));
-                patient.Prescriptions = prescriptions.ToList();
+                //var prescriptions = _context.Prescriptions.Include(p => p.Pills).Where(p => p.PatientID.Equals(patient.PatientID));
+                //patient.Prescriptions = prescriptions.ToList();
 
 
-                foreach (var item in patient.Prescriptions)
-                {
-                    foreach (var pill in item.Pills)
-                    {
-                        if (item.PrescriptionID.Equals(pill.PrescriptionId))
-                        {
-                            var pills = _context.Pills.Include(p => p.Schedule).Where(p => p.PrescriptionId.Equals(item.PrescriptionID));
-                            item.Pills = pills.ToList();
-                        }
-                    }
-                }
+                //foreach (var item in patient.Prescriptions)
+                //{
+                //    foreach (var pill in item.Pills)
+                //    {
+                //        if (item.PrescriptionID.Equals(pill.PrescriptionId))
+                //        {
+                //            var pills = _context.Pills.Include(p => p.Schedule).Where(p => p.PrescriptionId.Equals(item.PrescriptionID));
+                //            item.Pills = pills.ToList();
+                //        }
+                //    }
+                //}
 
 
 

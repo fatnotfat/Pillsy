@@ -51,14 +51,22 @@ namespace Pillsy.Controllers.Patients
             {
                 return NotFound();
             }
-            var patient = await _patientService.GetPatientById(id);
-
-            if (patient == null)
+            try
             {
-                return NotFound();
-            }
+                var patient = await _patientService.GetPatientById(id);
 
-            return patient;
+                if (patient == null)
+                {
+                    return NotFound();
+                }
+
+                return patient;
+            }
+            catch(Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+            
         }
 
         // PUT: api/Patients/5

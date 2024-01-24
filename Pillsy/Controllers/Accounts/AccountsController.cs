@@ -70,12 +70,14 @@ namespace Pillsy.Controllers.Accounts
         {
             if (!String.IsNullOrEmpty(accountLoginDTO.Email) && !String.IsNullOrEmpty(accountLoginDTO.Password))
             {
-                var data = await _accountService.GetAccountByEmailAndPassword(accountLoginDTO.Email, accountLoginDTO.Password);
-                if (data != null)
+                try
                 {
-                    var account = _mapper.Map<AccountDTO>(data);
-                    var patient = await _patientService.GetPatientByAccountIdAsync(data.AccountId);
-                    var claims = new[] {
+                    var data = await _accountService.GetAccountByEmailAndPassword(accountLoginDTO.Email, accountLoginDTO.Password);
+                    if (data != null)
+                    {
+                        var account = _mapper.Map<AccountDTO>(data);
+                        var patient = await _patientService.GetPatientByAccountIdAsync(data.AccountId);
+                        var claims = new[] {
                         new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
@@ -85,20 +87,25 @@ namespace Pillsy.Controllers.Accounts
                         new Claim("Role", account.Role.ToString()),
                         new Claim("Username", patient.FirstName + " " + patient.LastName)
                     };
-                    //create claims details based on the user information
+                        //create claims details based on the user information
 
-                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-                    var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-                    var token = new JwtSecurityToken(
-                        _configuration["Jwt:Issuer"],
-                        _configuration["Jwt:Audience"],
-                        claims,
-                        expires: DateTime.UtcNow.AddMinutes(60),
-                        signingCredentials: signIn);
+                        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+                        var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                        var token = new JwtSecurityToken(
+                            _configuration["Jwt:Issuer"],
+                            _configuration["Jwt:Audience"],
+                            claims,
+                            expires: DateTime.UtcNow.AddMinutes(60),
+                            signingCredentials: signIn);
 
-                    return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+                        return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+                    }
+                    return BadRequest("Invalid credentials");
                 }
-                return BadRequest("Invalid credentials");
+                catch (Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
             }
             return BadRequest("The value input should not be empty!");
         }
