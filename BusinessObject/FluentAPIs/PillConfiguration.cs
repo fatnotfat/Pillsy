@@ -15,15 +15,8 @@ namespace BusinessObject.FluentAPIs
             builder.ToTable("Pill");
             builder.HasKey(x => x.PillId);
             builder.Property(x => x.PillName).HasMaxLength(100).IsRequired();
-            builder.Property(x => x.PillDescription).HasMaxLength(255).IsRequired();
             builder.Property(x => x.DosagePerDay).HasDefaultValue(0);
             builder.Property(x => x.QuantityPerDose).HasDefaultValue(0);
-            builder.Property(x => x.Period);
-            builder.Property(x => x.Unit);
-            builder.Property(x => x.Status);
-
-
-            builder.HasOne<Schedule>(x => x.Schedule);
 
         }
     }

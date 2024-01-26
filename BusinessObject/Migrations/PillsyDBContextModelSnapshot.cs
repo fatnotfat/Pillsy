@@ -65,30 +65,30 @@ namespace BusinessObject.Migrations
                     b.HasData(
                         new
                         {
-                            AccountId = new Guid("991aa4ef-c3fe-4dcd-a94a-171648b05161"),
-                            CreatedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1373),
+                            AccountId = new Guid("2b1efc3d-f1b9-49c6-bfbd-cf3480531fe3"),
+                            CreatedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6296),
                             Email = "nguyenphat2711@gmail.com",
-                            LastModifiedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1376),
+                            LastModifiedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6299),
                             Password = "@@admin@@",
                             Role = 0,
                             Status = 1
                         },
                         new
                         {
-                            AccountId = new Guid("4ba51276-7081-444d-a5e1-d5776b4caaef"),
-                            CreatedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1379),
+                            AccountId = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
+                            CreatedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6302),
                             Email = "dungnvse160223@fpt.edu.vn",
-                            LastModifiedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1379),
+                            LastModifiedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6303),
                             Password = "@@patient@@",
                             Role = 2,
                             Status = 1
                         },
                         new
                         {
-                            AccountId = new Guid("dc3e145d-59b6-4148-8d98-cab8876f5092"),
-                            CreatedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1381),
+                            AccountId = new Guid("03757b9d-60cf-483e-85ef-fc27c48657a9"),
+                            CreatedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6305),
                             Email = "khoatruong2509@fpt.edu.vn",
-                            LastModifiedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1382),
+                            LastModifiedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6305),
                             Password = "@@doctor@@",
                             Role = 1,
                             Status = 1
@@ -191,14 +191,14 @@ namespace BusinessObject.Migrations
                     b.HasData(
                         new
                         {
-                            DoctorID = new Guid("e1a2543b-39a6-45c4-a1b8-df6adf7ee41b"),
-                            AccountId = new Guid("dc3e145d-59b6-4148-8d98-cab8876f5092"),
-                            CreatedBy = new Guid("dc3e145d-59b6-4148-8d98-cab8876f5092"),
-                            CreatedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1522),
+                            DoctorID = new Guid("f04b33f9-035b-4871-8e13-76966d52915d"),
+                            AccountId = new Guid("03757b9d-60cf-483e-85ef-fc27c48657a9"),
+                            CreatedBy = new Guid("03757b9d-60cf-483e-85ef-fc27c48657a9"),
+                            CreatedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6499),
                             FirstName = "Khoa",
-                            LastModifiedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1523),
+                            LastModifiedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6500),
                             LastName = "Truong",
-                            ModifiedBy = new Guid("dc3e145d-59b6-4148-8d98-cab8876f5092"),
+                            ModifiedBy = new Guid("03757b9d-60cf-483e-85ef-fc27c48657a9"),
                             PhoneNumber = "0987654321",
                             Specialty = "Khoa noi"
                         });
@@ -269,18 +269,18 @@ namespace BusinessObject.Migrations
                     b.HasData(
                         new
                         {
-                            PatientID = new Guid("aa16e71c-4b00-402f-80de-c99ff3559343"),
-                            AccountId = new Guid("4ba51276-7081-444d-a5e1-d5776b4caaef"),
+                            PatientID = new Guid("2ba2f9e4-135f-4f2f-bb9e-912e3a11c2e3"),
+                            AccountId = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
                             Address = "Bac Ninh",
-                            CreatedBy = new Guid("4ba51276-7081-444d-a5e1-d5776b4caaef"),
-                            CreatedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1627),
+                            CreatedBy = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
+                            CreatedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6601),
                             DateOfBirth = new DateTime(2002, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Dung",
                             Gender = 0,
-                            LastModifiedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1627),
+                            LastModifiedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6602),
                             LastName = "Nguyen",
-                            ModifiedBy = new Guid("4ba51276-7081-444d-a5e1-d5776b4caaef"),
-                            PaymentId = new Guid("dc2a7616-729d-483f-af85-040393546847"),
+                            ModifiedBy = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
+                            PaymentId = new Guid("1f4ae2d5-620a-4675-9436-baf885ec8da1"),
                             PhoneNumber = "0123456789"
                         });
                 });
@@ -318,9 +318,9 @@ namespace BusinessObject.Migrations
                     b.HasData(
                         new
                         {
-                            PaymentId = new Guid("dc2a7616-729d-483f-af85-040393546847"),
-                            CreatedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1504),
-                            LastModifiedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1505),
+                            PaymentId = new Guid("1f4ae2d5-620a-4675-9436-baf885ec8da1"),
+                            CreatedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6450),
+                            LastModifiedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6451),
                             PaymentType = "Momo",
                             Status = 0
                         });
@@ -339,6 +339,12 @@ namespace BusinessObject.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateStart")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("DosagePerDay")
@@ -365,9 +371,7 @@ namespace BusinessObject.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PillDescription")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PillName")
                         .IsRequired()
@@ -385,9 +389,6 @@ namespace BusinessObject.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(0);
 
-                    b.Property<Guid>("ScheduleId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -398,52 +399,48 @@ namespace BusinessObject.Migrations
 
                     b.HasIndex("PrescriptionId");
 
-                    b.HasIndex("ScheduleId");
-
                     b.ToTable("Pill", (string)null);
 
                     b.HasData(
                         new
                         {
-                            PillId = new Guid("b0a795f3-67e8-4d7b-b542-3193120c3913"),
+                            PillId = new Guid("96966c6e-2291-4e27-a2ae-9273dae671b2"),
                             Afternoon = 0,
-                            CreatedBy = new Guid("4ba51276-7081-444d-a5e1-d5776b4caaef"),
-                            CreatedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1676),
+                            CreatedBy = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
+                            CreatedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6643),
                             DosagePerDay = 1,
                             Evening = 0,
                             Index = 1,
-                            LastModifiedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1677),
-                            ModifiedBy = new Guid("4ba51276-7081-444d-a5e1-d5776b4caaef"),
+                            LastModifiedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6644),
+                            ModifiedBy = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
                             Morning = 1,
                             Period = "ngay",
                             PillDescription = "1 ngay uong 1 vien 30 phut sau khi an",
                             PillName = "Nexium mup",
-                            PrescriptionId = new Guid("b83dff89-9f45-4ec8-8857-fc181beaba31"),
+                            PrescriptionId = new Guid("47de07e6-229c-4a42-8b72-9d798adfc5fc"),
                             Quantity = 30,
                             QuantityPerDose = 1,
-                            ScheduleId = new Guid("c5482527-4763-4366-af81-e49047ff8534"),
                             Status = 1,
                             Unit = "vien"
                         },
                         new
                         {
-                            PillId = new Guid("3ffb60c0-becc-42fd-bf5c-2bb16bfd63f8"),
+                            PillId = new Guid("045ab47d-1a87-461e-ab64-b4f85cb7fb55"),
                             Afternoon = 0,
-                            CreatedBy = new Guid("4ba51276-7081-444d-a5e1-d5776b4caaef"),
-                            CreatedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1689),
+                            CreatedBy = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
+                            CreatedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6655),
                             DosagePerDay = 2,
                             Evening = 1,
                             Index = 1,
-                            LastModifiedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1689),
-                            ModifiedBy = new Guid("4ba51276-7081-444d-a5e1-d5776b4caaef"),
+                            LastModifiedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6656),
+                            ModifiedBy = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
                             Morning = 1,
                             Period = "ngay",
                             PillDescription = "1 ngay uong 2 vien chia lam 2 lan(sang, toi - sau khi an)",
                             PillName = "Amoxycilin",
-                            PrescriptionId = new Guid("b83dff89-9f45-4ec8-8857-fc181beaba31"),
+                            PrescriptionId = new Guid("47de07e6-229c-4a42-8b72-9d798adfc5fc"),
                             Quantity = 20,
                             QuantityPerDose = 1,
-                            ScheduleId = new Guid("c5482527-4763-4366-af81-e49047ff8534"),
                             Status = 1,
                             Unit = "vien"
                         });
@@ -503,67 +500,17 @@ namespace BusinessObject.Migrations
                     b.HasData(
                         new
                         {
-                            PrescriptionID = new Guid("b83dff89-9f45-4ec8-8857-fc181beaba31"),
-                            CreatedBy = new Guid("4ba51276-7081-444d-a5e1-d5776b4caaef"),
-                            CreatedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1662),
+                            PrescriptionID = new Guid("47de07e6-229c-4a42-8b72-9d798adfc5fc"),
+                            CreatedBy = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
+                            CreatedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6625),
                             Diagnosis = "viem da day",
-                            DoctorID = new Guid("e1a2543b-39a6-45c4-a1b8-df6adf7ee41b"),
+                            DoctorID = new Guid("f04b33f9-035b-4871-8e13-76966d52915d"),
                             ExaminationDate = new DateTime(2024, 1, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Image = "test",
                             Index = 1,
-                            LastModifiedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1663),
-                            ModifiedBy = new Guid("4ba51276-7081-444d-a5e1-d5776b4caaef"),
-                            PatientID = new Guid("aa16e71c-4b00-402f-80de-c99ff3559343"),
-                            Status = 1
-                        });
-                });
-
-            modelBuilder.Entity("BusinessObject.Schedule", b =>
-                {
-                    b.Property<Guid>("ScheduleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateEnd")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateStart")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("ScheduleId");
-
-                    b.ToTable("Schedule", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            ScheduleId = new Guid("c5482527-4763-4366-af81-e49047ff8534"),
-                            CreatedBy = new Guid("4ba51276-7081-444d-a5e1-d5776b4caaef"),
-                            CreatedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1646),
-                            DateEnd = new DateTime(2024, 1, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateStart = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1640),
-                            LastModifiedDate = new DateTime(2024, 1, 21, 11, 46, 53, 436, DateTimeKind.Utc).AddTicks(1647),
-                            ModifiedBy = new Guid("4ba51276-7081-444d-a5e1-d5776b4caaef"),
-                            Notes = "Dung 3 lieu, moi ngay 1 lieu",
+                            LastModifiedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6626),
+                            ModifiedBy = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
+                            PatientID = new Guid("2ba2f9e4-135f-4f2f-bb9e-912e3a11c2e3"),
                             Status = 1
                         });
                 });
@@ -716,15 +663,7 @@ namespace BusinessObject.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("BusinessObject.Schedule", "Schedule")
-                        .WithMany()
-                        .HasForeignKey("ScheduleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Prescription");
-
-                    b.Navigation("Schedule");
                 });
 
             modelBuilder.Entity("BusinessObject.Prescription", b =>

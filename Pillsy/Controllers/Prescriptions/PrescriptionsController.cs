@@ -27,15 +27,13 @@ namespace Pillsy.Controllers.Prescriptions
         //private readonly PillsyDBContext _context;
         private readonly IPrescriptionService _service;
         private readonly IPatientService _patientService;
-        private readonly IScheduleService _scheduleService;
         private readonly IPillService _pillService;
 
 
-        public PrescriptionsController(IPrescriptionService service, IPatientService patientService, IScheduleService scheduleService, IPillService pillService)
+        public PrescriptionsController(IPrescriptionService service, IPatientService patientService, IPillService pillService)
         {
             _service = service;
             _patientService = patientService;
-            _scheduleService = scheduleService;
             _pillService = pillService;
         }
 
@@ -114,7 +112,6 @@ namespace Pillsy.Controllers.Prescriptions
                 var config = new MapperConfiguration(cfg =>
                 {
                     cfg.AddProfile(new PrescriptionProfile());
-                    cfg.AddProfile(new ScheduleProfile());
                     cfg.AddProfile(new PillProfile());
                 });
                 var mapper = config.CreateMapper();
@@ -158,14 +155,6 @@ namespace Pillsy.Controllers.Prescriptions
                     var result = await _service.UpdatePrescriptionAsync(prescription);
                     if (result != null)
                     {
-                        var medicalRecord = prescriptiondto.User_data.Medication_records.ToList().First();
-                        var schedule = new Schedule
-                        {
-                            DateStart = mapper.Map<Schedule>(medicalRecord).DateStart,
-                            DateEnd = mapper.Map<Schedule>(medicalRecord).DateEnd,
-                        };
-                        var data1 = await _scheduleService.AddScheduleAsync(schedule);
-
 
                         var pills = prescriptiondto.User_data.Medication_records.Select(p => mapper.Map<Medication_records, Pill>(p));
                         foreach (var p in pills)
@@ -177,7 +166,6 @@ namespace Pillsy.Controllers.Prescriptions
                             p.Status = prescription.Status;
                             p.Index = prescription.Index;
                             p.PrescriptionId = prescriptiondto.User_data.Medication_records_id;
-                            p.ScheduleId = data1.ScheduleId;
                             await _pillService.AddPillAsync(p);
                         }
 

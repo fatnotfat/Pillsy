@@ -59,6 +59,14 @@ namespace Pillsy.Mappers
                 dest => dest.Evening,
                 opt => opt.MapFrom(src => src.Frequency_evening)
             )
+            .ForMember(
+                dest => dest.DateStart,
+                opt => opt.MapFrom(src => src.Start_date)
+            )
+            .ForMember(
+                dest => dest.DateEnd,
+                opt => opt.MapFrom(src => src.End_date)
+            )
             ;
 
             CreateMap<User_data, Pill>()

@@ -29,7 +29,6 @@ namespace BusinessObject
         public virtual DbSet<Account>? Accounts { get; set; }
         public virtual DbSet<Payment>? Payments { get; set; }
         public virtual DbSet<Pill>? Pills { get; set; }
-        public virtual DbSet<Schedule>? Schedules { get; set; }
         public virtual DbSet<SubscriptionPackage>? SubscriptionPackages { get; set; }
         public virtual DbSet<TransactionHistory>? TransactionHistory { get; set; }
 
@@ -159,18 +158,6 @@ namespace BusinessObject
                 ModifiedBy= accountId2
             });
 
-            builder.Entity<Schedule>().HasData(new Schedule
-            {
-                ScheduleId = scheduleId1,
-                DateStart = DateTime.UtcNow,
-                DateEnd = DateTime.Parse("2024-01-24"),
-                Notes = "Dung 3 lieu, moi ngay 1 lieu",
-                Status = 1,
-                CreatedBy = accountId2,
-                CreatedDate = DateTime.UtcNow,
-                LastModifiedDate = DateTime.UtcNow,
-                ModifiedBy = accountId2
-            });
 
             builder.Entity<Prescription>().HasData(new Prescription
             {
@@ -199,7 +186,6 @@ namespace BusinessObject
                 Status = 1,
                 Unit = "vien",
                 PrescriptionId = prescriptionId1,
-                ScheduleId = scheduleId1,
                 Morning = 1,
                 Quantity = 30,
                 Index = 1,
@@ -220,7 +206,6 @@ namespace BusinessObject
                 Status = 1,
                 Unit = "vien",
                 PrescriptionId = prescriptionId1,
-                ScheduleId = scheduleId1,
                 Morning = 1,
                 Evening = 1,
                 Quantity = 20,

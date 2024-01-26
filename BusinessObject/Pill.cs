@@ -24,7 +24,7 @@ namespace BusinessObject
         public int Evening { get; set; } = 0;
         public Guid PrescriptionId { get; set; }
         public Prescription Prescription { get; set; }
-        public Guid ScheduleId { get; set; }
-        public Schedule Schedule { get; set; }
+        public DateTime? DateStart { get; set; }
+        public DateTime? DateEnd { get; set; }
     }
 }
