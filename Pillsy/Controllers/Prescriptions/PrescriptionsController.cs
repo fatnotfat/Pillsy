@@ -241,9 +241,9 @@ namespace Pillsy.Controllers.Prescriptions
 
         }
 
-        [HttpPost]
-        [Route("patient/all-prescription")]
-        public async Task<ActionResult<IEnumerable<Prescription>>> GetPrescriptionsByPatientId([FromBody] Guid patientId)
+        [HttpGet]
+        [Route("patient/{patientId}/all-prescription")]
+        public async Task<ActionResult<IEnumerable<Prescription>>> GetPrescriptionsByPatientId(Guid patientId)
         {
             try
             {
