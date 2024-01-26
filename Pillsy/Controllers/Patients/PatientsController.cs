@@ -127,6 +127,7 @@ namespace Pillsy.Controllers.Patients
         // POST: api/Patients
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Route("sign-up")]
         public async Task<ActionResult<Patient>> AddPatient(PatientCreateDTO patientDTO)
         {
 
