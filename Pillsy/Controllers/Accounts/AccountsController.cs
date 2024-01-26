@@ -17,10 +17,11 @@ using Pillsy.DataTransferObjects.Account.AccountDTO;
 using Pillsy.DataTransferObjects.Account.AccountLoginDTO;
 using Pillsy.Mappers;
 using Pillsy.DataTransferObjects.Account.AccountCreateDTO;
+using Pillsy.DataTransferObjects.Account.UpdatePasswordDto;
 
 namespace Pillsy.Controllers.Accounts
 {
-    [Authorize(Roles = "Admin")]
+
     [Route("api/v1/[controller]")]
     [ApiController]
     public class AccountsController : ControllerBase
@@ -38,6 +39,7 @@ namespace Pillsy.Controllers.Accounts
             _patientService = patientService;
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: api/Accounts
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
@@ -77,7 +79,10 @@ namespace Pillsy.Controllers.Accounts
                     {
                         var account = _mapper.Map<AccountDTO>(data);
                         var patient = await _patientService.GetPatientByAccountIdAsync(data.AccountId);
-                        var claims = new[] {
+                        Claim[] claims = null;
+                        if (patient != null)
+                        {
+                            claims = new[] {
                         new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
@@ -87,7 +92,21 @@ namespace Pillsy.Controllers.Accounts
                         new Claim("Email", account.Email),
                         new Claim("Role", account.Role.ToString()),
                         new Claim("Username", patient.FirstName + " " + patient.LastName)
-                    };
+                            };
+                        }
+                        else
+                        {
+                            claims = new[] {
+                        new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                        new Claim(ClaimTypes.Role, account.Role.ToString()),
+                        new Claim("AccountId", data.AccountId.ToString()),
+                        new Claim("Email", account.Email),
+                        new Claim("Role", account.Role.ToString()),
+                        };
+                        }
+
                         //create claims details based on the user information
 
                         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -127,5 +146,61 @@ namespace Pillsy.Controllers.Accounts
             return Ok("user " + account.AccountId + " was created");
         }
 
+
+        [Authorize(Roles = "Patient")]
+        [HttpPut]
+        [Route("private/manage-password")]
+        public async Task<IActionResult> ChangePasswordPatient(UpdatePasswordDto account)
+        {
+            try
+            {
+                var accountExist = await _accountService.GetAccountById(account.AccountId);
+                if (accountExist == null)
+                {
+                    return NotFound("Account " + account.AccountId + " does not exist!");
+                }
+
+                if (accountExist.Password != null)
+                {
+                    accountExist.Password = account.Password;
+                }
+                //var accountExist = await _accountService.GetAccountById();
+                //if (!String.IsNullOrEmpty(patient.FirstName?.Trim()))
+                //{
+                //    patientExist.FirstName = patient.FirstName.Trim();
+                //}
+
+                //if (!String.IsNullOrEmpty(patient.LastName?.Trim()))
+                //{
+                //    patientExist.LastName = patient.LastName.Trim();
+                //}
+
+                //if (patient.DateOfBirth != null)
+                //{
+                //    patientExist.DateOfBirth = patient.DateOfBirth;
+                //}
+                //if (patient.Gender != null)
+                //{
+                //    patientExist.Gender = patient.Gender;
+                //}
+                //if (!String.IsNullOrEmpty(patient.PhoneNumber?.Trim()))
+                //{
+                //    patientExist.PhoneNumber = patient.PhoneNumber;
+                //}
+                //if (!String.IsNullOrEmpty(patient.Address?.Trim()))
+                //{
+                //    patientExist.Address = patient.Address;
+                //}
+
+                var result = await _accountService.UpdateAccount(accountExist);
+                if (result)
+                    return Ok("Password updated!");
+                return BadRequest("Password update failed!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

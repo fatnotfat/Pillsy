@@ -48,5 +48,9 @@ namespace Repository
             return await accountDAO.GetAccountById(id);
         }
 
+        public async Task<bool> UpdateAccount(Account account)
+        {
+            return await accountDAO.UpdateAccountAsync(account);
+        }
     }
 }

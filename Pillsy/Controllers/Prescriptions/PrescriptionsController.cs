@@ -15,11 +15,12 @@ using AutoMapper;
 using Pillsy.DataTransferObjects.Account.AccountDTO;
 using Service;
 using Pillsy.Mappers;
+using Pillsy.DataTransferObjects.Patient.PatientCreateDTO;
 
 namespace Pillsy.Controllers.Prescriptions
 {
     [Authorize(Roles = "Patient")]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/prescription-management/[controller]")]
     [ApiController]
     public class PrescriptionsController : ControllerBase
     {
@@ -236,6 +237,45 @@ namespace Pillsy.Controllers.Prescriptions
             else
             {
                 return NotFound("User not found!");
+            }
+
+        }
+
+        [HttpPost]
+        [Route("patient/all-prescription")]
+        public async Task<ActionResult<IEnumerable<Prescription>>> GetPrescriptionsByPatientId([FromBody] Guid patientId)
+        {
+            try
+            {
+                var patients = await _patientService.GetAllPatients();
+                if (patients == null)
+                {
+                    return Problem("Entity set 'PillsyDBContext.Patients'  is null.");
+                }
+
+                var patient = await _patientService.GetPatientById(patientId);
+                if (patient == null)
+                {
+                    return NotFound("Patient not found!");
+                }
+                var result = await _service.GetPrescriptionsByPatientIdAsync(patientId);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                switch (ex.Message)
+                {
+                    case "Patient not found!":
+                        return NotFound(ex.Message);
+
+                    default:
+                        return BadRequest(ex.Message);
+                }
             }
 
         }

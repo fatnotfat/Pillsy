@@ -100,5 +100,29 @@ namespace DataAcessObject
             }
             return prescription.ImageBase64;
         }
+
+
+        public async Task<IEnumerable<Prescription>> GetPrescriptionByPatientId(Guid prescriptionId)
+        {
+            try
+            {
+                var result = await GetAll();
+                if (result.Count() < 1)
+                {
+                    throw new Exception("The list is empty!");
+                }
+                var prescription = await _context.Prescriptions.Where(p => p.PatientID.Equals(prescriptionId)).ToListAsync();
+                if (prescription == null)
+                {
+                    throw new Exception("No content found!");
+                }
+                return prescription;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

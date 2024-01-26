@@ -47,25 +47,6 @@ namespace DataAcessObject
                 {
                     throw new Exception("Patient not found!");
                 }
-
-                //var prescriptions = _context.Prescriptions.Include(p => p.Pills).Where(p => p.PatientID.Equals(patient.PatientID));
-                //patient.Prescriptions = prescriptions.ToList();
-
-
-                //foreach (var item in patient.Prescriptions)
-                //{
-                //    foreach (var pill in item.Pills)
-                //    {
-                //        if (item.PrescriptionID.Equals(pill.PrescriptionId))
-                //        {
-                //            var pills = _context.Pills.Include(p => p.Schedule).Where(p => p.PrescriptionId.Equals(item.PrescriptionID));
-                //            item.Pills = pills.ToList();
-                //        }
-                //    }
-                //}
-
-
-
                 return patient;
             }
             catch (Exception)
@@ -76,20 +57,9 @@ namespace DataAcessObject
 
         public async Task<Patient> GetPatientByAccountIdAsync(Guid accountId)
         {
-            try
-            {
-                var _context = new PillsyDBContext();
-                var patient = await _context.Patients.FirstOrDefaultAsync(p => p.AccountId.Equals(accountId));
-                if (patient == null)
-                {
-                    throw new Exception("Patient not found!");
-                }
-                return patient;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            var _context = new PillsyDBContext();
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.AccountId.Equals(accountId));
+            return patient;
         }
 
         public async Task<bool> UpdatePatientAsync(Patient patient)

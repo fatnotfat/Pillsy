@@ -28,6 +28,11 @@ namespace Service
             return await _prescriptionRepository.GetAllPrescriptionsAsync();
         }
 
+        public async Task<IEnumerable<Prescription>> GetPrescriptionsByPatientIdAsync(Guid patientId)
+        {
+            return await _prescriptionRepository.GetPrescriptionsByPatientIdAsync(patientId);
+        }
+
         public async Task<Prescription> GetPrescriptionsByPrescriptionIdAsync(Guid prescriptionId)
         {
             return await _prescriptionRepository.GetPrescriptionsByPrescriptionIdAsync(prescriptionId);

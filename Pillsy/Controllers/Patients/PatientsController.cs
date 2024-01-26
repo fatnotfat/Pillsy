@@ -24,12 +24,14 @@ namespace Pillsy.Controllers.Patients
         private readonly IPatientService _patientService;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private readonly IAccountService _accountService;
 
-        public PatientsController(IConfiguration configuration, IMapper mapper, IPatientService patientService)
+        public PatientsController(IConfiguration configuration, IMapper mapper, IPatientService patientService, IAccountService accountService)
         {
             _configuration = configuration;
             _mapper = mapper;
             _patientService = patientService;
+            _accountService = accountService;
         }
 
         // GET: api/Patients
@@ -120,6 +122,8 @@ namespace Pillsy.Controllers.Patients
             }
         }
 
+
+        
         // POST: api/Patients
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]

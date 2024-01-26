@@ -74,5 +74,25 @@ namespace DataAcessObject
                 throw ex;
             }
         }
+
+        public async Task<bool> UpdateAccountAsync(Account account)
+        {
+            var isSuccess = false;
+            try
+            {
+                var _context = new PillsyDBContext();
+                account.CreatedBy = account.AccountId;
+                account.ModifiedBy = account.AccountId;
+                account.LastModifiedDate = account.LastModifiedDate;
+                _context.Entry(account).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                isSuccess = true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return isSuccess;
+        }
     }
 }

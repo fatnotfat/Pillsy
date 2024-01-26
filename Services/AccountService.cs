@@ -43,5 +43,10 @@ namespace Service
         {
             return await _accountRepository.GetAccounts();
         }
+
+        public async Task<bool> UpdateAccount(Account account)
+        {
+            return await _accountRepository.UpdateAccount(account);
+        }
     }
 }

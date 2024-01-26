@@ -27,6 +27,11 @@ namespace Repository
             return await prescriptionDAO.GetAll();
         }
 
+        public async Task<IEnumerable<Prescription>> GetPrescriptionsByPatientIdAsync(Guid patientId)
+        {
+            return await prescriptionDAO.GetPrescriptionByPatientId(patientId);
+        }
+
         public async Task<Prescription> GetPrescriptionsByPrescriptionIdAsync(Guid prescriptionId)
         {
             return await prescriptionDAO.GetPrescriptionById(prescriptionId);
