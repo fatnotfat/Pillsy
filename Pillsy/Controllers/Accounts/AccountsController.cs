@@ -83,6 +83,7 @@ namespace Pillsy.Controllers.Accounts
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                         new Claim(ClaimTypes.Role, account.Role.ToString()),
                         new Claim("AccountId", data.AccountId.ToString()),
+                        new Claim("PatientId", patient.PatientID.ToString()),
                         new Claim("Email", account.Email),
                         new Claim("Role", account.Role.ToString()),
                         new Claim("Username", patient.FirstName + " " + patient.LastName)

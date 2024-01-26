@@ -73,10 +73,10 @@ namespace Pillsy
             builder.Services.AddTransient<IAccountService, AccountService>();
             builder.Services.AddTransient<IPatientRepository, PatientRepository>();
             builder.Services.AddTransient<IPatientService, PatientService>();
-            //builder.Services.AddTransient<IPillRepository, PillRepository>();
-            //builder.Services.AddTransient<IPillService, PillService>();
-            //builder.Services.AddTransient<IScheduleRepository, ScheduleRepository>();
-            //builder.Services.AddTransient<IScheduleService, ScheduleService>();
+            builder.Services.AddTransient<IPillRepository, PillRepository>();
+            builder.Services.AddTransient<IPillService, PillService>();
+            builder.Services.AddTransient<IScheduleRepository, ScheduleRepository>();
+            builder.Services.AddTransient<IScheduleService, ScheduleService>();
             builder.Services.AddTransient<IPrescriptionRepository, PrescriptionRepository>();
             builder.Services.AddTransient<IPrescriptionService, PrescriptionService>();
 

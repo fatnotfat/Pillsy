@@ -31,5 +31,10 @@ namespace Repository
         {
             return await prescriptionDAO.GetPrescriptionById(prescriptionId);
         }
+
+        public async Task<Prescription> UpdatePrescriptionAsync(Prescription prescription)
+        {
+            return await prescriptionDAO.UpdatePrescription(prescription);
+        }
     }
 }

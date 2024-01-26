@@ -17,6 +17,19 @@ namespace Service
             _repository = repository;
         }
 
+        public async Task<Pill> AddPillAsync(Pill pill)
+        {
+            try
+            {
+                var result = await _repository.AddPillAsync(pill);
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<Pill>> GetAllPillsAsync()
         {
             try

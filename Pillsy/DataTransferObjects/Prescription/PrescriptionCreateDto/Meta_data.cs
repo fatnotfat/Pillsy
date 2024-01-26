@@ -1,10 +1,14 @@
-﻿namespace Pillsy.DataTransferObjects.Prescription.PrescriptionCreateDto
+﻿using Pillsy.Enum.Patient;
+
+namespace Pillsy.DataTransferObjects.Prescription.PrescriptionCreateDto
 {
-    public class Metadata
+    public class Meta_data
     {
+        public Guid User_id { get; set; }
+        public string? Schema_version { get; set; }
         public string? User_name { get; set; }
         public int? Age { get; set; }
-        public int? Gender { get; set; }
+        public PatientGender? Gender { get; set; }
         public string? Doctor_name { get; set; }
         public string? Hospital_name { get; set; }
         public string? Address { get; set; }

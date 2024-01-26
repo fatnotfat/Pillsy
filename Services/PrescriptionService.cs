@@ -32,5 +32,10 @@ namespace Service
         {
             return await _prescriptionRepository.GetPrescriptionsByPrescriptionIdAsync(prescriptionId);
         }
+
+        public async Task<Prescription> UpdatePrescriptionAsync(Prescription prescription)
+        {
+            return await _prescriptionRepository.UpdatePrescriptionAsync(prescription);
+        }
     }
 }

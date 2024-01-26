@@ -18,6 +18,11 @@ namespace Repository
             pillDAO = new PillDAO();
         }
 
+        public async Task<Pill> AddPillAsync(Pill pill)
+        {
+            return await pillDAO.AddAsync(pill);
+        }
+
         public async Task<IEnumerable<Pill>> GetAllPillsAsync()
         {
             return await pillDAO.GetAll();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessObject;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,8 @@ namespace Service.Interfaces
 {
     public interface IScheduleService
     {
+        public Task<IEnumerable<Schedule>> GetAllSchedulesAsync();
+        public Task<Schedule> GetScheduleByIdAsync(Guid scheduleId);
+        public Task<Schedule> AddScheduleAsync(Schedule schedule);
     }
 }

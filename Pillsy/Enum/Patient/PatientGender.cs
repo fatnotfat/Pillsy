@@ -2,8 +2,8 @@
 {
     public enum PatientGender
     {
-        Male,
-        Femail,
-        Others
+        Nam,
+        Nữ,
+        Khác
     }
 }

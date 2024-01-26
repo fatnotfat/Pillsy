@@ -11,6 +11,7 @@ namespace Service.Interfaces
     {
         public Task<IEnumerable<Pill>> GetAllPillsAsync();
         public Task<IEnumerable<Pill>> GetPillsByPrescriptionIdAsync(Guid prescriptionId);
+        public Task<Pill> AddPillAsync(Pill pill);
 
     }
 }

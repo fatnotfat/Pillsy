@@ -10,25 +10,16 @@ namespace DataAcessObject
 {
     public class PrescriptionDAO
     {
-        private static PrescriptionDAO instance = null;
-
-        public static PrescriptionDAO Instance
+        private readonly PillsyDBContext _context;
+        public PrescriptionDAO()
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new PrescriptionDAO();
-                }
-                return instance;
-            }
+            _context = new PillsyDBContext();
         }
 
         public async Task<IEnumerable<Prescription>> GetAll()
         {
             try
             {
-                var _context = new PillsyDBContext();
                 var prescriptions = await _context.Prescriptions.ToListAsync();
                 if (prescriptions == null)
                 {
@@ -46,7 +37,6 @@ namespace DataAcessObject
         {
             try
             {
-                var _context = new PillsyDBContext();
                 var result = await GetAll();
                 if (result.Count() < 1)
                 {
@@ -66,14 +56,39 @@ namespace DataAcessObject
             }
         }
 
+        public async Task<Prescription> UpdatePrescription(Prescription prescription)
+        {
+            try
+            {
+                var result = await GetAll();
+                if (result.Count() < 1)
+                {
+                    throw new Exception("The list is empty!");
+                }
+                var prescriptionExist = await _context.Prescriptions.FirstOrDefaultAsync(p => p.PrescriptionID.Equals(prescription.PrescriptionID));
+                if (prescriptionExist == null)
+                {
+                    throw new Exception("No content found!");
+                }
+                _context.Entry(prescription).State = EntityState.Modified;
+                //_context.Entry(prescription).CurrentValues.SetValues(prescription);
+                await _context.SaveChangesAsync();
+                return prescription;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
 
         public async Task<byte[]> AddAsync(Prescription prescription)
         {
-            var _context = new PillsyDBContext();
             using var transaction = _context.Database.BeginTransaction();
             try
             {
-                _context.Prescriptions.AddAsync(prescription);
+                await _context.AddAsync(prescription);
                 await _context.SaveChangesAsync();
 
                 transaction.Commit();

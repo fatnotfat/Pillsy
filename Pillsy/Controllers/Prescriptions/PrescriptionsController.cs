@@ -11,6 +11,10 @@ using Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Pillsy.DataTransferObjects.Prescription.PrescriptionUploadImageDto;
+using AutoMapper;
+using Pillsy.DataTransferObjects.Account.AccountDTO;
+using Service;
+using Pillsy.Mappers;
 
 namespace Pillsy.Controllers.Prescriptions
 {
@@ -22,11 +26,16 @@ namespace Pillsy.Controllers.Prescriptions
         //private readonly PillsyDBContext _context;
         private readonly IPrescriptionService _service;
         private readonly IPatientService _patientService;
+        private readonly IScheduleService _scheduleService;
+        private readonly IPillService _pillService;
 
-        public PrescriptionsController(IPrescriptionService service, IPatientService patientService)
+
+        public PrescriptionsController(IPrescriptionService service, IPatientService patientService, IScheduleService scheduleService, IPillService pillService)
         {
             _service = service;
             _patientService = patientService;
+            _scheduleService = scheduleService;
+            _pillService = pillService;
         }
 
         //// GET: api/Prescriptions
@@ -92,16 +101,96 @@ namespace Pillsy.Controllers.Prescriptions
         // POST: api/Prescriptions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Prescription>> PostPrescription(PrescriptionCreateDto prescriptiondto)
+        public async Task<ActionResult<Prescription>> UpdatePrescription(PrescriptionCreateDto prescriptiondto)
         {
-            if (await _service.GetAllPrescriptionsAsync() == null)
+            try
             {
-                return Problem("Entity set 'PillsyDBContext.Prescriptions'  is null.");
+                if (await _service.GetAllPrescriptionsAsync() == null)
+                {
+                    return Problem("Entity set 'PillsyDBContext.Prescriptions'  is null.");
+                }
+                //create map
+                var config = new MapperConfiguration(cfg =>
+                {
+                    cfg.AddProfile(new PrescriptionProfile());
+                    cfg.AddProfile(new ScheduleProfile());
+                    cfg.AddProfile(new PillProfile());
+                });
+                var mapper = config.CreateMapper();
+                //End create map
+
+                //transfer from account to account dto
+
+                var data = mapper.Map<Prescription>(prescriptiondto);
+
+                var prescription = await _service.GetPrescriptionsByPrescriptionIdAsync(data.PrescriptionID);
+                if (prescription != null)
+                {
+                    if (data.CreatedBy != null)
+                    {
+                        prescription.CreatedBy = data.CreatedBy;
+                    }
+                    if (data.CreatedDate != null)
+                    {
+                        prescription.CreatedDate = data.CreatedDate;
+                    }
+                    if (data.Index != 0)
+                    {
+                        prescription.Index = data.Index;
+                    }
+                    if (data.ModifiedBy != null)
+                    {
+                        prescription.ModifiedBy = data.ModifiedBy;
+                    }
+                    if (data.LastModifiedDate != null)
+                    {
+                        prescription.LastModifiedDate = data.LastModifiedDate;
+                    }
+                    if (data.Diagnosis != null)
+                    {
+                        prescription.Diagnosis = data.Diagnosis;
+                    }
+                    if (data.Status != 0)
+                    {
+                        prescription.Status = data.Status;
+                    }
+                    var result = await _service.UpdatePrescriptionAsync(prescription);
+                    if (result != null)
+                    {
+                        var medicalRecord = prescriptiondto.User_data.Medication_records.ToList().First();
+                        var schedule = new Schedule
+                        {
+                            DateStart = mapper.Map<Schedule>(medicalRecord).DateStart,
+                            DateEnd = mapper.Map<Schedule>(medicalRecord).DateEnd,
+                        };
+                        var data1 = await _scheduleService.AddScheduleAsync(schedule);
+
+
+                        var pills = prescriptiondto.User_data.Medication_records.Select(p => mapper.Map<Medication_records, Pill>(p));
+                        foreach (var p in pills)
+                        {
+                            p.CreatedBy = prescription.CreatedBy;
+                            p.ModifiedBy = prescription.ModifiedBy;
+                            p.LastModifiedDate = prescription.LastModifiedDate;
+                            p.CreatedDate = prescription.CreatedDate;
+                            p.Status = prescription.Status;
+                            p.Index = prescription.Index;
+                            p.PrescriptionId = prescriptiondto.User_data.Medication_records_id;
+                            p.ScheduleId = data1.ScheduleId;
+                            await _pillService.AddPillAsync(p);
+                        }
+
+
+                        return Ok("Add success!");
+                    }
+                }
+                return BadRequest("Add failed!");
             }
-            var a = prescriptiondto;
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-
-            return Ok(prescriptiondto);
         }
         [HttpPost]
         [Route("upload-image")]

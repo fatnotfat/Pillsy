@@ -10,25 +10,18 @@ namespace DataAcessObject
 {
     public class ScheduleDAO
     {
-        private static ScheduleDAO instance = null;
-
-        public static ScheduleDAO Instance
+        private readonly PillsyDBContext _context;
+        public ScheduleDAO()
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new ScheduleDAO();
-                }
-                return instance;
-            }
+
+            _context = new PillsyDBContext();
+
         }
 
         public async Task<IEnumerable<Schedule>> GetAll()
         {
             try
             {
-                var _context = new PillsyDBContext();
                 var schedules = await _context.Schedules.ToListAsync();
                 if (schedules == null)
                 {
@@ -46,7 +39,6 @@ namespace DataAcessObject
         {
             try
             {
-                var _context = new PillsyDBContext();
                 var result = await GetAll();
                 if (result.Count() < 1)
                 {
@@ -64,6 +56,24 @@ namespace DataAcessObject
             {
                 throw;
             }
+        }
+
+        public async Task<Schedule> AddAsync(Schedule schedule)
+        {
+            using var transaction = _context.Database.BeginTransaction();
+            try
+            {
+                await _context.AddAsync(schedule);
+                await _context.SaveChangesAsync();
+
+                transaction.Commit();
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+                throw;
+            }
+            return schedule;
         }
     }
 }

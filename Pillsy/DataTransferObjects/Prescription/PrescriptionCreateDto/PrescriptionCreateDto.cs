@@ -7,7 +7,7 @@ namespace Pillsy.DataTransferObjects.Prescription.PrescriptionCreateDto
     {
         public string? Status {  get; set; }
         public User_data? User_data { get; set; }
-        public Metadata? Meta_data { get; set; }
+        public Meta_data? Meta_data { get; set; }
         public string? Error { get; set; }
     }
 }

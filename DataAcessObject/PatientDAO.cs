@@ -127,16 +127,16 @@ namespace DataAcessObject
                 patient.CreatedDate = DateTime.Now;
                 patient.LastModifiedDate = DateTime.Now;
                 patient.ModifiedBy = accountId;
-                _context.Patients.AddAsync(patient);
+                await _context.Patients.AddAsync(patient);
                 await _context.SaveChangesAsync();
 
                 transaction.Commit();
                 return patient;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 transaction.Rollback();
-                return null;
+                throw;
             }
         }
     }

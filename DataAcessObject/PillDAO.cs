@@ -10,25 +10,18 @@ namespace DataAcessObject
 {
     public class PillDAO
     {
-        private static PillDAO instance = null;
-
-        public static PillDAO Instance
+        private readonly PillsyDBContext _context;
+        public PillDAO()
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new PillDAO();
-                }
-                return instance;
-            }
+
+            _context = new PillsyDBContext();
+
         }
 
         public async Task<IEnumerable<Pill>> GetAll()
         {
             try
             {
-                var _context = new PillsyDBContext();
                 var pills = await _context.Pills.ToListAsync();
                 if (pills == null)
                 {
@@ -46,7 +39,6 @@ namespace DataAcessObject
         {
             try
             {
-                var _context = new PillsyDBContext();
                 var result = await GetAll();
                 if (result.Count() < 1)
                 {
@@ -64,6 +56,24 @@ namespace DataAcessObject
             {
                 throw;
             }
+        }
+
+        public async Task<Pill> AddAsync(Pill pill)
+        {
+            using var transaction = _context.Database.BeginTransaction();
+            try
+            {
+                await _context.AddAsync(pill);
+                await _context.SaveChangesAsync();
+
+                transaction.Commit();
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+                throw;
+            }
+            return pill;
         }
 
     }
