@@ -39,16 +39,16 @@ namespace Pillsy.Controllers.Prescriptions
             _pillService = pillService;
         }
 
-        //// GET: api/Prescriptions
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Prescription>>> GetPrescriptions()
-        //{
-        //  if (_context.Prescriptions == null)
-        //  {
-        //      return NotFound();
-        //  }
-        //    return await _context.Prescriptions.ToListAsync();
-        //}
+        // GET: api/Prescriptions
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Prescription>>> GetPrescriptions()
+        {
+            if (await _service.GetAllPrescriptionsAsync() == null)
+            {
+                return NotFound();
+            }
+            return Ok(await _service.GetAllPrescriptionsAsync());
+        }
 
         //// GET: api/Prescriptions/5
         //[HttpGet("{id}")]
