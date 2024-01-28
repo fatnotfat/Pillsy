@@ -154,7 +154,7 @@ namespace Pillsy.Controllers.Accounts
         {
             try
             {
-                var accountExist = await _accountService.GetAccountById(account.AccountId);
+                var accountExist = await _accountService.GetAccountByAccountIdAndPassword(account.AccountId, account.OldPassword.Trim());
                 if (accountExist == null)
                 {
                     return NotFound("Account " + account.AccountId + " does not exist!");
@@ -162,7 +162,7 @@ namespace Pillsy.Controllers.Accounts
 
                 if (accountExist.Password != null)
                 {
-                    accountExist.Password = account.Password;
+                    accountExist.Password = account.NewPassword;
                 }
                 //var accountExist = await _accountService.GetAccountById();
                 //if (!String.IsNullOrEmpty(patient.FirstName?.Trim()))

@@ -94,5 +94,20 @@ namespace DataAcessObject
             }
             return isSuccess;
         }
+
+        public async Task<Account> GetAccountByIdAndPasswordAsync(Guid accountId, string oldPassword)
+        {
+            Account account = null;
+            try
+            {
+                var _context = new PillsyDBContext();
+                account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId.Equals(accountId) && a.Password.Equals(oldPassword.Trim()));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return account;
+        }
     }
 }
