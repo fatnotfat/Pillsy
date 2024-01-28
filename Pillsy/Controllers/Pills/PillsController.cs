@@ -37,8 +37,8 @@ namespace Pillsy.Controllers.Pills
         }
 
         // GET: api/Pills/5
-        [HttpPost("prescription-managed/")]
-        public async Task<ActionResult<Pill>> GetPillByPrescriptionIdAsync([FromBody]Guid prescriptionId)
+        [HttpGet("prescription-managed/{prescriptionId}")]
+        public async Task<ActionResult<Pill>> GetPillByPrescriptionIdAsync(Guid prescriptionId)
         {
             if (await _service.GetAllPillsAsync() == null)
             {
