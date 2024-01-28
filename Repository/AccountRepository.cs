@@ -23,6 +23,11 @@ namespace Repository
             return await accountDAO.Add(account);
         }
 
+        public async Task<Account> GetAccountByAccountIdAndPassword(Guid accountId, string password)
+        {
+            return await accountDAO.GetAccountByIdAndPasswordAsync(accountId, password);
+        }
+
         public async Task<IEnumerable<Account>> GetAccounts()
         {
             return await accountDAO.GetAccounts();

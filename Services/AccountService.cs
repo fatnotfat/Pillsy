@@ -22,6 +22,11 @@ namespace Service
             return await _accountRepository.AddNew(account);
         }
 
+        public async Task<Account> GetAccountByAccountIdAndPassword(Guid accountId, string password)
+        {
+            return await _accountRepository.GetAccountByAccountIdAndPassword(accountId, password);
+        }
+
         public async Task<Account> GetAccountByEmail(string email, string password)
         {
             var account = await _accountRepository.GetByEmail(email);

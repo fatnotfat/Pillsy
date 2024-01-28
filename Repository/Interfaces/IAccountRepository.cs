@@ -15,6 +15,7 @@ namespace Repository.Interfaces
         Task<Account> AddNew(Account account);
         Task<Account> GetByEmail(string email);
         Task<bool> UpdateAccount(Account account);
-
+        
+        Task<Account> GetAccountByAccountIdAndPassword(Guid accountId, string password);
     }
 }
