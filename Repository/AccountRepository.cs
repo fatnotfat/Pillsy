@@ -36,11 +36,7 @@ namespace Repository
         public async Task<Account> GetByEmail(string email)
         {
             var account = await accountDAO.GetAccountByEmail(email);
-            if(account != null)
-            {
-                return account;
-            }
-            return null;
+            return account;
         }
 
         public async Task<Account> GetByEmailAndPassword(string email, string password)

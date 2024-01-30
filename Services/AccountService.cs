@@ -27,16 +27,17 @@ namespace Service
             return await _accountRepository.GetAccountByAccountIdAndPassword(accountId, password);
         }
 
-        public async Task<Account> GetAccountByEmail(string email, string password)
+        public async Task<Account> GetAccountByEmail(string email)
         {
-            var account = await _accountRepository.GetByEmail(email);
-            if (account != null && account.Password.Equals(email.Trim())) return account;
-            return null;
+            return await _accountRepository.GetByEmail(email);
+
         }
 
         public async Task<Account> GetAccountByEmailAndPassword(string email, string password)
         {
-            return await _accountRepository.GetByEmailAndPassword(email, password);
+            var account = await _accountRepository.GetByEmail(email);
+            if (account != null && account.Password.Equals(password.Trim())) return account;
+            return null;
         }
 
         public async Task<Account> GetAccountById(Guid id)

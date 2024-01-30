@@ -1,4 +1,5 @@
 ﻿using BusinessObject;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -13,6 +14,7 @@ namespace DataAcessObject
     {
 
         private static AccountDAO instance = null;
+
 
         public static AccountDAO Instance
         {
@@ -62,6 +64,7 @@ namespace DataAcessObject
                 account.LastModifiedDate = DateTime.Now;
                 account.ModifiedBy = account.AccountId;
                 account.Status = 0;
+
 
                 await _context.Accounts.AddAsync(account);
                 await _context.SaveChangesAsync();

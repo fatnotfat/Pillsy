@@ -14,6 +14,7 @@ using Pillsy.DataTransferObjects.Patient.PatientDTO;
 using Pillsy.DataTransferObjects.Patient.PatientUpdateDto;
 using Pillsy.DataTransferObjects.Patient.PatientDetailDto;
 using Pillsy.Mappers;
+using Microsoft.AspNetCore.Identity;
 
 namespace Pillsy.Controllers.Patients
 {
@@ -25,13 +26,17 @@ namespace Pillsy.Controllers.Patients
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private readonly IAccountService _accountService;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public PatientsController(IConfiguration configuration, IMapper mapper, IPatientService patientService, IAccountService accountService)
+        public PatientsController(IConfiguration configuration, IMapper mapper, IPatientService patientService, IAccountService accountService, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _configuration = configuration;
             _mapper = mapper;
             _patientService = patientService;
             _accountService = accountService;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         // GET: api/Patients
@@ -137,12 +142,31 @@ namespace Pillsy.Controllers.Patients
             {
                 return Problem("Entity set 'PillsyDBContext.Patients'  is null.");
             }
+            IdentityUser user = new()
+            {
+                Email = patientDTO.Email,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = patientDTO.FirstName + patientDTO.LastName,
+                TwoFactorEnabled = false
+            };
+
+
             var result = await _patientService.AddNewPatient(data);
+
+            var account = await _accountService.GetAccountById(result.AccountId);
+            var resultAspUser = await _userManager.CreateAsync(user, account.Password);
+
+
+            if (!resultAspUser.Succeeded)
+            {
+                var message = string.Join(", ", resultAspUser.Errors.Select(x => "Code: " + x.Code + " Description: " + x.Description));
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new Response { Status = "Error", Message = message });
+            }
             if (result == null)
             {
                 return BadRequest();
             }
-
             return Ok("Patient " + result.PatientID + " was created!");
         }
 
