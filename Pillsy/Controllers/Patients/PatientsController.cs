@@ -15,6 +15,7 @@ using Pillsy.DataTransferObjects.Patient.PatientUpdateDto;
 using Pillsy.DataTransferObjects.Patient.PatientDetailDto;
 using Pillsy.Mappers;
 using Microsoft.AspNetCore.Identity;
+using System.Transactions;
 
 namespace Pillsy.Controllers.Patients
 {
@@ -150,24 +151,39 @@ namespace Pillsy.Controllers.Patients
                 TwoFactorEnabled = false
             };
 
-
-            var result = await _patientService.AddNewPatient(data);
-
-            var account = await _accountService.GetAccountById(result.AccountId);
-            //var resultAspUser = await _userManager.CreateAsync(user, account.Password);
-
-
-            //if (!resultAspUser.Succeeded)
-            //{
-            //    var message = string.Join(", ", resultAspUser.Errors.Select(x => "Code: " + x.Code + " Description: " + x.Description));
-            //    return StatusCode(StatusCodes.Status500InternalServerError,
-            //        new Response { Status = "Error", Message = message });
-            //}
-            if (result == null)
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                return BadRequest();
+                try
+                {
+                    var result = await _patientService.AddNewPatient(data);
+                    if (result != null)
+                    {
+                        var account = await _accountService.GetAccountById(result.AccountId);
+                        var resultAspUser = await _userManager.CreateAsync(user, account.Password);
+
+
+                        if (!resultAspUser.Succeeded)
+                        {
+
+                            var message = string.Join(", ", resultAspUser.Errors.Select(x => "Code: " + x.Code + " Description: " + x.Description));
+                            return StatusCode(StatusCodes.Status500InternalServerError,
+                                new Response { Status = "Error", Message = message });
+                        }
+                    }
+
+                    if (result == null)
+                    {
+                        return BadRequest();
+                    }
+                    return Ok("Patient " + result.PatientID + " was created!");
+                }
+                catch (Exception ex)
+                {
+                    scope.Dispose();
+                    return BadRequest($"{ex.Message}");
+                }
             }
-            return Ok("Patient " + result.PatientID + " was created!");
+            
         }
 
         //[HttpGet("{patientId}/prescriptions/detail")]

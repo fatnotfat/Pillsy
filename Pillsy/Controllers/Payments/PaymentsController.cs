@@ -8,7 +8,7 @@ namespace Pillsy.Controllers.Payments
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PaymentssController : ControllerBase
+    public class PaymentsController : ControllerBase
     {
         //[HttpGet]
         //[Route("momo-return")]
