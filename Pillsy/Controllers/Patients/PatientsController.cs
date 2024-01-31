@@ -175,6 +175,7 @@ namespace Pillsy.Controllers.Patients
                     {
                         return BadRequest();
                     }
+                    scope.Complete();
                     return Ok("Patient " + result.PatientID + " was created!");
                 }
                 catch (Exception ex)
