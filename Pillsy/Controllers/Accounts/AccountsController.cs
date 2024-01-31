@@ -249,7 +249,7 @@ namespace Pillsy.Controllers.Accounts
                 var message = new Message(new string[] { account.Email! }, "Forgot password link", forgotPasswordLink!);
                 _emailService.SendEmail(message);
                 return StatusCode(StatusCodes.Status200OK,
-                    new Response { Status = "Success", Message = $"Password changed request is sent on Email {account.Email}. Please open your email & click the link!" });
+                    new Response { Status = "Success", Message = $"Password changed request is sent on Email {account.Email}. Please open your email & click the link!", Body = token });
             }
             return StatusCode(StatusCodes.Status400BadRequest,
                     new Response { Status = "Error", Message = $"Could not send link to email. Please try again!" });
@@ -271,10 +271,11 @@ namespace Pillsy.Controllers.Accounts
         public async Task<IActionResult> ResetPassword(ResetPassword resetPassword)
         {
             var account = await _userManager.FindByEmailAsync(resetPassword.Email);
+            var accountExisted = await _accountService.GetAccountByEmail(resetPassword.Email);
             if (account != null)
             {
 
-                var resetPassResult = await _userManager.ResetPasswordAsync(account, resetPassword.Token, resetPassword.Password);
+                var resetPassResult = await _userManager.ChangePasswordAsync(account, accountExisted.Password, resetPassword.Password);
                 if (!resetPassResult.Succeeded)
                 {
                     foreach (var error in resetPassResult.Errors)

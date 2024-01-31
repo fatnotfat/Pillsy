@@ -16,6 +16,13 @@ using Pillsy.DataTransferObjects.Account.AccountDTO;
 using Service;
 using Pillsy.Mappers;
 using Pillsy.DataTransferObjects.Patient.PatientCreateDTO;
+using System.Net;
+using System.Net.Http.Headers;
+using Newtonsoft.Json;
+using System.Text;
+using Pillsy.DataTransferObjects.Prescription.PrescriptionRequestOCRDto;
+using System.Runtime.Serialization.Json;
+using Pillsy.DataTransferObjects.Prescription.PrescriptionRequestOCRInfoDto;
 
 namespace Pillsy.Controllers.Prescriptions
 {
@@ -217,9 +224,40 @@ namespace Pillsy.Controllers.Prescriptions
                 {
                     return BadRequest("Upload failed");
                 }
-
+                    
                 imageDto.Prescription_Id = pres.PrescriptionID;
                 imageDto.User_Id = Guid.Parse(userId);
+
+
+                //predict ocr
+                PrescriptionRequestOCRDto prescriptionRequestOCRDto = new PrescriptionRequestOCRDto();
+                prescriptionRequestOCRDto.Prescription_Id = imageDto.Prescription_Id;
+                prescriptionRequestOCRDto.User_Id = imageDto.User_Id;
+                prescriptionRequestOCRDto.Image = imageBytes;
+
+
+
+                //var content = new MultipartFormDataContent();
+                //content.Add(new ByteArrayContent(imageBytes), "image", "image.jpg");
+
+                var json = JsonConvert.SerializeObject(prescriptionRequestOCRDto);
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
+                var url = "http://35.232.72.106:8000/api/v1/predict-ocr/";
+                using var client = new HttpClient();
+                var response = await client.PostAsync(url, data);
+                var result = await response.Content.ReadAsStringAsync();
+
+                //predict infor
+
+                var bsObj = JsonConvert.DeserializeObject<PrescriptionRequestOCRInfoDto>(result);
+
+                var json2 = JsonConvert.SerializeObject(bsObj);
+                var data2 = new StringContent(json2, Encoding.UTF8, "application/json");
+                var url2 = "http://35.232.72.106:8000/api/v1/predict-info/";
+                using var client2 = new HttpClient();
+                var response2 = await client2.PostAsync(url2, data2);
+                var result2 = await response2.Content.ReadAsStringAsync();
+
                 return Ok(imageDto);
             }
             else
