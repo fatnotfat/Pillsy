@@ -154,15 +154,15 @@ namespace Pillsy.Controllers.Patients
             var result = await _patientService.AddNewPatient(data);
 
             var account = await _accountService.GetAccountById(result.AccountId);
-            var resultAspUser = await _userManager.CreateAsync(user, account.Password);
+            //var resultAspUser = await _userManager.CreateAsync(user, account.Password);
 
 
-            if (!resultAspUser.Succeeded)
-            {
-                var message = string.Join(", ", resultAspUser.Errors.Select(x => "Code: " + x.Code + " Description: " + x.Description));
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new Response { Status = "Error", Message = message });
-            }
+            //if (!resultAspUser.Succeeded)
+            //{
+            //    var message = string.Join(", ", resultAspUser.Errors.Select(x => "Code: " + x.Code + " Description: " + x.Description));
+            //    return StatusCode(StatusCodes.Status500InternalServerError,
+            //        new Response { Status = "Error", Message = message });
+            //}
             if (result == null)
             {
                 return BadRequest();

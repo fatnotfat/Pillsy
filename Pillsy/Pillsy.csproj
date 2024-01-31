@@ -7,6 +7,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Controllers\Schedules\**" />
+	  <Content Remove="Controllers\Schedules\**" />
+	  <EmbeddedResource Remove="Controllers\Schedules\**" />
+	  <None Remove="Controllers\Schedules\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="AutoMapper" Version="11.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.15" />
@@ -27,10 +34,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Services\Service.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Controllers\Schedules\" />
 	</ItemGroup>
 
 </Project>
