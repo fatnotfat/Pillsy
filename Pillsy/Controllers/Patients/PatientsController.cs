@@ -151,6 +151,7 @@ namespace Pillsy.Controllers.Patients
                 TwoFactorEnabled = false
             };
 
+            string mess = "";
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 try
@@ -168,19 +169,24 @@ namespace Pillsy.Controllers.Patients
                             var message = string.Join(", ", resultAspUser.Errors.Select(x => "Code: " + x.Code + " Description: " + x.Description));
                             return StatusCode(StatusCodes.Status500InternalServerError,
                                 new Response { Status = "Error", Message = message });
+                            mess = message;
                         }
+                        scope.Complete();
+                        return Ok("Patient " + result.PatientID + " was created!");
                     }
-
-                    if (result == null)
+                    else
                     {
-                        return BadRequest();
+                        return BadRequest("can not add this patient, please try again!");
                     }
-                    scope.Complete();
-                    return Ok("Patient " + result.PatientID + " was created!");
                 }
                 catch (Exception ex)
                 {
                     scope.Dispose();
+                    if(mess.Length > 0)
+                    {
+                        return BadRequest($"{mess}");
+
+                    }
                     return BadRequest($"{ex.Message}");
                 }
             }

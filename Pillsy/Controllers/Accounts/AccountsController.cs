@@ -243,7 +243,7 @@ namespace Pillsy.Controllers.Accounts
             var account = await _userManager.FindByEmailAsync(email);
             if (account != null)
             {
-                var token = await _userManager.GeneratePasswordResetTokenAsync(account);
+                var token = await _userManager.GenerateTwoFactorTokenAsync(account, "Email");
                 var formData = Request.Scheme;
                 var forgotPasswordLink = Url.Action(nameof(ResetPassword), "Accounts", new { token, email = account.Email }, formData);
                 var message = new Message(new string[] { account.Email! }, "Forgot password link", forgotPasswordLink!);

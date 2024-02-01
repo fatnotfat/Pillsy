@@ -81,24 +81,31 @@ namespace DataAcessObject
 
         public async Task<Patient> AddAsync(Patient patient)
         {
-            var _context = new PillsyDBContext();
+            try
+            {
+                var _context = new PillsyDBContext();
 
-            var accountId = Guid.NewGuid();
-            patient.AccountId = accountId;
-            patient.Account.AccountId = accountId;
-            patient.Account.CreatedDate = DateTime.Now;
-            patient.Account.LastModifiedDate = DateTime.Now;
-            patient.Account.Status = 1;
+                var accountId = Guid.NewGuid();
+                patient.AccountId = accountId;
+                patient.Account.AccountId = accountId;
+                patient.Account.CreatedDate = DateTime.Now;
+                patient.Account.LastModifiedDate = DateTime.Now;
+                patient.Account.Status = 1;
 
 
-            patient.CreatedBy = accountId;
-            patient.CreatedDate = DateTime.Now;
-            patient.LastModifiedDate = DateTime.Now;
-            patient.ModifiedBy = accountId;
-            await _context.Patients.AddAsync(patient);
-            await _context.SaveChangesAsync();
+                patient.CreatedBy = accountId;
+                patient.CreatedDate = DateTime.Now;
+                patient.LastModifiedDate = DateTime.Now;
+                patient.ModifiedBy = accountId;
+                await _context.Patients.AddAsync(patient);
+                await _context.SaveChangesAsync();
 
-            return patient;
+                return patient;
+            } catch (Exception) 
+            { 
+                throw; 
+            }
+            
 
         }
     }

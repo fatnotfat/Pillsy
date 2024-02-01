@@ -23,6 +23,7 @@ using System.Text;
 using Pillsy.DataTransferObjects.Prescription.PrescriptionRequestOCRDto;
 using System.Runtime.Serialization.Json;
 using Pillsy.DataTransferObjects.Prescription.PrescriptionRequestOCRInfoDto;
+using System.Transactions;
 
 namespace Pillsy.Controllers.Prescriptions
 {
@@ -163,7 +164,7 @@ namespace Pillsy.Controllers.Prescriptions
                     if (result != null)
                     {
 
-                        var pills = prescriptiondto.User_data.Medication_records.Select(p => mapper.Map<Medication_records, Pill>(p));
+                        var pills = prescriptiondto.User_data.Medication_records.Medication_Records.Select(p => mapper.Map<Medication_record, Pill>(p));
                         foreach (var p in pills)
                         {
                             p.CreatedBy = prescription.CreatedBy;
@@ -192,77 +193,92 @@ namespace Pillsy.Controllers.Prescriptions
         [Route("upload-image")]
         public async Task<ActionResult<string>> AddImagePrescription(IFormFile file)
         {
-            if (await _service.GetAllPrescriptionsAsync() == null)
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                return Problem("Entity set 'PillsyDBContext.Prescriptions'  is null.");
-            }
-            byte[]? imageBytes = null;
-            using (var ms = new MemoryStream())
-            {
-                file.CopyTo(ms);
-                imageBytes = ms.ToArray();
-            }
-            string userId = User.FindFirst("AccountId")?.Value;
-
-            var patient = await _patientService.GetPatientByAccountIdAsync(Guid.Parse(userId));
-
-            if (!String.IsNullOrEmpty(userId))
-            {
-                Prescription pres = new Prescription
+                try
                 {
-                    PrescriptionID = Guid.NewGuid(),
-                    PatientID = patient.PatientID,
-                    ExaminationDate = null,
-                    Status = 1,
-                    Index = 0,
-                    ImageBase64 = imageBytes
-                };
+                    if (await _service.GetAllPrescriptionsAsync() == null)
+                    {
+                        return Problem("Entity set 'PillsyDBContext.Prescriptions'  is null.");
+                    }
+                    byte[]? imageBytes = null;
+                    using (var ms = new MemoryStream())
+                    {
+                        file.CopyTo(ms);
+                        imageBytes = ms.ToArray();
+                    }
+                    string userId = User.FindFirst("AccountId")?.Value;
 
-                PrescriptionUploadImageDto imageDto = new PrescriptionUploadImageDto();
-                imageDto.ImageBase64 = await _service.AddAsync(pres);
-                if (String.IsNullOrEmpty(imageDto.ImageBase64.ToString().Trim()))
-                {
-                    return BadRequest("Upload failed");
+                    var patient = await _patientService.GetPatientByAccountIdAsync(Guid.Parse(userId));
+
+                    if (!String.IsNullOrEmpty(userId))
+                    {
+                        Prescription pres = new Prescription
+                        {
+                            PrescriptionID = Guid.NewGuid(),
+                            PatientID = patient.PatientID,
+                            ExaminationDate = null,
+                            Status = 1,
+                            Index = 0,
+                            ImageBase64 = imageBytes
+                        };
+
+                        PrescriptionUploadImageDto imageDto = new PrescriptionUploadImageDto();
+                        imageDto.ImageBase64 = await _service.AddAsync(pres);
+                        if (String.IsNullOrEmpty(imageDto.ImageBase64.ToString().Trim()))
+                        {
+                            return BadRequest("Upload failed");
+                        }
+
+                        imageDto.Prescription_Id = pres.PrescriptionID;
+                        imageDto.User_Id = Guid.Parse(userId);
+
+
+                        //predict ocr
+                        PrescriptionRequestOCRDto prescriptionRequestOCRDto = new PrescriptionRequestOCRDto();
+                        prescriptionRequestOCRDto.Prescription_Id = imageDto.Prescription_Id;
+                        prescriptionRequestOCRDto.User_Id = imageDto.User_Id;
+                        prescriptionRequestOCRDto.Image = imageBytes;
+
+
+
+                        //var content = new MultipartFormDataContent();
+                        //content.Add(new ByteArrayContent(imageBytes), "image", "image.jpg");
+
+                        var json = JsonConvert.SerializeObject(prescriptionRequestOCRDto);
+                        var data = new StringContent(json, Encoding.UTF8, "application/json");
+                        var url = "http://35.232.72.106:8000/api/v1/predict-ocr/";
+                        using var client = new HttpClient();
+                        var response = await client.PostAsync(url, data);
+                        var result = await response.Content.ReadAsStringAsync();
+
+                        //predict infor
+
+                        var bsObj = JsonConvert.DeserializeObject<PrescriptionRequestOCRInfoDto>(result);
+
+                        var json2 = JsonConvert.SerializeObject(bsObj);
+                        var data2 = new StringContent(json2, Encoding.UTF8, "application/json");
+                        var url2 = "http://35.232.72.106:8000/api/v1/predict-info/";
+                        using var client2 = new HttpClient();
+                        var response2 = await client2.PostAsync(url2, data2);
+                        var result2 = await response2.Content.ReadAsStringAsync();
+
+
+                        var prescriptiondto = JsonConvert.DeserializeObject<PrescriptionCreateDto>(result2);
+                        await UpdatePrescription(prescriptiondto);
+                        scope.Complete();
+                        return Ok("Prescription add complete!");
+                    }
+                    else
+                    {
+                        return NotFound("User not found!");
+                    }
                 }
-                    
-                imageDto.Prescription_Id = pres.PrescriptionID;
-                imageDto.User_Id = Guid.Parse(userId);
-
-
-                //predict ocr
-                PrescriptionRequestOCRDto prescriptionRequestOCRDto = new PrescriptionRequestOCRDto();
-                prescriptionRequestOCRDto.Prescription_Id = imageDto.Prescription_Id;
-                prescriptionRequestOCRDto.User_Id = imageDto.User_Id;
-                prescriptionRequestOCRDto.Image = imageBytes;
-
-
-
-                //var content = new MultipartFormDataContent();
-                //content.Add(new ByteArrayContent(imageBytes), "image", "image.jpg");
-
-                var json = JsonConvert.SerializeObject(prescriptionRequestOCRDto);
-                var data = new StringContent(json, Encoding.UTF8, "application/json");
-                var url = "http://35.232.72.106:8000/api/v1/predict-ocr/";
-                using var client = new HttpClient();
-                var response = await client.PostAsync(url, data);
-                var result = await response.Content.ReadAsStringAsync();
-
-                //predict infor
-
-                var bsObj = JsonConvert.DeserializeObject<PrescriptionRequestOCRInfoDto>(result);
-
-                var json2 = JsonConvert.SerializeObject(bsObj);
-                var data2 = new StringContent(json2, Encoding.UTF8, "application/json");
-                var url2 = "http://35.232.72.106:8000/api/v1/predict-info/";
-                using var client2 = new HttpClient();
-                var response2 = await client2.PostAsync(url2, data2);
-                var result2 = await response2.Content.ReadAsStringAsync();
-
-                return Ok(imageDto);
-            }
-            else
-            {
-                return NotFound("User not found!");
+                catch (Exception ex)
+                {
+                    scope.Dispose();
+                    return BadRequest($"{ex.Message}");
+                }
             }
 
         }

@@ -85,17 +85,14 @@ namespace DataAcessObject
 
         public async Task<byte[]> AddAsync(Prescription prescription)
         {
-            using var transaction = _context.Database.BeginTransaction();
             try
             {
                 await _context.AddAsync(prescription);
                 await _context.SaveChangesAsync();
 
-                transaction.Commit();
             }
             catch (Exception)
             {
-                transaction.Rollback();
                 throw;
             }
             return prescription.ImageBase64;
