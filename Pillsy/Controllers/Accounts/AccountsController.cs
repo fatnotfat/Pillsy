@@ -246,7 +246,7 @@ namespace Pillsy.Controllers.Accounts
                 var token = await _userManager.GenerateTwoFactorTokenAsync(account, "Email");
                 var formData = Request.Scheme;
                 var forgotPasswordLink = Url.Action(nameof(ResetPassword), "Accounts", new { token, email = account.Email }, formData);
-                var message = new Message(new string[] { account.Email! }, "OTP to reset password", token);
+                var message = new Message(new string[] { account.Email! }, "OTP to forgot password", token);
                 _emailService.SendEmail(message);
                 return StatusCode(StatusCodes.Status200OK,
                     new Response { Status = "Success", Message = $"Password changed request is sent on Email {account.Email}. Please open your email & click the link!", Body = token });

@@ -110,6 +110,7 @@ namespace Pillsy.Controllers.Prescriptions
         [HttpPost]
         public async Task<ActionResult<Prescription>> UpdatePrescription(PrescriptionCreateDto prescriptiondto)
         {
+
             try
             {
                 if (await _service.GetAllPrescriptionsAsync() == null)
@@ -271,6 +272,7 @@ namespace Pillsy.Controllers.Prescriptions
                     }
                     else
                     {
+                        scope.Dispose();
                         return NotFound("User not found!");
                     }
                 }

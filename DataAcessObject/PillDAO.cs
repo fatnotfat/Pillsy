@@ -73,5 +73,20 @@ namespace DataAcessObject
             return pill;
         }
 
+        public Pill Add(Pill pill)
+        {
+            try
+            {
+                _context.AddAsync(pill);
+                _context.SaveChanges();
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return pill;
+        }
+
     }
 }
