@@ -108,7 +108,7 @@ namespace DataAcessObject
                 {
                     throw new Exception("The list is empty!");
                 }
-                var prescription = await _context.Prescriptions.Where(p => p.PatientID.Equals(prescriptionId)).ToListAsync();
+                var prescription = await _context.Prescriptions.Include(p => p.Pills).Where(p => p.PatientID.Equals(prescriptionId)).ToListAsync();
                 if (prescription == null)
                 {
                     throw new Exception("No content found!");
