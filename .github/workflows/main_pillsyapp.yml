@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'pillsyapp'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_910CE6337B294C6C95779D08B8FF1DC4 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_82645AF95F2042E48B27C6E90F05C050 }}
           package: .
