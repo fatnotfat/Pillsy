@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using Service.Interfaces;
+using Pillsy.DataTransferObjects.Pill.PillCreateWithPrescriptionDto;
+using Pillsy.DataTransferObjects.Account.AccountDTO;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Pillsy.Controllers.Pills
 {
@@ -15,10 +19,12 @@ namespace Pillsy.Controllers.Pills
     public class PillsController : ControllerBase
     {
         private readonly IPillService _service;
+        private readonly IMapper _mapper;
 
-        public PillsController(IPillService service)
+        public PillsController(IPillService service, IMapper mapper)
         {
             _service = service;
+            _mapper = mapper;
         }
 
 
@@ -85,20 +91,25 @@ namespace Pillsy.Controllers.Pills
         //    return NoContent();
         //}
 
-        //// POST: api/Pills
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<Pill>> PostPill(Pill pill)
-        //{
-        //  if (_context.Pills == null)
-        //  {
-        //      return Problem("Entity set 'PillsyDBContext.Pills'  is null.");
-        //  }
-        //    _context.Pills.Add(pill);
-        //    await _context.SaveChangesAsync();
-
-        //    return CreatedAtAction("GetPill", new { id = pill.PillId }, pill);
-        //}
+        // POST: api/Pills
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Patient")]
+        [HttpPost]
+        [Route("add-to-prescription")]
+        public async Task<ActionResult<bool>> AddPillToPrescription(PillCreateWithPrescriptionDto pill,Guid prescriptionId)
+        {
+            try
+            {
+                string userId = User.FindFirst("PatientId")!.Value;
+                var data = _mapper.Map<Pill>(pill);
+                data.CreatedBy = Guid.Parse(userId!);
+                await _service.AddPillToPrescription(data, prescriptionId);
+                return Ok("Add successful!");
+            }catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         //// DELETE: api/Pills/5
         //[HttpDelete("{id}")]

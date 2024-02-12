@@ -2,6 +2,7 @@
 using BusinessObject;
 using Pillsy.DataTransferObjects.Account.AccountDTO;
 using Pillsy.DataTransferObjects.Pill.PillCreateDto;
+using Pillsy.DataTransferObjects.Pill.PillCreateWithPrescriptionDto;
 using Pillsy.DataTransferObjects.Prescription.PrescriptionCreateDto;
 
 namespace Pillsy.Mappers
@@ -74,6 +75,81 @@ namespace Pillsy.Mappers
                 dest => dest.PrescriptionId,
                 opt => opt.MapFrom(src => src.Medication_records_id)
             );
+
+            CreateMap<PillCreateWithPrescriptionDto, Pill>()
+            .ForMember(
+                dest => dest.PillId,
+                opt => opt.MapFrom(src => Guid.NewGuid())
+            )
+            .ForMember(
+                dest => dest.PillName,
+                opt => opt.MapFrom(src => src.PillName)
+            )
+            .ForMember(
+                dest => dest.PillDescription,
+                opt => opt.MapFrom(src => src.PillDescription)
+            )
+            .ForMember(
+                dest => dest.DosagePerDay,
+                opt => opt.MapFrom(src => src.DosagePerDay)
+            )
+            .ForMember(
+                dest => dest.Quantity,
+                opt => opt.MapFrom(src => src.Quantity)
+            )
+            .ForMember(
+                dest => dest.QuantityPerDose,
+                opt => opt.MapFrom(src => src.QuantityPerDose)
+            )
+            .ForMember(
+                dest => dest.Period,
+                opt => opt.MapFrom(src => src.Unit)
+            )
+            .ForMember(
+                dest => dest.Unit,
+                opt => opt.MapFrom(src => src.Unit)
+            )
+            .ForMember(
+                dest => dest.Status,
+                opt => opt.MapFrom(src => 1)
+            )
+            .ForMember(
+                dest => dest.Index,
+                opt => opt.MapFrom(src => 0)
+            )
+            .ForMember(
+                dest => dest.Morning,
+                opt => opt.MapFrom(src => src.Morning)
+            )
+            .ForMember(
+                dest => dest.Afternoon,
+                opt => opt.MapFrom(src => src.Afternoon)
+            )
+            .ForMember(
+                dest => dest.Evening,
+                opt => opt.MapFrom(src => src.Evening)
+            )
+            .ForMember(
+                dest => dest.PrescriptionId,
+                opt => opt.MapFrom(src => src.PrescriptionId)
+            )
+            .ForMember(
+                dest => dest.PillId,
+                opt => opt.MapFrom(src => Guid.NewGuid())
+            )
+            .ForMember(
+                dest => dest.DateStart,
+                opt => opt.MapFrom(src => src.DateStart)
+            )
+            .ForMember(
+                dest => dest.DateEnd,
+                opt => opt.MapFrom(src => src.DateEnd)
+            )
+            .ForMember(
+                dest => dest.CreatedDate,
+                opt => opt.MapFrom(src => DateTime.Now)
+            )
+            ;
         }
     }
 }

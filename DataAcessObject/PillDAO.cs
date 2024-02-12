@@ -88,5 +88,21 @@ namespace DataAcessObject
             return pill;
         }
 
+
+        public async Task<bool> AddPillToPrescription(Pill pill)
+        {
+            bool result = false;
+            try
+            {
+                _context.Pills!.Add(pill);
+                await _context.SaveChangesAsync();
+                result = true;
+            }catch (Exception)
+            {
+                throw;
+            }
+            return result;
+        }
+
     }
 }

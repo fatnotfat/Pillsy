@@ -12,9 +12,11 @@ namespace Service
     public class PillService : IPillService
     {
         private IPillRepository _repository;
-        public PillService(IPillRepository repository)
+        private IPrescriptionRepository _prescriptionRepository;
+        public PillService(IPillRepository repository, IPrescriptionRepository prescriptionRepository)
         {
             _repository = repository;
+            _prescriptionRepository = prescriptionRepository;
         }
 
         public Pill AddPill(Pill pill)
@@ -41,6 +43,24 @@ namespace Service
             {
                 throw;
             }
+        }
+
+        public async Task<bool> AddPillToPrescription(Pill pill, Guid prescriptionId)
+        {
+            var result = false;
+            try
+            {
+                var prescription = await _prescriptionRepository.GetPrescriptionsByPrescriptionIdAsync(prescriptionId);
+                if(prescription != null)
+                {
+                    pill.PrescriptionId = prescriptionId;
+                    result = await _repository.AddPillToPrescription(pill);
+                }
+            }catch (Exception)
+            {
+                throw;
+            }
+            return result;
         }
 
         public async Task<IEnumerable<Pill>> GetAllPillsAsync()

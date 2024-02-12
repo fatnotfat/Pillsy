@@ -1,15 +1,7 @@
-﻿using BusinessObject.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BusinessObject
+﻿namespace Pillsy.DataTransferObjects.Pill.PillCreateWithPrescriptionDto
 {
-    public class Pill : BaseEntity
+    public class PillCreateWithPrescriptionDto
     {
-        public Guid PillId { get; set; }
         public string PillName { get; set; }
         public string? PillDescription { get; set; }
         public int? DosagePerDay { get; set; }
@@ -17,13 +9,10 @@ namespace BusinessObject
         public int? QuantityPerDose { get; set; }
         public string? Period { get; set; }
         public string? Unit { get; set; }
-        public int Status { get; set; }
-        public int Index { get; set; }
         public int Morning { get; set; } = 0;
         public int Afternoon { get; set; } = 0;
         public int Evening { get; set; } = 0;
         public Guid PrescriptionId { get; set; }
-        public Prescription? Prescription { get; set; }
         public DateTime? DateStart { get; set; }
         public DateTime? DateEnd { get; set; }
     }

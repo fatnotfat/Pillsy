@@ -28,6 +28,11 @@ namespace Repository
             return await pillDAO.AddAsync(pill);
         }
 
+        public async Task<bool> AddPillToPrescription(Pill pill)
+        {
+            return await pillDAO.AddPillToPrescription(pill);
+        }
+
         public async Task<IEnumerable<Pill>> GetAllPillsAsync()
         {
             return await pillDAO.GetAll();
