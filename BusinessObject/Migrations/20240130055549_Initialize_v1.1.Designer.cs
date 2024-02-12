@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObject.Migrations
 {
     [DbContext(typeof(PillsyDBContext))]
-    [Migration("20240126202042_Initialize_v1.0")]
-    partial class Initialize_v10
+    [Migration("20240130055549_Initialize_v1.1")]
+    partial class Initialize_v11
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,30 +68,30 @@ namespace BusinessObject.Migrations
                     b.HasData(
                         new
                         {
-                            AccountId = new Guid("2b1efc3d-f1b9-49c6-bfbd-cf3480531fe3"),
-                            CreatedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6296),
+                            AccountId = new Guid("ae319569-eeaf-48f2-aa3f-3ff371f37f54"),
+                            CreatedDate = new DateTime(2024, 1, 30, 5, 55, 49, 679, DateTimeKind.Utc).AddTicks(3204),
                             Email = "nguyenphat2711@gmail.com",
-                            LastModifiedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6299),
+                            LastModifiedDate = new DateTime(2024, 1, 30, 5, 55, 49, 679, DateTimeKind.Utc).AddTicks(3208),
                             Password = "@@admin@@",
                             Role = 0,
                             Status = 1
                         },
                         new
                         {
-                            AccountId = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
-                            CreatedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6302),
+                            AccountId = new Guid("45d5c50c-2eba-4ed2-b06e-43956e0cb1f4"),
+                            CreatedDate = new DateTime(2024, 1, 30, 5, 55, 49, 679, DateTimeKind.Utc).AddTicks(3210),
                             Email = "dungnvse160223@fpt.edu.vn",
-                            LastModifiedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6303),
+                            LastModifiedDate = new DateTime(2024, 1, 30, 5, 55, 49, 679, DateTimeKind.Utc).AddTicks(3211),
                             Password = "@@patient@@",
                             Role = 2,
                             Status = 1
                         },
                         new
                         {
-                            AccountId = new Guid("03757b9d-60cf-483e-85ef-fc27c48657a9"),
-                            CreatedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6305),
+                            AccountId = new Guid("b0926bd8-74b3-432d-8e49-a5d91075114e"),
+                            CreatedDate = new DateTime(2024, 1, 30, 5, 55, 49, 679, DateTimeKind.Utc).AddTicks(3213),
                             Email = "khoatruong2509@fpt.edu.vn",
-                            LastModifiedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6305),
+                            LastModifiedDate = new DateTime(2024, 1, 30, 5, 55, 49, 679, DateTimeKind.Utc).AddTicks(3213),
                             Password = "@@doctor@@",
                             Role = 1,
                             Status = 1
@@ -194,14 +194,14 @@ namespace BusinessObject.Migrations
                     b.HasData(
                         new
                         {
-                            DoctorID = new Guid("f04b33f9-035b-4871-8e13-76966d52915d"),
-                            AccountId = new Guid("03757b9d-60cf-483e-85ef-fc27c48657a9"),
-                            CreatedBy = new Guid("03757b9d-60cf-483e-85ef-fc27c48657a9"),
-                            CreatedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6499),
+                            DoctorID = new Guid("34543098-a683-4add-a6c9-f8be6f02ffab"),
+                            AccountId = new Guid("b0926bd8-74b3-432d-8e49-a5d91075114e"),
+                            CreatedBy = new Guid("b0926bd8-74b3-432d-8e49-a5d91075114e"),
+                            CreatedDate = new DateTime(2024, 1, 30, 5, 55, 49, 679, DateTimeKind.Utc).AddTicks(3411),
                             FirstName = "Khoa",
-                            LastModifiedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6500),
+                            LastModifiedDate = new DateTime(2024, 1, 30, 5, 55, 49, 679, DateTimeKind.Utc).AddTicks(3411),
                             LastName = "Truong",
-                            ModifiedBy = new Guid("03757b9d-60cf-483e-85ef-fc27c48657a9"),
+                            ModifiedBy = new Guid("b0926bd8-74b3-432d-8e49-a5d91075114e"),
                             PhoneNumber = "0987654321",
                             Specialty = "Khoa noi"
                         });
@@ -251,7 +251,7 @@ namespace BusinessObject.Migrations
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PaymentId")
+                    b.Property<Guid?>("PaymentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PhoneNumber")
@@ -272,18 +272,18 @@ namespace BusinessObject.Migrations
                     b.HasData(
                         new
                         {
-                            PatientID = new Guid("2ba2f9e4-135f-4f2f-bb9e-912e3a11c2e3"),
-                            AccountId = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
+                            PatientID = new Guid("9c255002-796a-4b1c-89a0-2523f2ca7a5d"),
+                            AccountId = new Guid("45d5c50c-2eba-4ed2-b06e-43956e0cb1f4"),
                             Address = "Bac Ninh",
-                            CreatedBy = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
-                            CreatedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6601),
+                            CreatedBy = new Guid("45d5c50c-2eba-4ed2-b06e-43956e0cb1f4"),
+                            CreatedDate = new DateTime(2024, 1, 30, 5, 55, 49, 679, DateTimeKind.Utc).AddTicks(3497),
                             DateOfBirth = new DateTime(2002, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Dung",
                             Gender = 0,
-                            LastModifiedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6602),
+                            LastModifiedDate = new DateTime(2024, 1, 30, 5, 55, 49, 679, DateTimeKind.Utc).AddTicks(3497),
                             LastName = "Nguyen",
-                            ModifiedBy = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
-                            PaymentId = new Guid("1f4ae2d5-620a-4675-9436-baf885ec8da1"),
+                            ModifiedBy = new Guid("45d5c50c-2eba-4ed2-b06e-43956e0cb1f4"),
+                            PaymentId = new Guid("3d6697d9-7b21-4fa1-abd2-0b9128fc035f"),
                             PhoneNumber = "0123456789"
                         });
                 });
@@ -321,9 +321,9 @@ namespace BusinessObject.Migrations
                     b.HasData(
                         new
                         {
-                            PaymentId = new Guid("1f4ae2d5-620a-4675-9436-baf885ec8da1"),
-                            CreatedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6450),
-                            LastModifiedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6451),
+                            PaymentId = new Guid("3d6697d9-7b21-4fa1-abd2-0b9128fc035f"),
+                            CreatedDate = new DateTime(2024, 1, 30, 5, 55, 49, 679, DateTimeKind.Utc).AddTicks(3393),
+                            LastModifiedDate = new DateTime(2024, 1, 30, 5, 55, 49, 679, DateTimeKind.Utc).AddTicks(3393),
                             PaymentType = "Momo",
                             Status = 0
                         });
@@ -407,20 +407,20 @@ namespace BusinessObject.Migrations
                     b.HasData(
                         new
                         {
-                            PillId = new Guid("96966c6e-2291-4e27-a2ae-9273dae671b2"),
+                            PillId = new Guid("4445eb6d-8471-49a7-b818-57c15f83cb9d"),
                             Afternoon = 0,
-                            CreatedBy = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
-                            CreatedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6643),
+                            CreatedBy = new Guid("45d5c50c-2eba-4ed2-b06e-43956e0cb1f4"),
+                            CreatedDate = new DateTime(2024, 1, 30, 5, 55, 49, 679, DateTimeKind.Utc).AddTicks(3531),
                             DosagePerDay = 1,
                             Evening = 0,
                             Index = 1,
-                            LastModifiedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6644),
-                            ModifiedBy = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
+                            LastModifiedDate = new DateTime(2024, 1, 30, 5, 55, 49, 679, DateTimeKind.Utc).AddTicks(3532),
+                            ModifiedBy = new Guid("45d5c50c-2eba-4ed2-b06e-43956e0cb1f4"),
                             Morning = 1,
                             Period = "ngay",
                             PillDescription = "1 ngay uong 1 vien 30 phut sau khi an",
                             PillName = "Nexium mup",
-                            PrescriptionId = new Guid("47de07e6-229c-4a42-8b72-9d798adfc5fc"),
+                            PrescriptionId = new Guid("8895da60-2e7b-42ab-8b37-107990afb505"),
                             Quantity = 30,
                             QuantityPerDose = 1,
                             Status = 1,
@@ -428,20 +428,20 @@ namespace BusinessObject.Migrations
                         },
                         new
                         {
-                            PillId = new Guid("045ab47d-1a87-461e-ab64-b4f85cb7fb55"),
+                            PillId = new Guid("73c79a51-f469-421d-b8f1-b5a5327ff9fc"),
                             Afternoon = 0,
-                            CreatedBy = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
-                            CreatedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6655),
+                            CreatedBy = new Guid("45d5c50c-2eba-4ed2-b06e-43956e0cb1f4"),
+                            CreatedDate = new DateTime(2024, 1, 30, 5, 55, 49, 679, DateTimeKind.Utc).AddTicks(3604),
                             DosagePerDay = 2,
                             Evening = 1,
                             Index = 1,
-                            LastModifiedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6656),
-                            ModifiedBy = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
+                            LastModifiedDate = new DateTime(2024, 1, 30, 5, 55, 49, 679, DateTimeKind.Utc).AddTicks(3605),
+                            ModifiedBy = new Guid("45d5c50c-2eba-4ed2-b06e-43956e0cb1f4"),
                             Morning = 1,
                             Period = "ngay",
                             PillDescription = "1 ngay uong 2 vien chia lam 2 lan(sang, toi - sau khi an)",
                             PillName = "Amoxycilin",
-                            PrescriptionId = new Guid("47de07e6-229c-4a42-8b72-9d798adfc5fc"),
+                            PrescriptionId = new Guid("8895da60-2e7b-42ab-8b37-107990afb505"),
                             Quantity = 20,
                             QuantityPerDose = 1,
                             Status = 1,
@@ -503,17 +503,17 @@ namespace BusinessObject.Migrations
                     b.HasData(
                         new
                         {
-                            PrescriptionID = new Guid("47de07e6-229c-4a42-8b72-9d798adfc5fc"),
-                            CreatedBy = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
-                            CreatedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6625),
+                            PrescriptionID = new Guid("8895da60-2e7b-42ab-8b37-107990afb505"),
+                            CreatedBy = new Guid("45d5c50c-2eba-4ed2-b06e-43956e0cb1f4"),
+                            CreatedDate = new DateTime(2024, 1, 30, 5, 55, 49, 679, DateTimeKind.Utc).AddTicks(3515),
                             Diagnosis = "viem da day",
-                            DoctorID = new Guid("f04b33f9-035b-4871-8e13-76966d52915d"),
+                            DoctorID = new Guid("34543098-a683-4add-a6c9-f8be6f02ffab"),
                             ExaminationDate = new DateTime(2024, 1, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Image = "test",
                             Index = 1,
-                            LastModifiedDate = new DateTime(2024, 1, 26, 20, 20, 42, 640, DateTimeKind.Utc).AddTicks(6626),
-                            ModifiedBy = new Guid("d166440b-7cd4-4124-861f-5fce0e5d0c9c"),
-                            PatientID = new Guid("2ba2f9e4-135f-4f2f-bb9e-912e3a11c2e3"),
+                            LastModifiedDate = new DateTime(2024, 1, 30, 5, 55, 49, 679, DateTimeKind.Utc).AddTicks(3515),
+                            ModifiedBy = new Guid("45d5c50c-2eba-4ed2-b06e-43956e0cb1f4"),
+                            PatientID = new Guid("9c255002-796a-4b1c-89a0-2523f2ca7a5d"),
                             Status = 1
                         });
                 });
@@ -609,6 +609,268 @@ namespace BusinessObject.Migrations
                     b.ToTable("TransactionHistory", (string)null);
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "66d22dde-fd40-411d-b218-970a72e3751d",
+                            ConcurrencyStamp = "1",
+                            Name = "Admin",
+                            NormalizedName = "Admin"
+                        },
+                        new
+                        {
+                            Id = "03a2582e-6eee-407a-88f0-29abe6cec0ba",
+                            ConcurrencyStamp = "2",
+                            Name = "Doctor",
+                            NormalizedName = "Doctor"
+                        },
+                        new
+                        {
+                            Id = "333167ba-eac2-4647-a686-a5fe06df6244",
+                            ConcurrencyStamp = "3",
+                            Name = "Patient",
+                            NormalizedName = "Patient"
+                        });
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "eb540be0-e144-4a28-aa5f-f5910cc01750",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "11b4bd7e-c884-4f01-9a24-369d5042555f",
+                            Email = "nguyenphat2711@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "6779484f-a364-48ea-b855-0e15f02de7a9",
+                            TwoFactorEnabled = false,
+                            UserName = "Phat Nguyen"
+                        },
+                        new
+                        {
+                            Id = "57bcad15-f17e-4ec5-8f9f-5ea760a84a4e",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "d9dbc392-b28b-4997-8068-8e7512b35a13",
+                            Email = "dungnvse160223@fpt.edu.vn",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "60d4cb23-e003-4e47-8328-f8285ef152cf",
+                            TwoFactorEnabled = false,
+                            UserName = "Dung Nguyen"
+                        },
+                        new
+                        {
+                            Id = "603f5a31-893a-4719-828c-2a0c2f606513",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "50f6c598-9e46-4d4b-bf30-f1531641c0e5",
+                            Email = "khoatruong2509@fpt.edu.vn",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "7ff97fd8-37c7-45f4-807b-87ec4ef8c5ca",
+                            TwoFactorEnabled = false,
+                            UserName = "Khoa Truong"
+                        });
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
             modelBuilder.Entity("BusinessObject.Appointment", b =>
                 {
                     b.HasOne("BusinessObject.Doctor", "Doctor")
@@ -650,8 +912,7 @@ namespace BusinessObject.Migrations
                     b.HasOne("BusinessObject.Payment", "Payment")
                         .WithMany("Patients")
                         .HasForeignKey("PaymentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Account");
 
@@ -712,6 +973,57 @@ namespace BusinessObject.Migrations
                     b.Navigation("Payment");
 
                     b.Navigation("SubscriptionPackage");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BusinessObject.Doctor", b =>

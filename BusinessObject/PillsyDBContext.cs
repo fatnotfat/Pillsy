@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BusinessObject
 {
-    public class PillsyDBContext : DbContext
+    public class PillsyDBContext : IdentityDbContext<IdentityUser>
     {
         public PillsyDBContext()
         {
@@ -79,6 +81,10 @@ namespace BusinessObject
             var pillId2 = Guid.NewGuid();
             var pillId3 = Guid.NewGuid();
 
+            
+
+
+
 
 
             builder.Entity<Account>().HasData(
@@ -118,6 +124,31 @@ namespace BusinessObject
                     LastModifiedDate = DateTime.UtcNow,
                     ModifiedBy = null
                 });
+
+
+            IdentityUser user1 = new ()
+            {
+                Email = "nguyenphat2711@gmail.com",
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = "Phat Nguyen"
+            };
+            IdentityUser user2 = new()
+            {
+                Email = "dungnvse160223@fpt.edu.vn",
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = "Dung Nguyen"
+            };
+            IdentityUser user3 = new()
+            {
+                Email = "khoatruong2509@fpt.edu.vn",
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = "Khoa Truong"
+            };
+
+            builder.Entity<IdentityUser>().HasData(user1);
+            builder.Entity<IdentityUser>().HasData(user2);
+            builder.Entity<IdentityUser>().HasData(user3);
+
             builder.Entity<Payment>().HasData(new Payment
             {
                 PaymentId = paymentId1,
@@ -221,6 +252,18 @@ namespace BusinessObject
             //Take all configurations of entities from Infrastructures.FluentAPIs
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(builder);
+            SeedRoles(builder);
+        }
+
+        private static void SeedRoles(ModelBuilder builder)
+        {
+            builder.Entity<IdentityRole>().HasData
+                (
+                new IdentityRole() { Name = "Admin", ConcurrencyStamp = "1", NormalizedName = "Admin" },
+                new IdentityRole() { Name = "Doctor", ConcurrencyStamp = "2", NormalizedName = "Doctor" },
+                 new IdentityRole() { Name = "Patient", ConcurrencyStamp = "3", NormalizedName = "Patient" }
+
+                );
         }
     }
 }

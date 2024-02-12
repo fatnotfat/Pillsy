@@ -81,10 +81,10 @@ namespace DataAcessObject
 
         public async Task<Patient> AddAsync(Patient patient)
         {
-            var _context = new PillsyDBContext();
-            using var transaction = _context.Database.BeginTransaction();
             try
             {
+                var _context = new PillsyDBContext();
+
                 var accountId = Guid.NewGuid();
                 patient.AccountId = accountId;
                 patient.Account.AccountId = accountId;
@@ -100,14 +100,13 @@ namespace DataAcessObject
                 await _context.Patients.AddAsync(patient);
                 await _context.SaveChangesAsync();
 
-                transaction.Commit();
                 return patient;
+            } catch (Exception) 
+            { 
+                throw; 
             }
-            catch (Exception)
-            {
-                transaction.Rollback();
-                throw;
-            }
+            
+
         }
     }
 }

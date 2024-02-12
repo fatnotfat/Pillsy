@@ -13,7 +13,7 @@ namespace Service.Interfaces
         Task<Account> GetAccountById(Guid id);
         Task<Account> GetAccountByEmailAndPassword(string email, string password);
         Task<Account> AddNewAccount(Account account);
-        Task<Account> GetAccountByEmail(string email, string password);
+        Task<Account> GetAccountByEmail(string email);
         Task<bool> UpdateAccount(Account account);
         Task<Account> GetAccountByAccountIdAndPassword(Guid accountId, string password);
 

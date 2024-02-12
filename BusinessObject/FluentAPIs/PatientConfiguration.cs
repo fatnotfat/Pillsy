@@ -21,6 +21,8 @@ namespace BusinessObject.FluentAPIs
             builder.Property(x => x.PhoneNumber).IsRequired();
             builder.Property(x => x.Address).HasMaxLength(255).IsRequired();
             builder.HasIndex(x => x.PhoneNumber).IsUnique();
+            builder.Property(x => x.PaymentId);
+
 
             builder.HasMany(x => x.Appointments)
                 .WithOne(x => x.Patient)

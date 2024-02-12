@@ -12,6 +12,6 @@ namespace Pillsy.DataTransferObjects.Patient.PatientCreateDTO
         public PatientGender Gender { get; set; }
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
-        public Guid PaymentId { get; set; }
+        public Guid? PaymentId { get; set; }
     }
 }

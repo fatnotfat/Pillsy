@@ -85,17 +85,14 @@ namespace DataAcessObject
 
         public async Task<byte[]> AddAsync(Prescription prescription)
         {
-            using var transaction = _context.Database.BeginTransaction();
             try
             {
                 await _context.AddAsync(prescription);
                 await _context.SaveChangesAsync();
 
-                transaction.Commit();
             }
             catch (Exception)
             {
-                transaction.Rollback();
                 throw;
             }
             return prescription.ImageBase64;
@@ -111,7 +108,7 @@ namespace DataAcessObject
                 {
                     throw new Exception("The list is empty!");
                 }
-                var prescription = await _context.Prescriptions.Where(p => p.PatientID.Equals(prescriptionId)).ToListAsync();
+                var prescription = await _context.Prescriptions.Include(p => p.Pills).Where(p => p.PatientID.Equals(prescriptionId)).ToListAsync();
                 if (prescription == null)
                 {
                     throw new Exception("No content found!");

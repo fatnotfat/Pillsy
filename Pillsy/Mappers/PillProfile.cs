@@ -11,14 +11,14 @@ namespace Pillsy.Mappers
         public PillProfile()
         {
            
-            CreateMap<Pill, Medication_records>()
+            CreateMap<Pill, Medication_record>()
             .ForMember(
                 dest => dest.Record_id,
                 opt => opt.MapFrom(src => src.PillId)
             );
 
 
-            CreateMap<Medication_records, Pill>()
+            CreateMap<Medication_record, Pill>()
             .ForPath(
                 dest => dest.PillId,
                 opt => opt.MapFrom(src => src.Record_id)

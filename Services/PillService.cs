@@ -17,6 +17,19 @@ namespace Service
             _repository = repository;
         }
 
+        public Pill AddPill(Pill pill)
+        {
+            try
+            {
+                var result = _repository.AddPill(pill);
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<Pill> AddPillAsync(Pill pill)
         {
             try

@@ -14,6 +14,8 @@ using Pillsy.DataTransferObjects.Patient.PatientDTO;
 using Pillsy.DataTransferObjects.Patient.PatientUpdateDto;
 using Pillsy.DataTransferObjects.Patient.PatientDetailDto;
 using Pillsy.Mappers;
+using Microsoft.AspNetCore.Identity;
+using System.Transactions;
 
 namespace Pillsy.Controllers.Patients
 {
@@ -25,13 +27,17 @@ namespace Pillsy.Controllers.Patients
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private readonly IAccountService _accountService;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public PatientsController(IConfiguration configuration, IMapper mapper, IPatientService patientService, IAccountService accountService)
+        public PatientsController(IConfiguration configuration, IMapper mapper, IPatientService patientService, IAccountService accountService, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _configuration = configuration;
             _mapper = mapper;
             _patientService = patientService;
             _accountService = accountService;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         // GET: api/Patients
@@ -137,13 +143,54 @@ namespace Pillsy.Controllers.Patients
             {
                 return Problem("Entity set 'PillsyDBContext.Patients'  is null.");
             }
-            var result = await _patientService.AddNewPatient(data);
-            if (result == null)
+            IdentityUser user = new()
             {
-                return BadRequest();
-            }
+                Email = patientDTO.Email,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = patientDTO.FirstName + patientDTO.LastName,
+                TwoFactorEnabled = false
+            };
 
-            return Ok("Patient " + result.PatientID + " was created!");
+            string mess = "";
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                try
+                {
+                    var result = await _patientService.AddNewPatient(data);
+                    if (result != null)
+                    {
+                        var account = await _accountService.GetAccountById(result.AccountId);
+                        var resultAspUser = await _userManager.CreateAsync(user, account.Password);
+
+
+                        if (!resultAspUser.Succeeded)
+                        {
+
+                            var message = string.Join(", ", resultAspUser.Errors.Select(x => "Code: " + x.Code + " Description: " + x.Description));
+                            return StatusCode(StatusCodes.Status500InternalServerError,
+                                new Response { Status = "Error", Message = message });
+                            mess = message;
+                        }
+                        scope.Complete();
+                        return Ok("Patient " + result.PatientID + " was created!");
+                    }
+                    else
+                    {
+                        return BadRequest("can not add this patient, please try again!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    scope.Dispose();
+                    if(mess.Length > 0)
+                    {
+                        return BadRequest($"{mess}");
+
+                    }
+                    return BadRequest($"{ex.Message}");
+                }
+            }
+            
         }
 
         //[HttpGet("{patientId}/prescriptions/detail")]

@@ -18,6 +18,10 @@ using Pillsy.DataTransferObjects.Account.AccountLoginDTO;
 using Pillsy.Mappers;
 using Pillsy.DataTransferObjects.Account.AccountCreateDTO;
 using Pillsy.DataTransferObjects.Account.UpdatePasswordDto;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
+using Pillsy.DataTransferObjects.ForgotPasswordDTO;
+using System.Data;
 
 namespace Pillsy.Controllers.Accounts
 {
@@ -28,15 +32,21 @@ namespace Pillsy.Controllers.Accounts
     {
         private readonly IAccountService _accountService;
         private readonly IPatientService _patientService;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private readonly IEmailService _emailService;
 
-        public AccountsController(IAccountService accountService, IConfiguration configuration, IMapper mapper, IPatientService patientService)
+        public AccountsController(IAccountService accountService, IConfiguration configuration, IMapper mapper, IPatientService patientService, IEmailService emailService, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _accountService = accountService;
             _configuration = configuration;
             _mapper = mapper;
             _patientService = patientService;
+            _emailService = emailService;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         [Authorize(Roles = "Admin")]
@@ -142,6 +152,25 @@ namespace Pillsy.Controllers.Accounts
                 return Problem("Entity set 'PillsyDBContext.Accounts'  is null.");
             }
             var account = await _accountService.AddNewAccount(data);
+            IdentityUser user = new()
+            {
+                Email = account.Email,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = null,
+                TwoFactorEnabled = false
+            };
+
+            var result = await _userManager.CreateAsync(user, account.Password);
+            if (!result.Succeeded)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new Response { Status = "Error", Message = "User Failed to Create" });
+            }
+
+            //Add Token to Verify the email....
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+
 
             return Ok("user " + account.AccountId + " was created");
         }
@@ -201,6 +230,94 @@ namespace Pillsy.Controllers.Accounts
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("forgot-password")]
+
+        public async Task<IActionResult> ForgotPassword([Required] string email)
+        {
+            var account = await _userManager.FindByEmailAsync(email);
+            if (account != null)
+            {
+                var token = await _userManager.GenerateTwoFactorTokenAsync(account, "Email");
+                var formData = Request.Scheme;
+                var forgotPasswordLink = Url.Action(nameof(ResetPassword), "Accounts", new { token, email = account.Email }, formData);
+                var message = new Message(new string[] { account.Email! }, "OTP to forgot password", token);
+                _emailService.SendEmail(message);
+                return StatusCode(StatusCodes.Status200OK,
+                    new Response { Status = "Success", Message = $"Password changed request is sent on Email {account.Email}. Please open your email & click the link!", Body = token });
+            }
+            return StatusCode(StatusCodes.Status400BadRequest,
+                    new Response { Status = "Error", Message = $"Could not send link to email. Please try again!" });
+        }
+
+        [HttpGet("reset-password")]
+        public async Task<IActionResult> ResetPassword(string token, string email)
+        {
+            var model = new ResetPassword { Token = token, Email = email };
+            return Ok(new
+            {
+                model
+            });
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPassword resetPassword)
+        {
+            var account = await _userManager.FindByEmailAsync(resetPassword.Email);
+            var accountExisted = await _accountService.GetAccountByEmail(resetPassword.Email);
+            if (account != null)
+            {
+
+                var resetPassResult = await _userManager.ChangePasswordAsync(account, accountExisted.Password, resetPassword.Password);
+                if (!resetPassResult.Succeeded)
+                {
+                    foreach (var error in resetPassResult.Errors)
+                    {
+                        ModelState.AddModelError(error.Code, error.Description);
+                    }
+                    return Ok(ModelState);
+                }
+
+                //change password in table account
+                var accountExist = await _accountService.GetAccountByEmail(resetPassword.Email);
+                if(accountExist != null)
+                {
+                    UpdatePasswordDto updatePasswordDto = new UpdatePasswordDto()
+                    {
+                        AccountId = accountExist.AccountId,
+                        OldPassword = accountExist.Password,
+                        NewPassword = resetPassword.Password
+                    };
+
+                    var result = await ChangePasswordPatient(updatePasswordDto);
+                    return StatusCode(StatusCodes.Status200OK,
+                        new Response { Status = "Success", Message = $"Password has been changed!" });
+                }
+            }
+            return StatusCode(StatusCodes.Status400BadRequest,
+                    new Response { Status = "Error", Message = $"Could not change the password. Please try again!" });
+        }
+
+        private JwtSecurityToken GetToken(List<Claim> authClaims)
+        {
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["JWT:Issuer"],
+                audience: _configuration["JWT:Audience"],
+                expires: DateTime.Now.AddDays(2),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                );
+
+            return token;
         }
     }
 }

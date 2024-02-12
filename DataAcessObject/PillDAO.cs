@@ -60,17 +60,29 @@ namespace DataAcessObject
 
         public async Task<Pill> AddAsync(Pill pill)
         {
-            using var transaction = _context.Database.BeginTransaction();
             try
             {
                 await _context.AddAsync(pill);
                 await _context.SaveChangesAsync();
 
-                transaction.Commit();
             }
             catch (Exception)
             {
-                transaction.Rollback();
+                throw;
+            }
+            return pill;
+        }
+
+        public Pill Add(Pill pill)
+        {
+            try
+            {
+                _context.AddAsync(pill);
+                _context.SaveChanges();
+
+            }
+            catch (Exception)
+            {
                 throw;
             }
             return pill;
