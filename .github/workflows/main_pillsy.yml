@@ -6,7 +6,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - pillsy
 on:
   push:
     branches:
-      - update-forgot-password
+      - main
   workflow_dispatch:
 
 jobs:
@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'pillsy'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_89B6C03C49A74A908F345B93C50F2F89 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EFBB90C84FDC4614870D1BD5D5621D04 }}
           package: .
