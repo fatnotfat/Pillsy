@@ -14,5 +14,7 @@ namespace Repository.Interfaces
         public Task<Pill> AddPillAsync(Pill pill);
         public Pill AddPill(Pill pill);
         public Task<bool> AddPillToPrescription(Pill pill);
+        public Task<bool> UpdatePillAsync(Pill pill);
+        public Task<Pill> GetPillByIdAsync(Guid pillId);
     }
 }

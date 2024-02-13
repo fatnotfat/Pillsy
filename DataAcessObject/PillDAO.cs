@@ -104,5 +104,39 @@ namespace DataAcessObject
             return result;
         }
 
+        public async Task<bool> UpdatePillAsync(Pill pill)
+        {
+            bool result = false;
+            try
+            {
+                _context.Pills!.Update(pill);
+                await _context.SaveChangesAsync();
+                result = true;
+            }catch (Exception)
+            {
+                throw;
+            }
+            return result;
+        }
+
+        public async Task<Pill> GetPillByIdAsync(Guid pillId)
+        {
+            try
+            {
+                var pill = await _context.Pills!.FirstOrDefaultAsync(p => p.PillId.Equals(pillId));
+                if(pill != null)
+                {
+                    return pill;
+                }
+                else
+                {
+                    throw new Exception("Pill not found!");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

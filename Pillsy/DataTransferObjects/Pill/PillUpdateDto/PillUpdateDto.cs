@@ -1,8 +1,7 @@
-﻿namespace Pillsy.DataTransferObjects.Pill.PillCreateDto
+﻿namespace Pillsy.DataTransferObjects.Pill.PillUpdateDto
 {
-    public class PillCreateDto
+    public class PillUpdateDto
     {
-        public Guid PillId { get; set; }
         public string PillName { get; set; }
         public string? PillDescription { get; set; }
         public int? DosagePerDay { get; set; }
@@ -10,10 +9,10 @@
         public int? QuantityPerDose { get; set; }
         public string? Period { get; set; }
         public string? Unit { get; set; }
-        public int Morning { get; set; } = 0;
-        public int Afternoon { get; set; } = 0;
-        public int Evening { get; set; } = 0;
-        public Guid PrescriptionId { get; set; }
-
+        public int? Morning { get; set; }
+        public int? Afternoon { get; set; }
+        public int? Evening { get; set; }
+        public DateTime? DateStart { get; set; }
+        public DateTime? DateEnd { get; set; }
     }
 }

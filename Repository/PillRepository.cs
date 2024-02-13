@@ -38,9 +38,19 @@ namespace Repository
             return await pillDAO.GetAll();
         }
 
+        public async Task<Pill> GetPillByIdAsync(Guid pillId)
+        {
+            return await pillDAO.GetPillByIdAsync(pillId);
+        }
+
         public async Task<IEnumerable<Pill>> GetPillsByPrescriptionIdAsync(Guid prescriptionId)
         {
             return await pillDAO.GetAllByPrescriptionId(prescriptionId);
+        }
+
+        public async Task<bool> UpdatePillAsync(Pill pill)
+        {
+            return await pillDAO.UpdatePillAsync(pill);
         }
     }
 }

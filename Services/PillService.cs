@@ -51,12 +51,13 @@ namespace Service
             try
             {
                 var prescription = await _prescriptionRepository.GetPrescriptionsByPrescriptionIdAsync(prescriptionId);
-                if(prescription != null)
+                if (prescription != null)
                 {
                     pill.PrescriptionId = prescriptionId;
                     result = await _repository.AddPillToPrescription(pill);
                 }
-            }catch (Exception)
+            }
+            catch (Exception)
             {
                 throw;
             }
@@ -76,6 +77,19 @@ namespace Service
             }
         }
 
+        public async Task<Pill> GetPillByIdAsync(Guid pillId)
+        {
+            try
+            {
+                var pill = await _repository.GetPillByIdAsync(pillId);
+                return pill;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<Pill>> GetPillsByPrescriptionIdAsync(Guid prescriptionId)
         {
             try
@@ -86,6 +100,31 @@ namespace Service
                 }
                 var pills = await _repository.GetPillsByPrescriptionIdAsync(prescriptionId);
                 return pills;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdatePillAsync(Guid pillId, Pill pill)
+        {
+            var result = false;
+            try
+            {
+                if (pill == null)
+                {
+                    throw new Exception("Content must not be empty!");
+                }
+                else
+                {
+                    var pillExisted = await _repository.GetPillByIdAsync(pillId);
+                    if (pillExisted != null)
+                    {
+                        result = await _repository.UpdatePillAsync(pill);
+                    }
+                }
+                return result;
             }
             catch (Exception)
             {
