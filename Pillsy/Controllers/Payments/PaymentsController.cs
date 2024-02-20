@@ -35,7 +35,7 @@ namespace Pillsy.Controllers.Payments
 
                 var description = "Thanh toan chuyen khoan";
                 Random rnd = new Random();
-                var orderId = rnd.Next(0, 100);
+                var orderId = rnd.Next(0, 1000000000);
                 var totalPrice = price;
 
                 PaymentData paymentData = new PaymentData(orderId, totalPrice, description, items, "https://localhost:7100/", "https://localhost:7100/");
