@@ -68,20 +68,24 @@ namespace BusinessObject
             var accountId3 = Guid.NewGuid();
 
             var patientId1 = Guid.NewGuid();
-            var doctorId1 = Guid.NewGuid(); 
+            var doctorId1 = Guid.NewGuid();
 
             var paymentId1 = Guid.NewGuid();
             var paymentId2 = Guid.NewGuid();
 
             var scheduleId1 = Guid.NewGuid();
-            
+
             var prescriptionId1 = Guid.NewGuid();
 
             var pillId1 = Guid.NewGuid();
             var pillId2 = Guid.NewGuid();
             var pillId3 = Guid.NewGuid();
 
-            
+            var subPackage1 = Guid.NewGuid();
+            var subPackage2 = Guid.NewGuid();
+            var cusPackage1 = Guid.NewGuid();
+
+
 
 
 
@@ -126,23 +130,29 @@ namespace BusinessObject
                 });
 
 
-            IdentityUser user1 = new ()
+            IdentityUser user1 = new()
             {
                 Email = "nguyenphat2711@gmail.com",
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = "Phat Nguyen"
+                UserName = "Phat Nguyen",
+                NormalizedEmail = "NGUYENPHAT2711@GMAIL.COM",
+                LockoutEnabled = true,
             };
             IdentityUser user2 = new()
             {
                 Email = "dungnvse160223@fpt.edu.vn",
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = "Dung Nguyen"
+                UserName = "Dung Nguyen",
+                NormalizedEmail = "DUNGNVSE160223@FPT.EDU.VN",
+                LockoutEnabled = true,
             };
             IdentityUser user3 = new()
             {
                 Email = "khoatruong2509@fpt.edu.vn",
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = "Khoa Truong"
+                UserName = "Khoa Truong",
+                NormalizedEmail = "KHOATRUONG2509@FPT.EDU.VN",
+                LockoutEnabled = true,
             };
 
             builder.Entity<IdentityUser>().HasData(user1);
@@ -152,11 +162,11 @@ namespace BusinessObject
             builder.Entity<Payment>().HasData(new Payment
             {
                 PaymentId = paymentId1,
-                PaymentType = "Momo",
+                PaymentType = "Smart Banking",
                 CreatedBy = null,
                 CreatedDate = DateTime.UtcNow,
                 LastModifiedDate = DateTime.UtcNow,
-                ModifiedBy= null
+                ModifiedBy = null
             });
             builder.Entity<Doctor>().HasData(new Doctor
             {
@@ -186,7 +196,7 @@ namespace BusinessObject
                 CreatedBy = accountId2,
                 CreatedDate = DateTime.UtcNow,
                 LastModifiedDate = DateTime.UtcNow,
-                ModifiedBy= accountId2
+                ModifiedBy = accountId2
             });
 
 
@@ -204,6 +214,51 @@ namespace BusinessObject
                 CreatedDate = DateTime.UtcNow,
                 LastModifiedDate = DateTime.UtcNow,
                 ModifiedBy = accountId2
+            });
+
+            builder.Entity<SubscriptionPackage>().HasData(new SubscriptionPackage
+            {
+                PackageId = subPackage1,
+                PackageType = "Basic",
+                Period = "90",
+                UnitPrice = 0,
+                CurrencyUnit = "USD",
+                Status = 1,
+                CreatedBy = null,
+                CreatedDate = DateTime.UtcNow,
+                LastModifiedDate = DateTime.UtcNow,
+                ModifiedBy = null
+            });
+
+            builder.Entity<SubscriptionPackage>().HasData(new SubscriptionPackage
+            {
+                PackageId = subPackage2,
+                PackageType = "Premium",
+                Period = "365",
+                UnitPrice = 2,
+                CurrencyUnit = "USD",
+                Status = 1,
+                CreatedBy = null,
+                CreatedDate = DateTime.UtcNow,
+                LastModifiedDate = DateTime.UtcNow,
+                ModifiedBy = null
+            });
+
+            builder.Entity<CustomerPackage>().HasData(new CustomerPackage
+            {
+                CustomerPackageId = cusPackage1,
+                CustomerPackageName = "Basic",
+                Status = 1,
+                NumberScan = "2",
+                DateStart = DateTime.Now,
+                DateEnd = DateTime.Now.AddDays(90),
+                AllowPillHistory = 0,
+                PatientId = patientId1,
+                SubcriptionPackageId = subPackage1,
+                CreatedBy = null,
+                CreatedDate = DateTime.UtcNow,
+                LastModifiedDate = DateTime.UtcNow,
+                ModifiedBy = null
             });
 
             builder.Entity<Pill>().HasData(new Pill

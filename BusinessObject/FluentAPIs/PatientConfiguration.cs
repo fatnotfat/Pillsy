@@ -39,7 +39,9 @@ namespace BusinessObject.FluentAPIs
             //builder.HasOne<SubscriptionPackage>(x => x.SubscriptionPackage);
 
             builder.HasOne<Account>(x => x.Account);
-
+            builder.HasMany(x => x.CustomerPackages)
+               .WithOne(x => x.Patient)
+               .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

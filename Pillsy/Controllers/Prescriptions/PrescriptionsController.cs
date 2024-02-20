@@ -25,6 +25,8 @@ using System.Runtime.Serialization.Json;
 using Pillsy.DataTransferObjects.Prescription.PrescriptionRequestOCRInfoDto;
 using System.Transactions;
 using Pillsy.DataTransferObjects.Prescription.PrescriptionResponseOCRDto;
+using System.Collections;
+using Org.BouncyCastle.Utilities;
 
 namespace Pillsy.Controllers.Prescriptions
 {
@@ -166,7 +168,7 @@ namespace Pillsy.Controllers.Prescriptions
                     if (result != null)
                     {
 
-                        var pills = prescriptiondto.User_data.Medication_records.Medication_Records.Select(p => mapper.Map<Medication_record, Pill>(p));
+                        var pills = prescriptiondto.Data.Medication_records.Select(p => mapper.Map<Medication_record, Pill>(p));
                         foreach (var p in pills)
                         {
                             p.CreatedBy = prescription.CreatedBy;
@@ -175,7 +177,7 @@ namespace Pillsy.Controllers.Prescriptions
                             p.CreatedDate = prescription.CreatedDate;
                             p.Status = prescription.Status;
                             p.Index = prescription.Index;
-                            p.PrescriptionId = prescriptiondto.User_data.Medication_records_id;
+                            p.PrescriptionId = prescriptiondto.Data.Medication_records_id;
                             await _pillService.AddPillAsync(p);
                         }
 
@@ -216,7 +218,8 @@ namespace Pillsy.Controllers.Prescriptions
                             ExaminationDate = null,
                             Status = 1,
                             Index = 0,
-                            ImageBase64 = ocrDto.ImageBase64
+                            ImageBase64 = Convert.FromBase64String(ocrDto.Image!),
+                            CreatedDate = DateTime.Now,
                         };
 
                         PrescriptionUploadImageDto imageDto = new PrescriptionUploadImageDto();
@@ -295,7 +298,7 @@ namespace Pillsy.Controllers.Prescriptions
                         PrescriptionRequestOCRDto prescriptionRequestOCRDto = new PrescriptionRequestOCRDto();
                         prescriptionRequestOCRDto.Prescription_Id = Guid.NewGuid();
                         prescriptionRequestOCRDto.User_Id = patient.PatientID;
-                        prescriptionRequestOCRDto.Image = imageBytes;
+                        prescriptionRequestOCRDto.Image = Convert.ToBase64String(imageBytes);
 
                         //var content = new MultipartFormDataContent();
                         //content.Add(new ByteArrayContent(imageBytes), "image", "image.jpg");

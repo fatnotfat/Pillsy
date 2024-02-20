@@ -15,5 +15,6 @@ namespace BusinessObject
         public float UnitPrice { get; set; }
         public string CurrencyUnit { get; set; }
         public int Status { get; set; }
+        public List<CustomerPackage> CustomerPackages { get; set; }
     }
 }

@@ -20,7 +20,10 @@ namespace BusinessObject.FluentAPIs
             builder.Property(x => x.CurrencyUnit).IsRequired();
             builder.Property(x => x.Status).IsRequired();
 
-
+            builder.HasMany(x => x.CustomerPackages)
+               .WithOne(x => x.SubscriptionPackage)
+               .HasForeignKey(x => x.SubcriptionPackageId)
+               .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

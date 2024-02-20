@@ -20,6 +20,7 @@ namespace BusinessObject
         public Account Account { get; set; }
         public List<Appointment> Appointments { get; set; }
         public List<Prescription> Prescriptions { get; set; }
+        public List<CustomerPackage> CustomerPackages { get; set; }
         public Guid? PaymentId { get; set; }
         public Payment? Payment { get; set; }
         //public Guid PackageId { get; set; }
