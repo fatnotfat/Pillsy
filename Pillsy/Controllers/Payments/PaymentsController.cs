@@ -47,7 +47,15 @@ namespace Pillsy.Controllers.Payments
                 //    FileName = @"C:\Program Files\Google\Chrome\Application\chrome.exe",
                 //    Arguments = linkCheckOut
                 //});
-                Process.Start(new ProcessStartInfo(linkCheckOut) { UseShellExecute = true });
+                //Process.Start(new ProcessStartInfo(linkCheckOut) { UseShellExecute = true });
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "cmd",
+                    Arguments = $"/c start {linkCheckOut}",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                });
                 return Ok(linkCheckOut);
             }
             catch (Exception ex)
