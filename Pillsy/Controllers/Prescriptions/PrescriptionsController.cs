@@ -296,7 +296,7 @@ namespace Pillsy.Controllers.Prescriptions
                         };
 
                         PrescriptionUploadImageDto imageDto = new PrescriptionUploadImageDto();
-                        imageDto.ImageBase64 = await _service.AddAsync(pres);
+                        imageDto.ImageBase64 = Convert.FromBase64String(ocrDto.Image!);
                         if (String.IsNullOrEmpty(imageDto.ImageBase64.ToString().Trim()))
                         {
                             return BadRequest("Upload failed");
@@ -334,6 +334,23 @@ namespace Pillsy.Controllers.Prescriptions
 
 
                         var prescriptiondto = JsonConvert.DeserializeObject<PrescriptionCreateDto>(result2);
+                        while (prescriptiondto.Status.Equals("404"))
+                        {
+                            //int retryCount2 = 10;
+                            //do
+                            //{
+                            response2 = await client2.PostAsync(url2, data2);
+                            result2 = await response2.Content.ReadAsStringAsync();
+                            //    retryCount--;
+                            //} while (!response2.IsSuccessStatusCode && retryCount2 > 0);
+
+                            if (!response2.IsSuccessStatusCode)
+                            {
+                                return BadRequest("Failed to predict info after multiple attempts.");
+                            }
+                            prescriptiondto = JsonConvert.DeserializeObject<PrescriptionCreateDto>(result2);
+                        }
+                        await _service.AddAsync(pres);
                         await UpdatePrescription(prescriptiondto);
                         scope.Complete();
                         return Ok(result2);
