@@ -315,7 +315,21 @@ namespace Pillsy.Controllers.Prescriptions
                         var data2 = new StringContent(json2, Encoding.UTF8, "application/json");
                         var url2 = "http://35.232.72.106:8003/api/v1/predict-info/";
                         using var client2 = new HttpClient();
-                        var response2 = await client2.PostAsync(url2, data2);
+
+                        HttpResponseMessage response2;
+                        int retryCount = 10;
+                        do
+                        {
+                            response2 = await client2.PostAsync(url2, data2);
+                            retryCount--;
+                        } while (!response2.IsSuccessStatusCode && retryCount > 0);
+
+                        if (!response2.IsSuccessStatusCode)
+                        {
+                            return BadRequest("Failed to predict info after multiple attempts.");
+                        }
+
+                        //var response2 = await client2.PostAsync(url2, data2);
                         var result2 = await response2.Content.ReadAsStringAsync();
 
 
