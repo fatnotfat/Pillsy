@@ -42,11 +42,12 @@ namespace Pillsy.Controllers.Payments
                 CreatePaymentResult createPayment = await payOS.createPaymentLink(paymentData);
 
                 var linkCheckOut = createPayment.checkoutUrl;
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = @"C:\Program Files\Google\Chrome\Application\chrome.exe",
-                    Arguments = linkCheckOut
-                });
+                //Process.Start(new ProcessStartInfo
+                //{
+                //    FileName = @"C:\Program Files\Google\Chrome\Application\chrome.exe",
+                //    Arguments = linkCheckOut
+                //});
+                Process.Start(new ProcessStartInfo(linkCheckOut) { UseShellExecute = true });
                 return Ok(linkCheckOut);
             }
             catch (Exception ex)
