@@ -195,7 +195,80 @@ namespace Pillsy.Controllers.Prescriptions
         }
         [HttpPost]
         [Route("upload-predict-info")]
-        public async Task<ActionResult<string>> AddImagePrescription(PrescriptionResponseOCRDto ocrDto)
+        public async Task<ActionResult<string>> AddImagePrescription(PrescriptionCreateDto presCreDto, string imageOcr)
+        {
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                try
+                {
+                    if (await _service.GetAllPrescriptionsAsync() == null)
+                    {
+                        return Problem("Entity set 'PillsyDBContext.Prescriptions'  is null.");
+                    }
+                    string userId = User.FindFirst("AccountId")?.Value;
+
+                    var patient = await _patientService.GetPatientByAccountIdAsync(Guid.Parse(userId));
+
+                    if (!String.IsNullOrEmpty(userId))
+                    {
+                        Prescription pres = new Prescription
+                        {
+                            PrescriptionID = (Guid)presCreDto.Data.Medication_records_id,
+                            PatientID = patient.PatientID,
+                            ExaminationDate = null,
+                            Status = 1,
+                            Index = 0,
+                            ImageBase64 = Convert.FromBase64String(imageOcr),
+                            CreatedDate = DateTime.Now,
+                        };
+
+                        PrescriptionUploadImageDto imageDto = new PrescriptionUploadImageDto();
+                        imageDto.ImageBase64 = await _service.AddAsync(pres);
+                        if (String.IsNullOrEmpty(imageDto.ImageBase64.ToString().Trim()))
+                        {
+                            return BadRequest("Upload failed");
+                        }
+
+                        //imageDto.Prescription_Id = pres.PrescriptionID;
+                        //imageDto.User_Id = Guid.Parse(userId);
+                        //PrescriptionRequestOCRInfoDto prescriptionRequestOCRInfoDto = new PrescriptionRequestOCRInfoDto
+                        //{
+                        //    User_Id = patient.PatientID,
+                        //    Prescription_Id = pres.PrescriptionID,
+                        //    Data = presCreDto.Data
+                        //};
+
+                        //var json2 = JsonConvert.SerializeObject(prescriptionRequestOCRInfoDto);
+                        //var data2 = new StringContent(json2, Encoding.UTF8, "application/json");
+                        //var url2 = "http://35.232.72.106:8003/api/v1/predict-info/";
+                        //using var client2 = new HttpClient();
+                        //var response2 = await client2.PostAsync(url2, data2);
+                        //var result2 = await response2.Content.ReadAsStringAsync();
+
+
+                        //var prescriptiondto = JsonConvert.DeserializeObject<PrescriptionCreateDto>(result2);
+                        await UpdatePrescription(presCreDto);
+                        scope.Complete();
+                        return Ok("Prescription add complete!");
+                    }
+                    else
+                    {
+                        scope.Dispose();
+                        return NotFound("User not found!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    scope.Dispose();
+                    return BadRequest($"{ex.Message}");
+                }
+            }
+
+        }
+
+        [HttpPost]
+        [Route("return-predict-info")]
+        public async Task<ActionResult> ReturnPredictInforPrescription(PrescriptionResponseOCRDto ocrDto)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -223,7 +296,7 @@ namespace Pillsy.Controllers.Prescriptions
                         };
 
                         PrescriptionUploadImageDto imageDto = new PrescriptionUploadImageDto();
-                        imageDto.ImageBase64 = await _service.AddAsync(pres);
+                        imageDto.ImageBase64 = Convert.FromBase64String(ocrDto.Image!);
                         if (String.IsNullOrEmpty(imageDto.ImageBase64.ToString().Trim()))
                         {
                             return BadRequest("Upload failed");
@@ -244,12 +317,8 @@ namespace Pillsy.Controllers.Prescriptions
                         using var client2 = new HttpClient();
                         var response2 = await client2.PostAsync(url2, data2);
                         var result2 = await response2.Content.ReadAsStringAsync();
-
-
-                        var prescriptiondto = JsonConvert.DeserializeObject<PrescriptionCreateDto>(result2);
-                        await UpdatePrescription(prescriptiondto);
                         scope.Complete();
-                        return Ok("Prescription add complete!");
+                        return Ok(result2);
                     }
                     else
                     {
