@@ -349,6 +349,13 @@ namespace Pillsy.Controllers.Prescriptions
                                 return BadRequest("Failed to predict info after multiple attempts.");
                             }
                             prescriptiondto = JsonConvert.DeserializeObject<PrescriptionCreateDto>(result2);
+                            foreach (var date in prescriptiondto.Data.Medication_records)
+                            {
+                                if(date.Start_date == null)
+                                {
+                                    date.Start_date = DateTime.Now;
+                                }
+                            }
                         }
                         await _service.AddAsync(pres);
                         await UpdatePrescription(prescriptiondto);
