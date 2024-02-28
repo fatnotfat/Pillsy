@@ -27,6 +27,11 @@ namespace Service
             return await _customerPackageRepository.GetCustomerPackageByCustomerPackageId(customerPackageId);
         }
 
+        public async Task<CustomerPackage> GetCustomerPackageByPatientId(Guid patientId)
+        {
+            return await _customerPackageRepository.GetCustomerPackageByPatientId(patientId);
+        }
+
         public async Task<IEnumerable<CustomerPackage>> GetCustomerPackages()
         {
             return await _customerPackageRepository.GetCustomerPackages();

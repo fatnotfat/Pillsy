@@ -28,6 +28,11 @@ namespace Repository
             return await customerPackageDAO.GetCustomerPackageByCustomerPackageId(customerPackageId);
         }
 
+        public async Task<CustomerPackage> GetCustomerPackageByPatientId(Guid patientId)
+        {
+            return await customerPackageDAO.GetCustomerPackageByPatientId(patientId);
+        }
+
         public async Task<IEnumerable<CustomerPackage>> GetCustomerPackages()
         {
             return await customerPackageDAO.GetCustomerPackages();

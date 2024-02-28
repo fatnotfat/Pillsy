@@ -13,6 +13,7 @@ namespace Repository.Interfaces
         public Task<bool> UpdateCustomerPackage(CustomerPackage customerPackage);
         public Task<CustomerPackage> GetCustomerPackageByCustomerPackageId(Guid customerPackageId);
         public Task<IEnumerable<CustomerPackage>> GetCustomerPackages();
+        public Task<CustomerPackage> GetCustomerPackageByPatientId(Guid patientId);
 
 
     }

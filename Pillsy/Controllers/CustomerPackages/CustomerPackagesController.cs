@@ -10,6 +10,7 @@ using Service.Interfaces;
 using MailKit.Search;
 using Net.payOS.Types;
 using Net.payOS;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Pillsy.Controllers.CustomerPackages
 {
@@ -33,23 +34,22 @@ namespace Pillsy.Controllers.CustomerPackages
             return Ok(await _customerPackageService.GetCustomerPackages());
         }
 
-        //// GET: api/CustomerPackages/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<CustomerPackage>> GetCustomerPackage(Guid id)
-        //{
-        //  if (_context.CustomerPackages == null)
-        //  {
-        //      return NotFound();
-        //  }
-        //    var customerPackage = await _context.CustomerPackages.FindAsync(id);
+        // GET: api/CustomerPackages/5
+        [Authorize(Roles = "Patient")]
+        [HttpGet]
+        [Route("/patient/{patinetId}")]
+        public async Task<ActionResult<CustomerPackage>> GetCustomerPackageByPatientId(Guid patientId)
+        {
 
-        //    if (customerPackage == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var customerPackage = await _customerPackageService.GetCustomerPackageByPatientId(patientId);
 
-        //    return customerPackage;
-        //}
+            if (customerPackage == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(customerPackage);
+        }
 
         // PUT: api/CustomerPackages/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

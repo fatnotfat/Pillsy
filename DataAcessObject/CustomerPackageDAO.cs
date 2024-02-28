@@ -51,6 +51,19 @@ namespace DataAcessObject
             }
         }
 
+        public async Task<CustomerPackage> GetCustomerPackageByPatientId(Guid patientId)
+        {
+            try
+            {
+                var context = new PillsyDBContext();
+                return await context.CustomerPackages!.FirstOrDefaultAsync(c => c.PatientId.Equals(patientId));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<bool> AddNewCustomerPackage(CustomerPackage customerPackage)
         {
             try
