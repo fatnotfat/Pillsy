@@ -313,7 +313,7 @@ namespace Pillsy.Controllers.Prescriptions
 
                         var json2 = JsonConvert.SerializeObject(prescriptionRequestOCRInfoDto);
                         var data2 = new StringContent(json2, Encoding.UTF8, "application/json");
-                        var url2 = "http://35.232.72.106:8003/api/v1/predict-info/";
+                        var url2 = "http://192.168.3.143:8003/api/v1/predict-info/";
                         using var client2 = new HttpClient();
 
                         HttpResponseMessage response2;
@@ -416,7 +416,7 @@ namespace Pillsy.Controllers.Prescriptions
 
                         var json = JsonConvert.SerializeObject(prescriptionRequestOCRDto);
                         var data = new StringContent(json, Encoding.UTF8, "application/json");
-                        var url = "http://35.232.72.106:8003/api/v1/predict-ocr/";
+                        var url = "http://192.168.3.143:8003/api/v1/predict-ocr/";
                         using var client = new HttpClient();
                         var response = await client.PostAsync(url, data);
                         var result = await response.Content.ReadAsStringAsync();
