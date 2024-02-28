@@ -14,6 +14,8 @@ namespace Service.Interfaces
         public Task<Patient> AddNewPatient(Patient patient);
         public Task<bool> UpdatePatientAsync(Patient patient);
         public Task<Patient> GetPatientByAccountIdAsync(Guid id);
-            
+        public Task<IEnumerable<Patient>> GetNewPatientsByMonthAsync(int month);
+        public Task<IEnumerable<Patient>> GetNewPatientsByDateAsync(int date);
+        public Task<IEnumerable<Patient>> GetNewPatientsByYearAsync(int year);
     }
 }

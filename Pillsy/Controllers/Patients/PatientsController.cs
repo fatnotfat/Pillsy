@@ -16,6 +16,7 @@ using Pillsy.DataTransferObjects.Patient.PatientDetailDto;
 using Pillsy.Mappers;
 using Microsoft.AspNetCore.Identity;
 using System.Transactions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Pillsy.Controllers.Patients
 {
@@ -39,7 +40,7 @@ namespace Pillsy.Controllers.Patients
             _userManager = userManager;
             _roleManager = roleManager;
         }
-
+        [Authorize(Roles = "Admin")]
         // GET: api/Patients
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Patient>>> GetPatients()
@@ -50,7 +51,41 @@ namespace Pillsy.Controllers.Patients
             }
             return Ok(await _patientService.GetAllPatients());
         }
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        [Route("new-by-date/{date}")]
+        public async Task<ActionResult<IEnumerable<Patient>>> GetNewPatientsByDate(int date)
+        {
+            if (await _patientService.GetAllPatients() == null)
+            {
+                return NotFound();
+            }
+            return Ok(await _patientService.GetNewPatientsByDateAsync(date));
+        }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        [Route("new-by-month/{month}")]
+        public async Task<ActionResult<IEnumerable<Patient>>> GetNewPatientsByMonth(int month)
+        {
+            if (await _patientService.GetAllPatients() == null)
+            {
+                return NotFound();
+            }
+            return Ok(await _patientService.GetNewPatientsByMonthAsync(month));
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        [Route("new-by-year/{year}")]
+        public async Task<ActionResult<IEnumerable<Patient>>> GetNewPatientsByYear(int year)
+        {
+            if (await _patientService.GetAllPatients() == null)
+            {
+                return NotFound();
+            }
+            return Ok(await _patientService.GetNewPatientsByYearAsync(year));
+        }
         // GET: api/Patients/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Patient>> GetPatient(Guid id)
@@ -70,11 +105,11 @@ namespace Pillsy.Controllers.Patients
 
                 return patient;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return NotFound(ex.Message);
             }
-            
+
         }
 
         // PUT: api/Patients/5
@@ -129,7 +164,7 @@ namespace Pillsy.Controllers.Patients
         }
 
 
-        
+
         // POST: api/Patients
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -182,7 +217,7 @@ namespace Pillsy.Controllers.Patients
                 catch (Exception ex)
                 {
                     scope.Dispose();
-                    if(mess.Length > 0)
+                    if (mess.Length > 0)
                     {
                         return BadRequest($"{mess}");
 
@@ -190,7 +225,7 @@ namespace Pillsy.Controllers.Patients
                     return BadRequest($"{ex.Message}");
                 }
             }
-            
+
         }
 
         //[HttpGet("{patientId}/prescriptions/detail")]
@@ -266,7 +301,7 @@ namespace Pillsy.Controllers.Patients
                 return NotFound();
             }
 
-            
+
 
             return NoContent();
         }

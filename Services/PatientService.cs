@@ -26,6 +26,21 @@ namespace Service
             return await _repository.GetPatients();
         }
 
+        public async Task<IEnumerable<Patient>> GetNewPatientsByDateAsync(int date)
+        {
+            return await _repository.GetNewPatientsByDateAsync(date);
+        }
+
+        public async Task<IEnumerable<Patient>> GetNewPatientsByMonthAsync(int month)
+        {
+            return await _repository.GetNewPatientsByMonthAsync(month);
+        }
+
+        public async Task<IEnumerable<Patient>> GetNewPatientsByYearAsync(int year)
+        {
+            return await _repository.GetNewPatientsByYearAsync(year);
+        }
+
         public async Task<Patient> GetPatientByAccountIdAsync(Guid id)
         {
             return await _repository.GetByAccountId(id);

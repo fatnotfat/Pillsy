@@ -37,6 +37,39 @@ namespace DataAcessObject
             return result;
         }
 
+        public async Task<IEnumerable<Patient>> GetNewPatientsByMonthAsync(int month)
+        {
+            var _context = new PillsyDBContext();
+            var result = await _context.Patients!.Where(p => p.CreatedDate!.Value.Month.Equals(month)).ToListAsync();
+            if (result == null)
+            {
+                throw new Exception("Patient not found!");
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<Patient>> GetNewPatientsByDateAsync(int date)
+        {
+            var _context = new PillsyDBContext();
+            var result = await _context.Patients!.Where(p => p.CreatedDate!.Value.Date.Equals(date)).ToListAsync();
+            if (result == null)
+            {
+                throw new Exception("Patient not found!");
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<Patient>> GetNewPatientsByYearAsync(int year)
+        {
+            var _context = new PillsyDBContext();
+            var result = await _context.Patients!.Where(p => p.CreatedDate!.Value.Year.Equals(year)).ToListAsync();
+            if (result == null)
+            {
+                throw new Exception("Patient not found!");
+            }
+            return result;
+        }
+
         public async Task<Patient> GetPatientByIdAsync(Guid patientId)
         {
             try

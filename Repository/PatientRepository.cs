@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Repository
 {
@@ -49,6 +50,42 @@ namespace Repository
             {
                 var result = await patientDAO.GetPatientByIdAsync(id);
                 return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<Patient>> GetNewPatientsByDateAsync(int date)
+        {
+            try
+            {
+                return await patientDAO.GetNewPatientsByDateAsync(date);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<Patient>> GetNewPatientsByMonthAsync(int month)
+        {
+            try
+            {
+                return await patientDAO.GetNewPatientsByMonthAsync(month);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<Patient>> GetNewPatientsByYearAsync(int year)
+        {
+            try
+            {
+                return await patientDAO.GetNewPatientsByYearAsync(year);
             }
             catch (Exception)
             {

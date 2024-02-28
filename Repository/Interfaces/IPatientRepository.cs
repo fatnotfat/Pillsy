@@ -14,6 +14,9 @@ namespace Repository.Interfaces
         public Task<Patient> AddNew(Patient patient);
         public Task<bool> Update(Patient patient);
         public Task<Patient> GetByAccountId(Guid id);
+        public Task<IEnumerable<Patient>> GetNewPatientsByMonthAsync(int month);
+        public Task<IEnumerable<Patient>> GetNewPatientsByDateAsync(int date);
+        public Task<IEnumerable<Patient>> GetNewPatientsByYearAsync(int year);
 
     }
 }
