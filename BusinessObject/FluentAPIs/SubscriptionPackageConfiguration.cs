@@ -13,7 +13,7 @@ namespace BusinessObject.FluentAPIs
         public void Configure(EntityTypeBuilder<SubscriptionPackage> builder)
         {
             builder.ToTable("SubscriptionPackage");
-            builder.HasKey(x => x.PackageId);
+            builder.HasKey(x => x.SubscriptionId);
             builder.Property(x => x.PackageType).HasMaxLength(100).IsRequired();
             builder.Property(x => x.Period).IsRequired();
             builder.Property(x => x.UnitPrice).IsRequired();
@@ -24,6 +24,12 @@ namespace BusinessObject.FluentAPIs
                .WithOne(x => x.SubscriptionPackage)
                .HasForeignKey(x => x.SubcriptionPackageId)
                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasMany(x => x.OrderDetails)
+                .WithOne(x => x.SubscriptionPackage)
+                .HasForeignKey(x => x.SubscriptionId)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
     }
 }

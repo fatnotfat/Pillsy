@@ -33,6 +33,9 @@ namespace BusinessObject
         public virtual DbSet<Pill>? Pills { get; set; }
         public virtual DbSet<SubscriptionPackage>? SubscriptionPackages { get; set; }
         public virtual DbSet<TransactionHistory>? TransactionHistory { get; set; }
+        public virtual DbSet<CustomerPackage>? CustomerPackages { get; set; }
+        public virtual DbSet<Order>? Orders { get; set; }
+        public virtual DbSet<OrderDetail> OrderDetails { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -218,7 +221,7 @@ namespace BusinessObject
 
             builder.Entity<SubscriptionPackage>().HasData(new SubscriptionPackage
             {
-                PackageId = subPackage1,
+                SubscriptionId = subPackage1,
                 PackageType = "Basic",
                 Period = "90",
                 UnitPrice = 0,
@@ -232,7 +235,7 @@ namespace BusinessObject
 
             builder.Entity<SubscriptionPackage>().HasData(new SubscriptionPackage
             {
-                PackageId = subPackage2,
+                SubscriptionId = subPackage2,
                 PackageType = "Premium",
                 Period = "365",
                 UnitPrice = 2,

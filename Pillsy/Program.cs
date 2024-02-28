@@ -54,6 +54,15 @@ namespace Pillsy
             builder.Services.AddTransient<IPrescriptionRepository, PrescriptionRepository>();
             builder.Services.AddTransient<IPrescriptionService, PrescriptionService>();
             builder.Services.AddTransient<IEmailService, EmailService>();
+            builder.Services.AddTransient<ICustomerPackageRepository, CustomerPackageRepository>();
+            builder.Services.AddTransient<ICustomerPackageService, CustomerPackageService>();
+            builder.Services.AddTransient<ISubscriptionPackageRepository, SubscriptionPackageRepository>();
+            builder.Services.AddTransient<ISubscriptionPackageService, SubscriptionPackageService>();
+            builder.Services.AddTransient<IOrderRepository, OrderRepository>();
+            builder.Services.AddTransient<IOrderService, OrderService>();
+            builder.Services.AddTransient<IOrderDetailService, OrderDetailService>();
+            builder.Services.AddTransient<IOrderDetailRepository, OrderDetailRepository>();
+
 
 
             //

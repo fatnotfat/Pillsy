@@ -1,0 +1,19 @@
+﻿using BusinessObject;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Repository.Interfaces
+{
+    public interface ICustomerPackageRepository
+    {
+        public Task<bool> AddNewCustomerPackage(CustomerPackage customerPackage);
+        public Task<bool> UpdateCustomerPackage(CustomerPackage customerPackage);
+        public Task<CustomerPackage> GetCustomerPackageByCustomerPackageId(Guid customerPackageId);
+        public Task<IEnumerable<CustomerPackage>> GetCustomerPackages();
+
+
+    }
+}

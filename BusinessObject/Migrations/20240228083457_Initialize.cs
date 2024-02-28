@@ -92,7 +92,7 @@ namespace BusinessObject.Migrations
                 name: "SubscriptionPackage",
                 columns: table => new
                 {
-                    PackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SubscriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PackageType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Period = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UnitPrice = table.Column<float>(type: "real", nullable: false),
@@ -105,7 +105,7 @@ namespace BusinessObject.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SubscriptionPackage", x => x.PackageId);
+                    table.PrimaryKey("PK_SubscriptionPackage", x => x.SubscriptionId);
                 });
 
             migrationBuilder.CreateTable(
@@ -305,6 +305,88 @@ namespace BusinessObject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CustomerPackage",
+                columns: table => new
+                {
+                    CustomerPackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CustomerPackageName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    NumberScan = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateStart = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateEnd = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AllowPillHistory = table.Column<int>(type: "int", nullable: false),
+                    PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SubcriptionPackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerPackage", x => x.CustomerPackageId);
+                    table.ForeignKey(
+                        name: "FK_CustomerPackage_Patient_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patient",
+                        principalColumn: "PatientID");
+                    table.ForeignKey(
+                        name: "FK_CustomerPackage_SubscriptionPackage_SubcriptionPackageId",
+                        column: x => x.SubcriptionPackageId,
+                        principalTable: "SubscriptionPackage",
+                        principalColumn: "SubscriptionId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Order",
+                columns: table => new
+                {
+                    OrderID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TotalPrice = table.Column<double>(type: "float", nullable: false),
+                    TotalItem = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    OrderId_PayOS = table.Column<int>(type: "int", nullable: true),
+                    PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Order", x => x.OrderID);
+                    table.ForeignKey(
+                        name: "FK_Order_Patient_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patient",
+                        principalColumn: "PatientID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PillManager",
+                columns: table => new
+                {
+                    PillManagerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    TakenTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PillManager", x => x.PillManagerId);
+                    table.ForeignKey(
+                        name: "FK_PillManager_Patient_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patient",
+                        principalColumn: "PatientID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Prescription",
                 columns: table => new
                 {
@@ -347,7 +429,7 @@ namespace BusinessObject.Migrations
                     PaymentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    SubscriptionPackagePackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SubscriptionPackageSubscriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -369,11 +451,40 @@ namespace BusinessObject.Migrations
                         principalColumn: "PaymentId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TransactionHistory_SubscriptionPackage_SubscriptionPackagePackageId",
-                        column: x => x.SubscriptionPackagePackageId,
+                        name: "FK_TransactionHistory_SubscriptionPackage_SubscriptionPackageSubscriptionId",
+                        column: x => x.SubscriptionPackageSubscriptionId,
                         principalTable: "SubscriptionPackage",
-                        principalColumn: "PackageId",
+                        principalColumn: "SubscriptionId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderDetail",
+                columns: table => new
+                {
+                    OrderDetailID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<float>(type: "real", nullable: false),
+                    SubscriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrderID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderDetail", x => x.OrderDetailID);
+                    table.ForeignKey(
+                        name: "FK_OrderDetail_Order_OrderID",
+                        column: x => x.OrderID,
+                        principalTable: "Order",
+                        principalColumn: "OrderID");
+                    table.ForeignKey(
+                        name: "FK_OrderDetail_SubscriptionPackage_SubscriptionId",
+                        column: x => x.SubscriptionId,
+                        principalTable: "SubscriptionPackage",
+                        principalColumn: "SubscriptionId");
                 });
 
             migrationBuilder.CreateTable(
@@ -394,6 +505,7 @@ namespace BusinessObject.Migrations
                     Afternoon = table.Column<int>(type: "int", nullable: false),
                     Evening = table.Column<int>(type: "int", nullable: false),
                     PrescriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PillManagerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     DateStart = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DateEnd = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -404,6 +516,11 @@ namespace BusinessObject.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Pill", x => x.PillId);
+                    table.ForeignKey(
+                        name: "FK_Pill_PillManager_PillManagerId",
+                        column: x => x.PillManagerId,
+                        principalTable: "PillManager",
+                        principalColumn: "PillManagerId");
                     table.ForeignKey(
                         name: "FK_Pill_Prescription_PrescriptionId",
                         column: x => x.PrescriptionId,
@@ -416,9 +533,9 @@ namespace BusinessObject.Migrations
                 columns: new[] { "AccountId", "CreatedBy", "CreatedDate", "Email", "LastModifiedDate", "ModifiedBy", "Password", "Role", "Status" },
                 values: new object[,]
                 {
-                    { new Guid("56862c2b-bd74-41cf-8af2-c82966f332ad"), null, new DateTime(2024, 1, 30, 5, 30, 28, 774, DateTimeKind.Utc).AddTicks(7209), "khoatruong2509@fpt.edu.vn", new DateTime(2024, 1, 30, 5, 30, 28, 774, DateTimeKind.Utc).AddTicks(7210), null, "@@doctor@@", 1, 1 },
-                    { new Guid("8fc5ef50-7ed0-45c4-aa12-9f5120f5d799"), null, new DateTime(2024, 1, 30, 5, 30, 28, 774, DateTimeKind.Utc).AddTicks(7206), "dungnvse160223@fpt.edu.vn", new DateTime(2024, 1, 30, 5, 30, 28, 774, DateTimeKind.Utc).AddTicks(7207), null, "@@patient@@", 2, 1 },
-                    { new Guid("d74fdda3-1ffe-4ae4-8f55-c23e92b0c19e"), null, new DateTime(2024, 1, 30, 5, 30, 28, 774, DateTimeKind.Utc).AddTicks(7198), "nguyenphat2711@gmail.com", new DateTime(2024, 1, 30, 5, 30, 28, 774, DateTimeKind.Utc).AddTicks(7202), null, "@@admin@@", 0, 1 }
+                    { new Guid("acd3bc8a-565a-40aa-b23c-13cfb1bb4240"), null, new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(4855), "khoatruong2509@fpt.edu.vn", new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(4856), null, "@@doctor@@", 1, 1 },
+                    { new Guid("bfa6adf3-736e-48a5-94bb-ca60dadc0ffd"), null, new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(4844), "nguyenphat2711@gmail.com", new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(4848), null, "@@admin@@", 0, 1 },
+                    { new Guid("e6125d71-4bf1-4274-a3e9-0c61d778d897"), null, new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(4851), "dungnvse160223@fpt.edu.vn", new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(4852), null, "@@patient@@", 2, 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -426,9 +543,9 @@ namespace BusinessObject.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "199d38c3-c051-4a76-b64e-67d25a7894e0", "2", "Doctor", "Doctor" },
-                    { "5698b9e3-ebfd-40b8-acde-02fcb8157900", "1", "Admin", "Admin" },
-                    { "d213039d-0f03-495b-a1a6-538369ce24a2", "3", "Patient", "Patient" }
+                    { "5446a0a3-3ee8-4a0d-90ed-66038f1f1fbb", "1", "Admin", "Admin" },
+                    { "d5247bdc-6ecd-431d-a5ab-187901bc5d8f", "2", "Doctor", "Doctor" },
+                    { "f7b8069a-ba53-4970-bd2d-eed6ee32b353", "3", "Patient", "Patient" }
                 });
 
             migrationBuilder.InsertData(
@@ -436,38 +553,52 @@ namespace BusinessObject.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "1d15ffe8-463c-4322-a76e-f5609d3c6871", 0, "2cc4d13b-5754-4382-ab76-adbdcb1bc6fd", "nguyenphat2711@gmail.com", false, false, null, null, null, null, null, false, "d5042133-0775-4fca-b7f6-eb4c6ccef6e6", false, "Phat Nguyen" },
-                    { "48543c33-263b-4a09-bfd1-b3346eefe31e", 0, "25e5268f-6a6d-4a83-9a4c-c44572ff5cc1", "dungnvse160223@fpt.edu.vn", false, false, null, null, null, null, null, false, "2e8494e9-2304-450f-bcf6-1be48fd40edf", false, "Dung Nguyen" },
-                    { "4a2dc2d8-279d-449f-931e-9f7bbfc3b333", 0, "5c9ddb5c-09d2-4b63-9f41-88d270b1a614", "khoatruong2509@fpt.edu.vn", false, false, null, null, null, null, null, false, "13388991-7fb0-4de0-942c-04fa990d4ca6", false, "Khoa Truong" }
+                    { "17d815a6-8392-4144-81a5-416fe1bbb673", 0, "afbb94e7-ca87-4276-a01b-ec6648f3461a", "khoatruong2509@fpt.edu.vn", false, true, null, "KHOATRUONG2509@FPT.EDU.VN", null, null, null, false, "2c2f65bc-73d4-4573-b67d-30ab8add124b", false, "Khoa Truong" },
+                    { "6eab9c5f-eb1e-480c-96b7-3e2c3d8bea9e", 0, "bd51202d-bfab-42aa-ba77-ce3bde381069", "nguyenphat2711@gmail.com", false, true, null, "NGUYENPHAT2711@GMAIL.COM", null, null, null, false, "d85fd415-3bde-42b6-8452-b4a59bf2b1bc", false, "Phat Nguyen" },
+                    { "b33fe319-5a6e-4fd8-aef3-6024d0ac3754", 0, "57c34f55-e30f-4f3a-82b4-848310c37266", "dungnvse160223@fpt.edu.vn", false, true, null, "DUNGNVSE160223@FPT.EDU.VN", null, null, null, false, "5280e727-5ea9-4c62-b236-9acbafaf3f10", false, "Dung Nguyen" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Payment",
                 columns: new[] { "PaymentId", "CreatedBy", "CreatedDate", "LastModifiedDate", "ModifiedBy", "PaymentType", "Status" },
-                values: new object[] { new Guid("5d9c6279-394d-433f-bbcb-42fb45627501"), null, new DateTime(2024, 1, 30, 5, 30, 28, 774, DateTimeKind.Utc).AddTicks(7518), new DateTime(2024, 1, 30, 5, 30, 28, 774, DateTimeKind.Utc).AddTicks(7519), null, "Momo", 0 });
+                values: new object[] { new Guid("3a85a5c0-2189-4ef1-8dcd-bb399a844166"), null, new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(5264), new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(5264), null, "Smart Banking", 0 });
+
+            migrationBuilder.InsertData(
+                table: "SubscriptionPackage",
+                columns: new[] { "SubscriptionId", "CreatedBy", "CreatedDate", "CurrencyUnit", "LastModifiedDate", "ModifiedBy", "PackageType", "Period", "Status", "UnitPrice" },
+                values: new object[,]
+                {
+                    { new Guid("53077e66-d1a7-4b6b-a8e7-dc88401e2f04"), null, new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(5557), "USD", new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(5558), null, "Premium", "365", 1, 2f },
+                    { new Guid("75f620aa-282d-41f2-b8f3-e9b7940c9d71"), null, new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(5484), "USD", new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(5484), null, "Basic", "90", 1, 0f }
+                });
 
             migrationBuilder.InsertData(
                 table: "Doctor",
                 columns: new[] { "DoctorID", "AccountId", "CreatedBy", "CreatedDate", "FirstName", "LastModifiedDate", "LastName", "ModifiedBy", "PhoneNumber", "Specialty" },
-                values: new object[] { new Guid("7e58e8f5-ad56-4129-beb0-a3c22a6b20dd"), new Guid("56862c2b-bd74-41cf-8af2-c82966f332ad"), new Guid("56862c2b-bd74-41cf-8af2-c82966f332ad"), new DateTime(2024, 1, 30, 5, 30, 28, 774, DateTimeKind.Utc).AddTicks(7542), "Khoa", new DateTime(2024, 1, 30, 5, 30, 28, 774, DateTimeKind.Utc).AddTicks(7543), "Truong", new Guid("56862c2b-bd74-41cf-8af2-c82966f332ad"), "0987654321", "Khoa noi" });
+                values: new object[] { new Guid("eac3307e-e29d-48e6-bb79-805437d0d970"), new Guid("acd3bc8a-565a-40aa-b23c-13cfb1bb4240"), new Guid("acd3bc8a-565a-40aa-b23c-13cfb1bb4240"), new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(5288), "Khoa", new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(5288), "Truong", new Guid("acd3bc8a-565a-40aa-b23c-13cfb1bb4240"), "0987654321", "Khoa noi" });
 
             migrationBuilder.InsertData(
                 table: "Patient",
                 columns: new[] { "PatientID", "AccountId", "Address", "CreatedBy", "CreatedDate", "DateOfBirth", "FirstName", "Gender", "LastModifiedDate", "LastName", "ModifiedBy", "PaymentId", "PhoneNumber" },
-                values: new object[] { new Guid("dbaf0216-ad5d-45a6-bf60-e6975ca9961e"), new Guid("8fc5ef50-7ed0-45c4-aa12-9f5120f5d799"), "Bac Ninh", new Guid("8fc5ef50-7ed0-45c4-aa12-9f5120f5d799"), new DateTime(2024, 1, 30, 5, 30, 28, 774, DateTimeKind.Utc).AddTicks(7658), new DateTime(2002, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "Dung", 0, new DateTime(2024, 1, 30, 5, 30, 28, 774, DateTimeKind.Utc).AddTicks(7658), "Nguyen", new Guid("8fc5ef50-7ed0-45c4-aa12-9f5120f5d799"), new Guid("5d9c6279-394d-433f-bbcb-42fb45627501"), "0123456789" });
+                values: new object[] { new Guid("e8c6ece8-a51d-4161-bf30-956a40a26c2f"), new Guid("e6125d71-4bf1-4274-a3e9-0c61d778d897"), "Bac Ninh", new Guid("e6125d71-4bf1-4274-a3e9-0c61d778d897"), new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(5427), new DateTime(2002, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "Dung", 0, new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(5428), "Nguyen", new Guid("e6125d71-4bf1-4274-a3e9-0c61d778d897"), new Guid("3a85a5c0-2189-4ef1-8dcd-bb399a844166"), "0123456789" });
+
+            migrationBuilder.InsertData(
+                table: "CustomerPackage",
+                columns: new[] { "CustomerPackageId", "AllowPillHistory", "CreatedBy", "CreatedDate", "CustomerPackageName", "DateEnd", "DateStart", "LastModifiedDate", "ModifiedBy", "NumberScan", "PatientId", "Status", "SubcriptionPackageId" },
+                values: new object[] { new Guid("05c54210-3feb-47ec-9cba-ea11366fc32b"), 0, null, new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(5615), "Basic", new DateTime(2024, 5, 28, 15, 34, 57, 644, DateTimeKind.Local).AddTicks(5591), new DateTime(2024, 2, 28, 15, 34, 57, 644, DateTimeKind.Local).AddTicks(5580), new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(5616), null, "2", new Guid("e8c6ece8-a51d-4161-bf30-956a40a26c2f"), 1, new Guid("75f620aa-282d-41f2-b8f3-e9b7940c9d71") });
 
             migrationBuilder.InsertData(
                 table: "Prescription",
                 columns: new[] { "PrescriptionID", "CreatedBy", "CreatedDate", "Diagnosis", "DoctorID", "ExaminationDate", "Image", "ImageBase64", "Index", "LastModifiedDate", "ModifiedBy", "PatientID", "Status" },
-                values: new object[] { new Guid("d1b551c2-f64d-4bc6-a01c-bce1f7cb711e"), new Guid("8fc5ef50-7ed0-45c4-aa12-9f5120f5d799"), new DateTime(2024, 1, 30, 5, 30, 28, 774, DateTimeKind.Utc).AddTicks(7690), "viem da day", new Guid("7e58e8f5-ad56-4129-beb0-a3c22a6b20dd"), new DateTime(2024, 1, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), "test", null, 1, new DateTime(2024, 1, 30, 5, 30, 28, 774, DateTimeKind.Utc).AddTicks(7690), new Guid("8fc5ef50-7ed0-45c4-aa12-9f5120f5d799"), new Guid("dbaf0216-ad5d-45a6-bf60-e6975ca9961e"), 1 });
+                values: new object[] { new Guid("a3931257-9c52-4237-92e0-6ef798fd55f0"), new Guid("e6125d71-4bf1-4274-a3e9-0c61d778d897"), new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(5459), "viem da day", new Guid("eac3307e-e29d-48e6-bb79-805437d0d970"), new DateTime(2024, 1, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), "test", null, 1, new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(5460), new Guid("e6125d71-4bf1-4274-a3e9-0c61d778d897"), new Guid("e8c6ece8-a51d-4161-bf30-956a40a26c2f"), 1 });
 
             migrationBuilder.InsertData(
                 table: "Pill",
-                columns: new[] { "PillId", "Afternoon", "CreatedBy", "CreatedDate", "DateEnd", "DateStart", "DosagePerDay", "Evening", "Index", "LastModifiedDate", "ModifiedBy", "Morning", "Period", "PillDescription", "PillName", "PrescriptionId", "Quantity", "QuantityPerDose", "Status", "Unit" },
+                columns: new[] { "PillId", "Afternoon", "CreatedBy", "CreatedDate", "DateEnd", "DateStart", "DosagePerDay", "Evening", "Index", "LastModifiedDate", "ModifiedBy", "Morning", "Period", "PillDescription", "PillManagerId", "PillName", "PrescriptionId", "Quantity", "QuantityPerDose", "Status", "Unit" },
                 values: new object[,]
                 {
-                    { new Guid("07b8bae5-0cdb-4f8c-90a5-b6749fb0f7d9"), 0, new Guid("8fc5ef50-7ed0-45c4-aa12-9f5120f5d799"), new DateTime(2024, 1, 30, 5, 30, 28, 774, DateTimeKind.Utc).AddTicks(7713), null, null, 1, 0, 1, new DateTime(2024, 1, 30, 5, 30, 28, 774, DateTimeKind.Utc).AddTicks(7714), new Guid("8fc5ef50-7ed0-45c4-aa12-9f5120f5d799"), 1, "ngay", "1 ngay uong 1 vien 30 phut sau khi an", "Nexium mup", new Guid("d1b551c2-f64d-4bc6-a01c-bce1f7cb711e"), 30, 1, 1, "vien" },
-                    { new Guid("56c35107-7373-4e4a-b879-474303892dc0"), 0, new Guid("8fc5ef50-7ed0-45c4-aa12-9f5120f5d799"), new DateTime(2024, 1, 30, 5, 30, 28, 774, DateTimeKind.Utc).AddTicks(7728), null, null, 2, 1, 1, new DateTime(2024, 1, 30, 5, 30, 28, 774, DateTimeKind.Utc).AddTicks(7728), new Guid("8fc5ef50-7ed0-45c4-aa12-9f5120f5d799"), 1, "ngay", "1 ngay uong 2 vien chia lam 2 lan(sang, toi - sau khi an)", "Amoxycilin", new Guid("d1b551c2-f64d-4bc6-a01c-bce1f7cb711e"), 20, 1, 1, "vien" }
+                    { new Guid("403369ce-b0bc-4a07-8a71-ded36fca729b"), 0, new Guid("e6125d71-4bf1-4274-a3e9-0c61d778d897"), new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(5654), null, null, 2, 1, 1, new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(5655), new Guid("e6125d71-4bf1-4274-a3e9-0c61d778d897"), 1, "ngay", "1 ngay uong 2 vien chia lam 2 lan(sang, toi - sau khi an)", null, "Amoxycilin", new Guid("a3931257-9c52-4237-92e0-6ef798fd55f0"), 20, 1, 1, "vien" },
+                    { new Guid("e0cd6642-0d26-4653-9341-1fcc0033675a"), 0, new Guid("e6125d71-4bf1-4274-a3e9-0c61d778d897"), new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(5638), null, null, 1, 0, 1, new DateTime(2024, 2, 28, 8, 34, 57, 644, DateTimeKind.Utc).AddTicks(5639), new Guid("e6125d71-4bf1-4274-a3e9-0c61d778d897"), 1, "ngay", "1 ngay uong 1 vien 30 phut sau khi an", null, "Nexium mup", new Guid("a3931257-9c52-4237-92e0-6ef798fd55f0"), 30, 1, 1, "vien" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -526,6 +657,16 @@ namespace BusinessObject.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CustomerPackage_PatientId",
+                table: "CustomerPackage",
+                column: "PatientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CustomerPackage_SubcriptionPackageId",
+                table: "CustomerPackage",
+                column: "SubcriptionPackageId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Doctor_AccountId",
                 table: "Doctor",
                 column: "AccountId");
@@ -535,6 +676,21 @@ namespace BusinessObject.Migrations
                 table: "Doctor",
                 column: "PhoneNumber",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_PatientId",
+                table: "Order",
+                column: "PatientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDetail_OrderID",
+                table: "OrderDetail",
+                column: "OrderID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDetail_SubscriptionId",
+                table: "OrderDetail",
+                column: "SubscriptionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Patient_AccountId",
@@ -553,9 +709,19 @@ namespace BusinessObject.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Pill_PillManagerId",
+                table: "Pill",
+                column: "PillManagerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Pill_PrescriptionId",
                 table: "Pill",
                 column: "PrescriptionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PillManager_PatientId",
+                table: "PillManager",
+                column: "PatientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Prescription_DoctorID",
@@ -578,9 +744,9 @@ namespace BusinessObject.Migrations
                 column: "PaymentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TransactionHistory_SubscriptionPackagePackageId",
+                name: "IX_TransactionHistory_SubscriptionPackageSubscriptionId",
                 table: "TransactionHistory",
-                column: "SubscriptionPackagePackageId");
+                column: "SubscriptionPackageSubscriptionId");
         }
 
         /// <inheritdoc />
@@ -605,6 +771,12 @@ namespace BusinessObject.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CustomerPackage");
+
+            migrationBuilder.DropTable(
+                name: "OrderDetail");
+
+            migrationBuilder.DropTable(
                 name: "Pill");
 
             migrationBuilder.DropTable(
@@ -615,6 +787,12 @@ namespace BusinessObject.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Order");
+
+            migrationBuilder.DropTable(
+                name: "PillManager");
 
             migrationBuilder.DropTable(
                 name: "Prescription");

@@ -2,9 +2,9 @@
 {
     public class Constants
     {
-        public static string ClientId = "310b83ae-b4a3-4b85-90f5-61b2c5fabef6";
-        public static string ApiKey = "35925b24-6856-4e0b-ac8c-8b92bf506be0";
-        public static string CheckSumKey = "f7c9f9418740507c2927fa867d968c685c525b0786268440f0cdaf83960ef2b7";
+        public static string ClientId = "19639d7a-4558-47dd-a7a4-938794d57c4d";
+        public static string ApiKey = "03ed7021-d625-4ecb-8baf-4b9e68e3aa2f";
+        public static string CheckSumKey = "2a8cffdbdc71acc6d8c3fa6ecb7bada92d4f79a2db744a54bbea91ce9ac7f020";
 
     }
 }
