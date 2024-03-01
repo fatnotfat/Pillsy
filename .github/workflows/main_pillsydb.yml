@@ -28,27 +28,6 @@ jobs:
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      
-      - name: Delete Old Artifacts
-        uses: actions/github-script@v6
-        id: artifact
-        with:
-          script: |
-            const res = await github.rest.actions.listArtifactsForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-            })
-
-            res.data.artifacts
-              .filter(({ name }) => name === 'package')
-              .forEach(({ id }) => {
-                github.rest.actions.deleteArtifact({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  artifact_id: id,
-                })
-              })
-
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
@@ -74,5 +53,5 @@ jobs:
         with:
           app-name: 'pillsydb'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8128A795686D4572900CB1C54344519B }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_25804CB58EC0400CA535CC85BE99A6CD }}
           package: .
