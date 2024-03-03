@@ -37,4 +37,9 @@
 		<ProjectReference Include="..\Services\Service.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Controllers\OrderDetails\" />
+	  <Folder Include="Controllers\Orders\" />
+	</ItemGroup>
+
 </Project>

@@ -33,6 +33,11 @@ namespace Repository
             return await accountDAO.GetAccounts();
         }
 
+        public Task<Account> GetAdminAccount()
+        {
+            return AccountDAO.Instance.GetAdminAsync();
+        }
+
         public async Task<Account> GetByEmail(string email)
         {
             var account = await accountDAO.GetAccountByEmail(email);

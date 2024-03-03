@@ -1,4 +1,5 @@
 ﻿using BusinessObject;
+using DataAcessObject;
 using Repository.Interfaces;
 using Service.Interfaces;
 using System;
@@ -43,6 +44,11 @@ namespace Service
         public async Task<Account> GetAccountById(Guid id)
         {
             return await _accountRepository.GetById(id);
+        }
+
+        public Task<Account> GetAdminAccount()
+        {
+            return AccountDAO.Instance.GetAdminAsync();
         }
 
         public async Task<IEnumerable<Account>> GetAllAccounts()

@@ -29,7 +29,10 @@ namespace BusinessObject.FluentAPIs
                 .WithOne(x => x.SubscriptionPackage)
                 .HasForeignKey(x => x.SubscriptionId)
                 .OnDelete(DeleteBehavior.NoAction);
-
+            builder.HasMany(x => x.TransactionHistories)
+                .WithOne(x => x.SubscriptionPackage)
+                .HasForeignKey(x => x.PackageId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

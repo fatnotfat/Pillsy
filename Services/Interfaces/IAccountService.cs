@@ -16,6 +16,6 @@ namespace Service.Interfaces
         Task<Account> GetAccountByEmail(string email);
         Task<bool> UpdateAccount(Account account);
         Task<Account> GetAccountByAccountIdAndPassword(Guid accountId, string password);
-
+        Task<Account> GetAdminAccount();
     }
 }

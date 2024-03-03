@@ -17,5 +17,6 @@ namespace BusinessObject
         public int Status { get; set; }
         public List<CustomerPackage>? CustomerPackages { get; set; }
         public List<OrderDetail>? OrderDetails { get; set; }
+        public List<TransactionHistory>? TransactionHistories { get; set; }
     }
 }

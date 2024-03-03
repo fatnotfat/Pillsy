@@ -13,6 +13,7 @@ using Pillsy.DataTransferObjects.Payment;
 using Pillsy.DataTransferObjects.Payment.PaymentDto;
 using Pillsy.DataTransferObjects.Pill.PillCreateWithPrescriptionDto;
 using Pillsy.DataTransferObjects.Prescription.PrescriptionRequestOCRDto;
+using Service;
 using Service.Interfaces;
 using Service.Momo.Request;
 using System.Diagnostics;
@@ -32,8 +33,14 @@ namespace Pillsy.Controllers.Payments
         private readonly IOrderService _orderService;
         private readonly IOrderDetailService _orderDetailService;
         private readonly ICustomerPackageService _customerPackageService;
+        private readonly ITransactionHistoryService _transactionHistoryService;
+        private readonly IPaymentService _paymentService;
+        private readonly IEmailService _emailService;
+        private readonly IPatientService _patientService;
+        private readonly IAccountService _accountService;
+
         PayOS payOS;
-        public PaymentsController(ISubscriptionPackageService subscriptionPackageService, IConfiguration configuration, IOrderService orderService, IOrderDetailService orderDetailService, ICustomerPackageService customerPackageService)
+        public PaymentsController(ISubscriptionPackageService subscriptionPackageService, IConfiguration configuration, IOrderService orderService, IOrderDetailService orderDetailService, ICustomerPackageService customerPackageService, ITransactionHistoryService transactionHistoryService, IPaymentService paymentService, IEmailService emailService, IPatientService patientService, IAccountService accountService)
         {
             payOS = new PayOS(Constants.Constants.ClientId, Constants.Constants.ApiKey, Constants.Constants.CheckSumKey);
             _subscriptionPackageService = subscriptionPackageService;
@@ -41,6 +48,11 @@ namespace Pillsy.Controllers.Payments
             _orderService = orderService;
             _orderDetailService = orderDetailService;
             _customerPackageService = customerPackageService;
+            _transactionHistoryService = transactionHistoryService;
+            _paymentService = paymentService;
+            _emailService = emailService;
+            _patientService = patientService;
+            _accountService = accountService;
         }
 
         [Authorize(Roles = "Patient")]
@@ -63,6 +75,7 @@ namespace Pillsy.Controllers.Payments
                     var totalPrice = price;
 
                     string patientId = User.FindFirst("PatientId")?.Value;
+                    string userId = User.FindFirst("AccountId")?.Value;
 
 
 
@@ -145,7 +158,38 @@ namespace Pillsy.Controllers.Payments
                         await _customerPackageService.AddNewCustomerPackage(customerPackage);
                     };
 
+                    var payment = await _paymentService.GetPaymentByPaymentType("Smart Banking");
 
+                    if (payment == null)
+                    {
+                        return BadRequest("Payment type does not exist!");
+                    }
+
+                    TransactionHistory transactionHistory = new TransactionHistory
+                    {
+                        TransactionId = Guid.NewGuid(),
+                        PatientId = Guid.Parse(patientId),
+                        PackageId = subscriptionId,
+                        PaymentId = payment.PaymentId,
+                        Status = 0,
+                        Description = description,
+                        CreatedBy = Guid.Parse(patientId),
+                        CreatedDate = DateTime.UtcNow,
+                        ModifiedBy = null,
+                        LastModifiedDate = DateTime.UtcNow,
+                    };
+                    
+
+                    var transaction = await _transactionHistoryService.AddNewTransactionHistory(transactionHistory);
+
+                    var account = await _accountService.GetAccountById(Guid.Parse(userId));
+                    var patient = await _patientService.GetPatientById(Guid.Parse(patientId));
+                    var admin = await _accountService.GetAdminAccount();
+                    var message1 = new Message(new string[] { admin.Email! }, "Customer payment!", $"Customer {patient.FirstName + " " + patient.LastName} already paid for {subscriptionPackage.PackageType} package! Please check for unlock feature to this customer!");
+                    var message2 = new Message(new string[] { account.Email! }, "Subscription payment!", $"You already paid for {subscriptionPackage.PackageType} package! Please wait for admin check for unlock feature!");
+
+                    _emailService.SendEmail(message1);
+                    _emailService.SendEmail(message2);
                     scope.Complete();
                     return Ok(paymentResponsePayOSDTO);
 
@@ -166,7 +210,7 @@ namespace Pillsy.Controllers.Payments
         {
             try
             {
-                
+
                 PayOS payOS = new PayOS(Constants.Constants.ClientId, Constants.Constants.ApiKey, Constants.Constants.CheckSumKey);
 
                 PaymentLinkInformation paymentLinkInfomation = await payOS.getPaymentLinkInfomation(orderId);

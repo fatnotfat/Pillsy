@@ -62,6 +62,10 @@ namespace Pillsy
             builder.Services.AddTransient<IOrderService, OrderService>();
             builder.Services.AddTransient<IOrderDetailService, OrderDetailService>();
             builder.Services.AddTransient<IOrderDetailRepository, OrderDetailRepository>();
+            builder.Services.AddTransient<ITransactionHistoryRepository, TransactionHistoryRepository>();
+            builder.Services.AddTransient<ITransactionHistoryService, TransactionHistoryService>();
+            builder.Services.AddTransient<IPaymentRepository, PaymentRepository>();
+            builder.Services.AddTransient<IPaymentService, PaymentService>();
 
 
 

@@ -112,5 +112,20 @@ namespace DataAcessObject
             }
             return account;
         }
+
+        public async Task<Account> GetAdminAsync()
+        {
+            Account account = null;
+            try
+            {
+                var _context = new PillsyDBContext();
+                account = await _context.Accounts.FirstOrDefaultAsync(a => a.Role == 0);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return account;
+        }
     }
 }
