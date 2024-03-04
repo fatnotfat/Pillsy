@@ -30,7 +30,7 @@ namespace Pillsy.Mappers
             )
             .ForPath(
                 dest => dest.CreatedDate,
-                opt => opt.MapFrom(src => src.Data.Meta_data.Created_at)
+                opt => opt.MapFrom(src => DateTime.UtcNow)
             )
             .ForPath(
                 dest => dest.ModifiedBy,
