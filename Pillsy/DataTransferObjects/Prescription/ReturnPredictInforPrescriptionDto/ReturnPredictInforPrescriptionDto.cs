@@ -2,7 +2,7 @@
 {
     public class ReturnPredictInforPrescriptionDto
     {
-        public string Result { get; set; }
+        public PrescriptionCreateDto.PrescriptionCreateDto PrescriptionCreateDto { get; set; }
         public BusinessObject.Prescription Prescription { get; set; }
     }
 }

@@ -20,6 +20,6 @@ namespace BusinessObject
         public string? Image { get; set; }
         public byte[]? ImageBase64 { get; set; }
         public int Index { get; set; }
-        public List<Pill> Pills { get; set; }
+        public List<Pill>? Pills { get; set; }
     }
 }

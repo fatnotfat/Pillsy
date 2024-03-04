@@ -347,7 +347,7 @@ namespace Pillsy.Controllers.Prescriptions
                         scope.Complete();
                         return Ok(new ReturnPredictInforPrescriptionDto
                         {
-                            Result = result2,
+                            PrescriptionCreateDto = prescriptiondto,
                             Prescription = pres
                         });
                     }
