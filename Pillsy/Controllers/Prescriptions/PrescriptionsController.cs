@@ -284,7 +284,7 @@ namespace Pillsy.Controllers.Prescriptions
                             Status = 1,
                             Index = 0,
                             ImageBase64 = Convert.FromBase64String(ocrDto.Image!),
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow,
                         };
 
                         PrescriptionUploadImageDto imageDto = new PrescriptionUploadImageDto();
@@ -340,7 +340,7 @@ namespace Pillsy.Controllers.Prescriptions
                             {
                                 if (date.Start_date == null)
                                 {
-                                    date.Start_date = DateTime.Now;
+                                    date.Start_date = DateTime.UtcNow;
                                 }
                             }
                         }
