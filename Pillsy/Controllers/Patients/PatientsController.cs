@@ -87,7 +87,6 @@ namespace Pillsy.Controllers.Patients
             return Ok(await _patientService.GetNewPatientsByYearAsync(year));
         }
         // GET: api/Patients/5
-        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Patient>> GetPatient(Guid id)
         {
