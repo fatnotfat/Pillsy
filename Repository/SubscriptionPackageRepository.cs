@@ -15,5 +15,10 @@ namespace Repository
         {
             return await SubscriptionPackageDAO.Instance.GetSubscriptionPackageByIdAsync(subscriptionPackageId);
         }
+
+        public async Task<IEnumerable<SubscriptionPackage>> GetSubscriptionPackages()
+        {
+            return await SubscriptionPackageDAO.Instance.GetSubscriptionPackages();
+        }
     }
 }

@@ -10,5 +10,7 @@ namespace Repository.Interfaces
     public interface ISubscriptionPackageRepository
     {
         public Task<SubscriptionPackage> GetSubscriptionPackageByIdAsync(Guid subscriptionPackageId);
+        public Task<IEnumerable<SubscriptionPackage>> GetSubscriptionPackages();
+
     }
 }

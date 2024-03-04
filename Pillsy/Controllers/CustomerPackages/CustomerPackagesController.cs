@@ -28,6 +28,7 @@ namespace Pillsy.Controllers.CustomerPackages
         }
 
         // GET: api/CustomerPackages
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CustomerPackage>>> GetCustomerPackages()
         {
@@ -53,6 +54,7 @@ namespace Pillsy.Controllers.CustomerPackages
 
         // PUT: api/CustomerPackages/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         [Route("update-success-status/{customerPackageId}/{orderId}")]
         public async Task<IActionResult> UpdateCustomerPackage(Guid customerPackageId, Guid orderId)
@@ -99,41 +101,13 @@ namespace Pillsy.Controllers.CustomerPackages
 
         // POST: api/CustomerPackages
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<CustomerPackage>> AddCustomerPackage(CustomerPackage customerPackage)
         {
-            //if (_context.CustomerPackages == null)
-            //{
-            //    return Problem("Entity set 'PillsyDBContext.CustomerPackages'  is null.");
-            //}
             await _customerPackageService.AddNewCustomerPackage(customerPackage);
 
             return Ok("Add successfully!");
         }
-
-        //// DELETE: api/CustomerPackages/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteCustomerPackage(Guid id)
-        //{
-        //    if (_context.CustomerPackages == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var customerPackage = await _context.CustomerPackages.FindAsync(id);
-        //    if (customerPackage == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.CustomerPackages.Remove(customerPackage);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        //private bool CustomerPackageExists(Guid id)
-        //{
-        //    return (_context.CustomerPackages?.Any(e => e.CustomerPackageId == id)).GetValueOrDefault();
-        //}
     }
 }

@@ -87,6 +87,7 @@ namespace Pillsy.Controllers.Patients
             return Ok(await _patientService.GetNewPatientsByYearAsync(year));
         }
         // GET: api/Patients/5
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Patient>> GetPatient(Guid id)
         {
@@ -114,6 +115,7 @@ namespace Pillsy.Controllers.Patients
 
         // PUT: api/Patients/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Patient")]
         [HttpPut]
         public async Task<IActionResult> UpdatePatient(PatientUpdateDto patient)
         {
@@ -167,6 +169,7 @@ namespace Pillsy.Controllers.Patients
 
         // POST: api/Patients
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
         [HttpPost]
         [Route("sign-up")]
         public async Task<ActionResult<Patient>> AddPatient(PatientCreateDTO patientDTO)
@@ -228,66 +231,9 @@ namespace Pillsy.Controllers.Patients
 
         }
 
-        //[HttpGet("{patientId}/prescriptions/detail")]
-        //public async Task<ActionResult<PatientDetailDto>> GetPatientDetail(Guid id)
-        //{
-        //    if (await _patientService.GetAllPatients() == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var patient = await _patientService.GetPatientById(id);
-
-        //    if (patient == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var dataPres = patient.Prescriptions;
-        //    var patientDto = new PatientDetailDto
-        //    {
-        //        Userdata = new Userdata
-        //        {
-        //            Medication_records = new List<Medication_Records>
-        //            {
-        //                new Medication_Records
-        //                {
-        //                    Medication = new List<Medication>()
-        //                }
-        //            }
-        //        },
-        //        Metadata = new Metadata
-        //        {
-
-        //        }
-        //    };
-
-
-        //    var medRecords = new List<Medication_Records>();
-
-
-        //    foreach (var pres in dataPres)
-        //    {
-        //        var config = new MapperConfiguration(cfg =>
-        //        {
-        //            cfg.AddProfile(new PillProfile());
-        //            cfg.AddProfile(new ScheduleProfile());
-        //            cfg.AddProfile(new PatientProfile());
-        //        });
-        //        var mapper = config.CreateMapper();
-        //        medRecords = pres.Pills.Select(mapper.Map<Pill, Medication_Records>).ToList();
-        //        foreach (var med in medRecords)
-        //        {
-        //            med.Medication = pres.Pills.Where(p => p.PillId.Equals(med.Record_id)).Select(mapper.Map<Pill, Medication>).ToList();
-        //        }
-        //    }
-
-        //    patientDto.Userdata.Medication_records = medRecords;
-
-        //    return patientDto;
-
-        //}
 
         //DELETE: api/Patients/5
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePatient(Guid id)
         {

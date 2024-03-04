@@ -27,6 +27,7 @@ using System.Transactions;
 using Pillsy.DataTransferObjects.Prescription.PrescriptionResponseOCRDto;
 using System.Collections;
 using Org.BouncyCastle.Utilities;
+using Pillsy.DataTransferObjects.Prescription.UploadPredictInforPrescriptionDto;
 
 namespace Pillsy.Controllers.Prescriptions
 {
@@ -59,54 +60,6 @@ namespace Pillsy.Controllers.Prescriptions
             return Ok(await _service.GetAllPrescriptionsAsync());
         }
 
-        //// GET: api/Prescriptions/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Prescription>> GetPrescription(Guid id)
-        //{
-        //  if (_context.Prescriptions == null)
-        //  {
-        //      return NotFound();
-        //  }
-        //    var prescription = await _context.Prescriptions.FindAsync(id);
-
-        //    if (prescription == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return prescription;
-        //}
-
-        //// PUT: api/Prescriptions/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutPrescription(Guid id, Prescription prescription)
-        //{
-        //    if (id != prescription.PrescriptionID)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(prescription).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!PrescriptionExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
 
         // POST: api/Prescriptions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -268,7 +221,7 @@ namespace Pillsy.Controllers.Prescriptions
 
         [HttpPost]
         [Route("upload-predict-info")]
-        public async Task<ActionResult> UploadPredictInforPrescription(PrescriptionCreateDto presCreateDto)
+        public async Task<ActionResult> UploadPredictInforPrescription(UploadPredictInforPrescriptionDto uploadPresDto)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -284,81 +237,8 @@ namespace Pillsy.Controllers.Prescriptions
 
                     if (!String.IsNullOrEmpty(userId))
                     {
-                        //Prescription pres = new Prescription
-                        //{
-                        //    PrescriptionID = (Guid)ocrDto.Prescription_Id,
-                        //    PatientID = (Guid)ocrDto.User_Id,
-                        //    ExaminationDate = null,
-                        //    Status = 1,
-                        //    Index = 0,
-                        //    ImageBase64 = Convert.FromBase64String(ocrDto.Image!),
-                        //    CreatedDate = DateTime.Now,
-                        //};
-
-                        //PrescriptionUploadImageDto imageDto = new PrescriptionUploadImageDto();
-                        //imageDto.ImageBase64 = Convert.FromBase64String(ocrDto.Image!);
-                        //if (String.IsNullOrEmpty(imageDto.ImageBase64.ToString().Trim()))
-                        //{
-                        //    return BadRequest("Upload failed");
-                        //}
-
-                        //imageDto.Prescription_Id = pres.PrescriptionID;
-                        //imageDto.User_Id = Guid.Parse(userId);
-                        //PrescriptionRequestOCRInfoDto prescriptionRequestOCRInfoDto = new PrescriptionRequestOCRInfoDto
-                        //{
-                        //    User_Id = ocrDto.User_Id,
-                        //    Prescription_Id = ocrDto.Prescription_Id,
-                        //    Data = ocrDto.Data
-                        //};
-
-                        //var json2 = JsonConvert.SerializeObject(prescriptionRequestOCRInfoDto);
-                        //var data2 = new StringContent(json2, Encoding.UTF8, "application/json");
-                        //var url2 = "http://35.232.72.106:8003/api/v1/predict-info/";
-                        //using var client2 = new HttpClient();
-
-                        //HttpResponseMessage response2;
-                        //int retryCount = 10;
-                        //do
-                        //{
-                        //    response2 = await client2.PostAsync(url2, data2);
-                        //    retryCount--;
-                        //} while (!response2.IsSuccessStatusCode && retryCount > 0);
-
-                        //if (!response2.IsSuccessStatusCode)
-                        //{
-                        //    return BadRequest("Failed to predict info after multiple attempts.");
-                        //}
-
-                        ////var response2 = await client2.PostAsync(url2, data2);
-                        //var result2 = await response2.Content.ReadAsStringAsync();
-
-
-                        //var prescriptiondto = JsonConvert.DeserializeObject<PrescriptionCreateDto>(result2);
-                        //while (prescriptiondto.Status.Equals("404"))
-                        //{
-                        //    //int retryCount2 = 10;
-                        //    //do
-                        //    //{
-                        //    response2 = await client2.PostAsync(url2, data2);
-                        //    result2 = await response2.Content.ReadAsStringAsync();
-                        //    //    retryCount--;
-                        //    //} while (!response2.IsSuccessStatusCode && retryCount2 > 0);
-
-                        //    if (!response2.IsSuccessStatusCode)
-                        //    {
-                        //        return BadRequest("Failed to predict info after multiple attempts.");
-                        //    }
-                        //    prescriptiondto = JsonConvert.DeserializeObject<PrescriptionCreateDto>(result2);
-                        //    foreach (var date in prescriptiondto.Data.Medication_records)
-                        //    {
-                        //        if(date.Start_date == null)
-                        //        {
-                        //            date.Start_date = DateTime.Now;
-                        //        }
-                        //    }
-                        //}
-                        //await _service.AddAsync(pres);
-                        await UpdatePrescription(presCreateDto);
+                        await _service.AddAsync(uploadPresDto.Prescription);
+                        await UpdatePrescription(uploadPresDto.PrescriptionCreateDto);
                         scope.Complete();
                         return Ok("Add successfully!");
                     }
@@ -448,13 +328,8 @@ namespace Pillsy.Controllers.Prescriptions
                         var prescriptiondto = JsonConvert.DeserializeObject<PrescriptionCreateDto>(result2);
                         while (prescriptiondto.Status.Equals("404") || prescriptiondto.Status.Equals("400") || prescriptiondto.Status.Equals("500"))
                         {
-                            //int retryCount2 = 10;
-                            //do
-                            //{
                             response2 = await client2.PostAsync(url2, data2);
                             result2 = await response2.Content.ReadAsStringAsync();
-                            //    retryCount--;
-                            //} while (!response2.IsSuccessStatusCode && retryCount2 > 0);
 
                             if (!response2.IsSuccessStatusCode)
                             {
@@ -469,10 +344,12 @@ namespace Pillsy.Controllers.Prescriptions
                                 }
                             }
                         }
-                        await _service.AddAsync(pres);
-                        //await UpdatePrescription(prescriptiondto);
                         scope.Complete();
-                        return Ok(result2);
+                        return Ok(new ReturnPredictInforPrescriptionDto
+                        {
+                            Result = result2,
+                            Prescription = pres
+                        });
                     }
                     else
                     {
@@ -526,8 +403,6 @@ namespace Pillsy.Controllers.Prescriptions
                         prescriptionRequestOCRDto.User_Id = patient.PatientID;
                         prescriptionRequestOCRDto.Image = Convert.ToBase64String(imageBytes);
 
-                        //var content = new MultipartFormDataContent();
-                        //content.Add(new ByteArrayContent(imageBytes), "image", "image.jpg");
 
                         var json = JsonConvert.SerializeObject(prescriptionRequestOCRDto);
                         var data = new StringContent(json, Encoding.UTF8, "application/json");
@@ -594,29 +469,5 @@ namespace Pillsy.Controllers.Prescriptions
 
         }
 
-        //// DELETE: api/Prescriptions/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeletePrescription(Guid id)
-        //{
-        //    if (_context.Prescriptions == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var prescription = await _context.Prescriptions.FindAsync(id);
-        //    if (prescription == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.Prescriptions.Remove(prescription);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        //private bool PrescriptionExists(Guid id)
-        //{
-        //    return (_context.Prescriptions?.Any(e => e.PrescriptionID == id)).GetValueOrDefault();
-        //}
     }
 }

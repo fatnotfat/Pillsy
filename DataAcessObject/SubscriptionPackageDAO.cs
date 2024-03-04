@@ -38,5 +38,19 @@ namespace DataAcessObject
                 throw;
             }
         }
+
+        public async Task<IEnumerable<SubscriptionPackage>> GetSubscriptionPackages()
+        {
+            try
+            {
+                var context = new PillsyDBContext();
+                var subscriptionPackages = await context.SubscriptionPackages!.ToListAsync();
+                return subscriptionPackages;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

@@ -22,5 +22,10 @@ namespace Service
         {
             return await _repository.GetSubscriptionPackageByIdAsync(subscriptionPackageId);
         }
+
+        public async Task<IEnumerable<SubscriptionPackage>> GetSubscriptionPackages()
+        {
+            return await _repository.GetSubscriptionPackages();
+        }
     }
 }

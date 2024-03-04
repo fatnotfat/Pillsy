@@ -10,5 +10,7 @@ namespace Service.Interfaces
     public interface ISubscriptionPackageService
     {
         public Task<SubscriptionPackage> GetSubscriptionPackageById(Guid subscriptionPackageId);
+        public Task<IEnumerable<SubscriptionPackage>> GetSubscriptionPackages();
+
     }
 }
