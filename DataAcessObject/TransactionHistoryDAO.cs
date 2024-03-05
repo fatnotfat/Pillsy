@@ -28,7 +28,14 @@ namespace DataAcessObject
         public async Task<IEnumerable<TransactionHistory>> GetAllTransactions()
         {
             var context = new PillsyDBContext();
-            var transactions = await context.TransactionHistory!.ToListAsync();
+            var transactions = await context.TransactionHistory!.Include(t => t.SubscriptionPackage).ToListAsync();
+            return transactions;
+        }
+
+        public async Task<IEnumerable<TransactionHistory>> GetAllTransactionsWithSuccessStatus()
+        {
+            var context = new PillsyDBContext();
+            var transactions = await context.TransactionHistory!.Include(t => t.SubscriptionPackage).Where(t => t.Status == 1).ToListAsync();
             return transactions;
         }
         public async Task<TransactionHistory> GetTransactionByTransactionId(Guid transactionID)

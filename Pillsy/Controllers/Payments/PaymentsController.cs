@@ -64,7 +64,8 @@ namespace Pillsy.Controllers.Payments
             {
                 try
                 {
-
+                    int exchangeRate = 23000;
+                    price = price * exchangeRate;
                     ItemData item = new ItemData(name, number, price);
                     List<ItemData> items = new List<ItemData>();
                     items.Add(item);
@@ -72,6 +73,7 @@ namespace Pillsy.Controllers.Payments
                     var description = "Thanh toan chuyen khoan";
                     Random rnd = new Random();
                     var orderId = rnd.Next(0, 1000000000);
+                    
                     var totalPrice = price;
 
                     string patientId = User.FindFirst("PatientId")?.Value;

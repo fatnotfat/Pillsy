@@ -14,7 +14,7 @@ namespace Service.Interfaces
         public Task<TransactionHistory> GetTransactionByTransactionId(Guid transactionID);
         public Task<bool> UpdateTransactionHistory(TransactionHistory transactionHistory);
         public Task<bool> AddNewTransactionHistory(TransactionHistory transactionHistory);
-
+        public Task<IEnumerable<TransactionHistory>> GetAllTransactionsWithSuccessStatus();
 
     }
 }

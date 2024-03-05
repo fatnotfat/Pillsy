@@ -473,5 +473,129 @@ namespace Pillsy.Controllers.Prescriptions
 
         }
 
+
+        [HttpGet]
+        [Route("patient/{patientId}/all-prescription-by-date/{date}")]
+        public async Task<ActionResult<IEnumerable<Prescription>>> GetPrescriptionsByPatientId(Guid patientId, int date)
+        {
+            try
+            {
+                var patients = await _patientService.GetAllPatients();
+                if (patients == null)
+                {
+                    return Problem("Entity set 'PillsyDBContext.Patients'  is null.");
+                }
+
+                var patient = await _patientService.GetPatientById(patientId);
+                if (patient == null)
+                {
+                    return NotFound("Patient not found!");
+                }
+                var result = await _service.GetPrescriptionsByPatientIdAsync(patientId);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                var prescriptions = result.Where(p => p.CreatedDate!.Value.Date.Equals(date));
+
+                return Ok(prescriptions);
+            }
+            catch (Exception ex)
+            {
+                switch (ex.Message)
+                {
+                    case "Patient not found!":
+                        return NotFound(ex.Message);
+
+                    default:
+                        return BadRequest(ex.Message);
+                }
+            }
+
+        }
+
+        [HttpGet]
+        [Route("patient/{patientId}/all-prescription-by-month/{month}")]
+        public async Task<ActionResult<IEnumerable<Prescription>>> GetPrescriptionsByPatientIdAndMonth(Guid patientId, int month)
+        {
+            try
+            {
+                var patients = await _patientService.GetAllPatients();
+                if (patients == null)
+                {
+                    return Problem("Entity set 'PillsyDBContext.Patients'  is null.");
+                }
+
+                var patient = await _patientService.GetPatientById(patientId);
+                if (patient == null)
+                {
+                    return NotFound("Patient not found!");
+                }
+                var result = await _service.GetPrescriptionsByPatientIdAsync(patientId);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                var prescriptions = result.Where(p => p.CreatedDate!.Value.Date.Equals(month));
+
+                return Ok(prescriptions);
+            }
+            catch (Exception ex)
+            {
+                switch (ex.Message)
+                {
+                    case "Patient not found!":
+                        return NotFound(ex.Message);
+
+                    default:
+                        return BadRequest(ex.Message);
+                }
+            }
+
+        }
+
+        [HttpGet]
+        [Route("patient/{patientId}/all-prescription-by-year/{year}")]
+        public async Task<ActionResult<IEnumerable<Prescription>>> GetPrescriptionsByPatientIdAndYear(Guid patientId, int year)
+        {
+            try
+            {
+                var patients = await _patientService.GetAllPatients();
+                if (patients == null)
+                {
+                    return Problem("Entity set 'PillsyDBContext.Patients'  is null.");
+                }
+
+                var patient = await _patientService.GetPatientById(patientId);
+                if (patient == null)
+                {
+                    return NotFound("Patient not found!");
+                }
+                var result = await _service.GetPrescriptionsByPatientIdAsync(patientId);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                var prescriptions = result.Where(p => p.CreatedDate!.Value.Date.Equals(year));
+
+                return Ok(prescriptions);
+            }
+            catch (Exception ex)
+            {
+                switch (ex.Message)
+                {
+                    case "Patient not found!":
+                        return NotFound(ex.Message);
+
+                    default:
+                        return BadRequest(ex.Message);
+                }
+            }
+
+        }
+
     }
 }

@@ -35,6 +35,16 @@ namespace Pillsy.Controllers.CustomerPackages
             return Ok(await _customerPackageService.GetCustomerPackages());
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        [Route("totals")]
+        public async Task<ActionResult<IEnumerable<CustomerPackage>>> GetCustomerPackagesTotals()
+        {
+            var customerPackages = await _customerPackageService.GetCustomerPackages();
+            int totals = customerPackages.Where(c => c.Status == 1).Count();
+            return Ok(totals);
+        }
+
         // GET: api/CustomerPackages/5
         [Authorize(Roles = "Patient")]
         [HttpGet]

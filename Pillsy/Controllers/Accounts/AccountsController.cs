@@ -22,6 +22,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using Pillsy.DataTransferObjects.ForgotPasswordDTO;
 using System.Data;
+using Pillsy.DataTransferObjects.Account.AccountByMonthDTO;
 
 namespace Pillsy.Controllers.Accounts
 {
@@ -73,6 +74,33 @@ namespace Pillsy.Controllers.Accounts
                 return NotFound();
             }
             return Ok(accounts);
+        }
+
+        [Authorize(Roles = "Admin")]
+        // GET: api/Accounts
+        [HttpGet]
+        [Route("totals")]
+        public async Task<ActionResult<IEnumerable<Account>>> GetAccountsTotals()
+        {
+            //create map
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AccountFrofile());
+            });
+            var mapper = config.CreateMapper();
+            //End create map
+
+            //transfer from account to account dto
+
+            var data = await _accountService.GetAllAccounts();
+            var accounts = data.Select(
+                             acc => mapper.Map<Account, AccountDTO>(acc)
+                           );
+            if (await _accountService.GetAllAccounts() == null)
+            {
+                return NotFound();
+            }
+            return Ok(accounts.Count());
         }
 
         [HttpPost]
@@ -287,7 +315,7 @@ namespace Pillsy.Controllers.Accounts
 
                 //change password in table account
                 var accountExist = await _accountService.GetAccountByEmail(resetPassword.Email);
-                if(accountExist != null)
+                if (accountExist != null)
                 {
                     UpdatePasswordDto updatePasswordDto = new UpdatePasswordDto()
                     {
@@ -318,6 +346,95 @@ namespace Pillsy.Controllers.Accounts
                 );
 
             return token;
+        }
+
+        [Authorize(Roles = "Admin")]
+        // GET: api/Accounts
+        [HttpGet]
+        [Route("user/month")]
+        public async Task<ActionResult<IEnumerable<Account>>> GetAccountsByMonth()
+        {
+            //create map
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AccountFrofile());
+            });
+            var mapper = config.CreateMapper();
+            //End create map
+
+            //transfer from account to account dto
+
+            var data = await _accountService.GetAllAccounts();
+
+
+            List<AccountByMonthDTO> accountByMonths = new List<AccountByMonthDTO>();
+            
+            for(int i = 1; i <= 12; i++)
+            {
+                var jan = data.Where(d => d.CreatedDate!.Value.Month.Equals(i));
+                var count = jan.Count();
+                DateTime dateTime = new DateTime(DateTime.Now.Year, i, 1);
+                accountByMonths.Add(new AccountByMonthDTO
+                {
+                    X = dateTime,
+                    Y = count
+                });
+            }
+
+            var accounts = data.Select(
+                             acc => mapper.Map<Account, AccountDTO>(acc)
+                           );
+            if (await _accountService.GetAllAccounts() == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(accountByMonths);
+        }
+
+        [Authorize(Roles = "Admin")]
+        // GET: api/Accounts
+        [HttpGet]
+        [Route("user/month/totals")]
+        public async Task<ActionResult<IEnumerable<Account>>> GetAccountsByMonthTotals()
+        {
+            //create map
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AccountFrofile());
+            });
+            var mapper = config.CreateMapper();
+            //End create map
+
+            //transfer from account to account dto
+
+            var data = await _accountService.GetAllAccounts();
+
+
+            List<AccountByMonthDTO> accountByMonths = new List<AccountByMonthDTO>();
+
+            for (int i = 1; i <= 12; i++)
+            {
+                var jan = data.Where(d => d.CreatedDate!.Value.Month.Equals(i));
+                var count = jan.Count();
+                DateTime dateTime = new DateTime(DateTime.Now.Year, i, 1);
+                accountByMonths.Add(new AccountByMonthDTO
+                {
+                    X = dateTime,
+                    Y = count
+                });
+            }
+
+            var accounts = data.Select(
+                             acc => mapper.Map<Account, AccountDTO>(acc)
+                           );
+            if (await _accountService.GetAllAccounts() == null)
+            {
+                return NotFound();
+            }
+            double accountByMonthsTotals = accountByMonths.Sum(acc => acc.Y);
+
+            return Ok(accountByMonthsTotals);
         }
     }
 }

@@ -52,6 +52,21 @@ namespace Pillsy.Controllers.Patients
             return Ok(await _patientService.GetAllPatients());
         }
         [Authorize(Roles = "Admin")]
+        // GET: api/Patients
+        [HttpGet]
+        [Route("totals")]
+        public async Task<ActionResult<IEnumerable<Patient>>> GetPatientsTotals()
+        {
+            if (await _patientService.GetAllPatients() == null)
+            {
+                return NotFound();
+            }
+            var patients = await _patientService.GetAllPatients();
+
+            int patientsTotal = patients.Count();
+            return Ok(patientsTotal);
+        }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("new-by-date/{date}")]
         public async Task<ActionResult<IEnumerable<Patient>>> GetNewPatientsByDate(int date)

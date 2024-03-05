@@ -28,6 +28,11 @@ namespace Service
             return await _transactionHistoryRepository.GetAllTransactions();
         }
 
+        public async Task<IEnumerable<TransactionHistory>> GetAllTransactionsWithSuccessStatus()
+        {
+            return await _transactionHistoryRepository.GetAllTransactionsWithSuccessStatus();
+        }
+
         public async Task<IEnumerable<TransactionHistory>> GetTransactionByPatientId(Guid patientId)
         {
             return await _transactionHistoryRepository.GetTransactionByPatientId(patientId);

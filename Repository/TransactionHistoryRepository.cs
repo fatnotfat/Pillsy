@@ -21,6 +21,11 @@ namespace Repository
             return await TransactionHistoryDAO.Instance.GetAllTransactions();
         }
 
+        public async Task<IEnumerable<TransactionHistory>> GetAllTransactionsWithSuccessStatus()
+        {
+            return await TransactionHistoryDAO.Instance.GetAllTransactionsWithSuccessStatus();
+        }
+
         public async Task<IEnumerable<TransactionHistory>> GetTransactionByPatientId(Guid patientId)
         {
             return await TransactionHistoryDAO.Instance.GetTransactionByPatientId(patientId);
