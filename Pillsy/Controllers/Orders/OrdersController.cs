@@ -45,36 +45,33 @@ namespace Pillsy.Controllers.Orders
             return Ok(order);
         }
 
-        //// PUT: api/Orders/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutOrder(Guid id, Order order)
-        //{
-        //    if (id != order.OrderID)
-        //    {
-        //        return BadRequest();
-        //    }
+        // PUT: api/Orders/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateOrder(Guid id)
+        {
 
-        //    _context.Entry(order).State = EntityState.Modified;
+            try
+            {
+                var order = await _orderService.GetOrderByOrderId(id);
+                if (order == null)
+                {
+                    return NotFound("Order not found!");
+                }
+                else
+                {
+                    order.Status = true;
+                    var result = await _orderService.UpdateOrder(order);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!OrderExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
+            return Ok("Order update successfully!");
+        }
 
         //// POST: api/Orders
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
