@@ -341,7 +341,11 @@ namespace Pillsy.Controllers.Prescriptions
                                 if (date.Start_date == null)
                                 {
                                     date.Start_date = DateTime.UtcNow;
+                                    pres.CreatedDate = date.Start_date;
+
                                 }
+                                pres.CreatedDate = date.Start_date;
+
                             }
                         }
                         scope.Complete();
