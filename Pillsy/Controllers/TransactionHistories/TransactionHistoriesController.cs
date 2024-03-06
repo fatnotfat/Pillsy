@@ -39,6 +39,14 @@ namespace Pillsy.Controllers.TransactionHistories
             return Ok(await _transactionHistoryService.GetAllTransactions());
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        [Route("get-all/success-status")]
+        public async Task<ActionResult<IEnumerable<TransactionHistory>>> GetTransactionHistorySuccessStatus()
+        {
+            return Ok(await _transactionHistoryService.GetAllTransactionsWithSuccessStatus());
+        }
+
         // GET: api/TransactionHistories/5
         [Authorize(Roles = "Patient")]
         [HttpGet]

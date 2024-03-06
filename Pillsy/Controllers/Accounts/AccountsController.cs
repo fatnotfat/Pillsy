@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Identity;
 using Pillsy.DataTransferObjects.ForgotPasswordDTO;
 using System.Data;
 using Pillsy.DataTransferObjects.Account.AccountByMonthDTO;
+using Pillsy.DataTransferObjects.Account.UpdateAccountDto;
 
 namespace Pillsy.Controllers.Accounts
 {
@@ -435,6 +436,41 @@ namespace Pillsy.Controllers.Accounts
             double accountByMonthsTotals = accountByMonths.Sum(acc => acc.Y);
 
             return Ok(accountByMonthsTotals);
+        }
+
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut]
+        [Route("update-account")]
+        public async Task<IActionResult> UpdateAccount(UpdateAccountDto updateAccountDto)
+        {
+            try
+            {
+                var accountExist = await _accountService.GetAccountById(updateAccountDto.AccountId);
+                if (accountExist == null)
+                {
+                    return NotFound("Account " + updateAccountDto.AccountId + " does not exist!");
+                }
+
+                if (updateAccountDto.Role != null)
+                {
+                    accountExist.Role = (int)updateAccountDto.Role;
+                }
+                if (updateAccountDto.Status != null)
+                {
+                    accountExist.Status = (int)updateAccountDto.Status;
+                }
+
+                var result = await _accountService.UpdateAccount(accountExist);
+                if (result)
+                    return Ok("Account updated!");
+                return BadRequest("Account update failed!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

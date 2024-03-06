@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Pillsy.DataTransferObjects.Order.AddNewOrderDto;
 
 namespace Pillsy.Controllers.Orders
 {
@@ -73,44 +74,48 @@ namespace Pillsy.Controllers.Orders
             return Ok("Order update successfully!");
         }
 
-        //// POST: api/Orders
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<Order>> PostOrder(Order order)
-        //{
-        //  if (_context.Orders == null)
-        //  {
-        //      return Problem("Entity set 'PillsyDBContext.Orders'  is null.");
-        //  }
-        //    _context.Orders.Add(order);
-        //    await _context.SaveChangesAsync();
-
-        //    return CreatedAtAction("GetOrder", new { id = order.OrderID }, order);
-        //}
-
-        //// DELETE: api/Orders/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteOrder(Guid id)
-        //{
-        //    if (_context.Orders == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var order = await _context.Orders.FindAsync(id);
-        //    if (order == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.Orders.Remove(order);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        //private bool OrderExists(Guid id)
-        //{
-        //    return (_context.Orders?.Any(e => e.OrderID == id)).GetValueOrDefault();
-        //}
+        // POST: api/Orders
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<ActionResult<string>> AddNewOrder(AddNewOrderDto newOrderDto)
+        {
+            try
+            {
+                Random random = new Random();
+                int orderPayOsId = random.Next(1, 2000000000);
+                var orderExisted = await _orderService.GetOrderByOrderIdPayOs(orderPayOsId);
+                if (orderExisted != null)
+                {
+                    return BadRequest("Order PayOs Id was exist!, Please try again!");
+                }
+                string userId = User.FindFirst("AccountId")?.Value;
+                var order = new Order
+                {
+                    OrderID = Guid.NewGuid(),
+                    TotalItem = newOrderDto.TotalItem,
+                    TotalPrice = newOrderDto.TotalPrice,
+                    OrderId_PayOS = orderPayOsId,
+                    CreatedBy = Guid.Parse(userId),
+                    CreatedDate = DateTime.Now,
+                    LastModifiedDate = DateTime.Now,
+                    ModifiedBy = Guid.Parse(userId),
+                    Status = newOrderDto.Status,
+                };
+                var result = await _orderService.AddNewOrder(order);
+                if (result)
+                {
+                    return Ok("Add successfully!");
+                }
+                else
+                {
+                    return BadRequest("Add failed!");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
