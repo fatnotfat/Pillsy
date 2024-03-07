@@ -65,6 +65,7 @@ namespace Pillsy.Controllers.TransactionHistories
 
         // GET: api/TransactionHistories/5
         [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Patient")]
         [HttpGet]
         [Route("history-transaction/{transactionId}")]
         public async Task<ActionResult<TransactionHistory>> GetTransactionHistoryByTransactionId(Guid transactionId)
