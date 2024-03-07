@@ -46,6 +46,20 @@ namespace Pillsy.Controllers.Orders
             return Ok(order);
         }
 
+        [HttpGet]
+        [Route("all-orders/patient/{patientId}")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersByPatientId(Guid patientId)
+        {
+            var orders = await _orderService.GetOrderByPatientId(patientId);
+
+            if (orders == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(orders);
+        }
+
         // PUT: api/Orders/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize(Roles = "Admin")]

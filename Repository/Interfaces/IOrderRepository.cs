@@ -14,6 +14,8 @@ namespace Repository.Interfaces
         public Task<bool> AddNewOrder(Order order);
         public Task<Order> GetOrderByOrderId(Guid orderId);
         public Task<Order> GetOrderByOrderIdPayOs(int orderIdPayOs);
+        public Task<Order> GetOrderByPatientId(Guid patientId);
+
 
     }
 }

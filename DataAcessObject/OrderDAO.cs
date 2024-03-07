@@ -53,6 +53,20 @@ namespace DataAcessObject
             }
         }
 
+        public async Task<Order> GetOrderByPatientId(Guid patientId)
+        {
+            try
+            {
+                var context = new PillsyDBContext();
+                var result = await context.Orders!.FirstOrDefaultAsync(o => o.PatientId.Equals(patientId));
+                return result!;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<Order> GetOrderByOrderIdPayOs(int orderIdPayOS)
         {
             try
