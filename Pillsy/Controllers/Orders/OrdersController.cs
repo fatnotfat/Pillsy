@@ -9,6 +9,7 @@ using BusinessObject;
 using Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Pillsy.DataTransferObjects.Order.AddNewOrderDto;
+using Pillsy.DataTransferObjects.Order.UpdateOrderDto;
 
 namespace Pillsy.Controllers.Orders
 {
@@ -64,19 +65,39 @@ namespace Pillsy.Controllers.Orders
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateOrder(Guid id)
+        public async Task<IActionResult> UpdateOrder(UpdateOrderDto updateOrderDto)
         {
 
             try
             {
-                var order = await _orderService.GetOrderByOrderId(id);
+                var order = await _orderService.GetOrderByOrderId(updateOrderDto.OrderID);
                 if (order == null)
                 {
                     return NotFound("Order not found!");
                 }
                 else
                 {
-                    order.Status = true;
+
+                    if (updateOrderDto.TotalItem != null)
+                    {
+                        order.TotalItem = (int)updateOrderDto.TotalItem;
+                    }
+                    if (updateOrderDto.TotalPrice != null)
+                    {
+                        order.TotalPrice = (int)updateOrderDto.TotalPrice;
+                    }
+                    if (updateOrderDto.Status != null)
+                    {
+                        order.Status = (bool)updateOrderDto.Status;
+                    }
+                    if (updateOrderDto.OrderId_PayOS != null)
+                    {
+                        order.OrderId_PayOS = (int)updateOrderDto.OrderId_PayOS;
+                    }
+                    if (updateOrderDto.PatientId != null)
+                    {
+                        order.PatientId = (Guid)(updateOrderDto.PatientId);
+                    }
                     var result = await _orderService.UpdateOrder(order);
                 }
             }
