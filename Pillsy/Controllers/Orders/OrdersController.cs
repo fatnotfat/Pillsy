@@ -64,7 +64,7 @@ namespace Pillsy.Controllers.Orders
         // PUT: api/Orders/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize(Roles = "Admin")]
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> UpdateOrder(UpdateOrderDto updateOrderDto)
         {
 

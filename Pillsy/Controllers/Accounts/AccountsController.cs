@@ -222,34 +222,6 @@ namespace Pillsy.Controllers.Accounts
                 {
                     accountExist.Password = account.NewPassword;
                 }
-                //var accountExist = await _accountService.GetAccountById();
-                //if (!String.IsNullOrEmpty(patient.FirstName?.Trim()))
-                //{
-                //    patientExist.FirstName = patient.FirstName.Trim();
-                //}
-
-                //if (!String.IsNullOrEmpty(patient.LastName?.Trim()))
-                //{
-                //    patientExist.LastName = patient.LastName.Trim();
-                //}
-
-                //if (patient.DateOfBirth != null)
-                //{
-                //    patientExist.DateOfBirth = patient.DateOfBirth;
-                //}
-                //if (patient.Gender != null)
-                //{
-                //    patientExist.Gender = patient.Gender;
-                //}
-                //if (!String.IsNullOrEmpty(patient.PhoneNumber?.Trim()))
-                //{
-                //    patientExist.PhoneNumber = patient.PhoneNumber;
-                //}
-                //if (!String.IsNullOrEmpty(patient.Address?.Trim()))
-                //{
-                //    patientExist.Address = patient.Address;
-                //}
-
                 var result = await _accountService.UpdateAccount(accountExist);
                 if (result)
                     return Ok("Password updated!");

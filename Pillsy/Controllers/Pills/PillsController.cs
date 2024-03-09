@@ -63,7 +63,7 @@ namespace Pillsy.Controllers.Pills
 
         // PUT: api/Pills/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize(Roles = "Patient")]
+        [Authorize(Roles = "Patient, Admin")]
         [HttpPut]
         [Route("update-pill/{id}")]
 

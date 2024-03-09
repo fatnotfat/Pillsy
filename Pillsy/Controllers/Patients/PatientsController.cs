@@ -129,7 +129,7 @@ namespace Pillsy.Controllers.Patients
 
         // PUT: api/Patients/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize(Roles = "Patient")]
+        [Authorize(Roles = "Patient, Admin")]
         [HttpPut]
         public async Task<IActionResult> UpdatePatient(PatientUpdateDto patient)
         {
