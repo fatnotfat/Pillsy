@@ -31,7 +31,7 @@ namespace Repository
             return await OrderDAO.Instance.GetOrderByOrderIdPayOs(orderIdPayOs);
         }
 
-        public async Task<Order> GetOrderByPatientId(Guid patientId)
+        public async Task<IEnumerable<Order>> GetOrderByPatientId(Guid patientId)
         {
             return await OrderDAO.Instance.GetOrderByPatientId(patientId);
         }

@@ -42,7 +42,7 @@ namespace Service
             return await _orderRepository.GetOrderByOrderIdPayOs(orderIdPayOs);
         }
 
-        public async Task<Order> GetOrderByPatientId(Guid patientId)
+        public async Task<IEnumerable<Order>> GetOrderByPatientId(Guid patientId)
         {
             return await _orderRepository.GetOrderByPatientId(patientId);
         }

@@ -53,12 +53,12 @@ namespace DataAcessObject
             }
         }
 
-        public async Task<Order> GetOrderByPatientId(Guid patientId)
+        public async Task<IEnumerable<Order>> GetOrderByPatientId(Guid patientId)
         {
             try
             {
                 var context = new PillsyDBContext();
-                var result = await context.Orders!.FirstOrDefaultAsync(o => o.PatientId.Equals(patientId));
+                var result = await context.Orders!.Where(o => o.PatientId.Equals(patientId)).ToListAsync();
                 return result!;
             }
             catch (Exception)
