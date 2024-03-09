@@ -54,7 +54,7 @@ namespace Pillsy.Controllers.Accounts
         [Authorize(Roles = "Admin")]
         // GET: api/Accounts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
+        public async Task<ActionResult<IEnumerable<AccountDTO>>> GetAccounts()
         {
             //create map
             var config = new MapperConfiguration(cfg =>

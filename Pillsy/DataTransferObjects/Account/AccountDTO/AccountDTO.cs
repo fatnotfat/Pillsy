@@ -10,6 +10,7 @@ namespace Pillsy.DataTransferObjects.Account.AccountDTO
 {
     public class AccountDTO
     {
+        public Guid AccountId { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         [JsonConverter(typeof(JsonStringEnumConverter))]
