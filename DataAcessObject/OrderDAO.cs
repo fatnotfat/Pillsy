@@ -11,18 +11,31 @@ namespace DataAcessObject
 {
     public class OrderDAO
     {
-        private static OrderDAO instance = null;
+        private static OrderDAO instance1 = null;
+        private static SubscriptionPackageDAO instance2 = null;
 
 
         public static OrderDAO Instance
         {
             get
             {
-                if (instance == null)
+                if (instance1 == null)
                 {
-                    instance = new OrderDAO();
+                    instance1 = new OrderDAO();
                 }
-                return instance;
+                return instance1;
+            }
+        }
+
+        public static SubscriptionPackageDAO Instance2
+        {
+            get
+            {
+                if (instance2 == null)
+                {
+                    instance2 = new SubscriptionPackageDAO();
+                }
+                return instance2;
             }
         }
 
@@ -58,7 +71,15 @@ namespace DataAcessObject
             try
             {
                 var context = new PillsyDBContext();
-                var result = await context.Orders!.Where(o => o.PatientId.Equals(patientId)).ToListAsync();
+                var result = await context.Orders!.Include(o => o.OrderDetails).Where(o => o.PatientId.Equals(patientId)).ToListAsync();
+                foreach(var o in result)
+                {
+                    foreach (var o2 in o.OrderDetails)
+                    {
+                        var package = await Instance2.GetSubscriptionPackageByIdAsync((Guid)o2.SubscriptionId!);
+                        o2.SubscriptionPackage = package;
+                    }
+                }
                 return result!;
             }
             catch (Exception)
