@@ -33,7 +33,7 @@ namespace Pillsy.Controllers.Patients
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public PatientsController(IConfiguration configuration, IMapper mapper, IPatientService patientService, IAccountService accountService, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public PatientsController(IConfiguration configuration, IMapper mapper, IPatientService patientService, IAccountService accountService, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, ICustomerPackageService customerPackageService, ISubscriptionPackageService subscriptionPackageService)
         {
             _configuration = configuration;
             _mapper = mapper;
@@ -41,6 +41,8 @@ namespace Pillsy.Controllers.Patients
             _accountService = accountService;
             _userManager = userManager;
             _roleManager = roleManager;
+            _customerPackageService = customerPackageService;
+            _subscriptionPackageService = subscriptionPackageService;
         }
         [Authorize(Roles = "Admin")]
         // GET: api/Patients

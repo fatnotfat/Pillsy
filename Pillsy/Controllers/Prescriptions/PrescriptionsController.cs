@@ -40,13 +40,15 @@ namespace Pillsy.Controllers.Prescriptions
         private readonly IPrescriptionService _service;
         private readonly IPatientService _patientService;
         private readonly IPillService _pillService;
+        private readonly ICustomerPackageService _customerPackageService;
 
 
-        public PrescriptionsController(IPrescriptionService service, IPatientService patientService, IPillService pillService)
+        public PrescriptionsController(IPrescriptionService service, IPatientService patientService, IPillService pillService, ICustomerPackageService customerPackageService)
         {
             _service = service;
             _patientService = patientService;
             _pillService = pillService;
+            _customerPackageService = customerPackageService;
         }
 
         // GET: api/Prescriptions
@@ -239,6 +241,7 @@ namespace Pillsy.Controllers.Prescriptions
                     {
                         await _service.AddAsync(uploadPresDto.Prescription);
                         await UpdatePrescription(uploadPresDto.PrescriptionCreateDto);
+                        
                         scope.Complete();
                         return Ok("Add successfully!");
                     }
