@@ -130,7 +130,7 @@ namespace DataAcessObject
                 patient.CreatedDate = DateTime.Now;
                 patient.LastModifiedDate = DateTime.Now;
                 patient.ModifiedBy = accountId;
-                await _context.Patients.AddAsync(patient);
+                await _context.Patients!.AddAsync(patient);
                 await _context.SaveChangesAsync();
 
                 return patient;

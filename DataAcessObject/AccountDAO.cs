@@ -56,9 +56,7 @@ namespace DataAcessObject
         public async Task<Account> Add(Account account)
         {
             var _context = new PillsyDBContext();
-            using var transaction = _context.Database.BeginTransaction();
-            try
-            {
+
                 account.CreatedBy = account.AccountId;
                 account.CreatedDate = DateTime.Now;
                 account.LastModifiedDate = DateTime.Now;
@@ -66,16 +64,9 @@ namespace DataAcessObject
                 account.Status = 0;
 
 
-                await _context.Accounts.AddAsync(account);
+                await _context.Accounts!.AddAsync(account);
                 await _context.SaveChangesAsync();
-                transaction.Commit();
                 return account;
-            }
-            catch (Exception ex)
-            {
-                transaction.Rollback();
-                throw ex;
-            }
         }
 
         public async Task<bool> UpdateAccountAsync(Account account)

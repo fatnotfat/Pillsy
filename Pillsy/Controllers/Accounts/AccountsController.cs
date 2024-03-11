@@ -24,6 +24,7 @@ using Pillsy.DataTransferObjects.ForgotPasswordDTO;
 using System.Data;
 using Pillsy.DataTransferObjects.Account.AccountByMonthDTO;
 using Pillsy.DataTransferObjects.Account.UpdateAccountDto;
+using System.Transactions;
 
 namespace Pillsy.Controllers.Accounts
 {
@@ -175,33 +176,47 @@ namespace Pillsy.Controllers.Accounts
         [AllowAnonymous]
         public async Task<ActionResult<Account>> PostAccount(AccountCreateDTO accountDTO)
         {
-            var data = _mapper.Map<Account>(accountDTO);
-            if (await _accountService.GetAllAccounts() == null)
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                return Problem("Entity set 'PillsyDBContext.Accounts'  is null.");
+                try
+                {
+                    var data = _mapper.Map<Account>(accountDTO);
+                    if (await _accountService.GetAllAccounts() == null)
+                    {
+                        return Problem("Entity set 'PillsyDBContext.Accounts'  is null.");
+                    }
+                    var account = await _accountService.AddNewAccount(data);
+                    Random random = new Random();
+                    var number = random.Next(1,1000000000);
+                    IdentityUser user = new()
+                    {
+                        Email = account.Email,
+                        SecurityStamp = Guid.NewGuid().ToString(),
+                        UserName = $"User{number}",
+                        TwoFactorEnabled = false
+                    };
+
+                    var result = await _userManager.CreateAsync(user, account.Password);
+                    if (!result.Succeeded)
+                    {
+                        return StatusCode(StatusCodes.Status500InternalServerError,
+                            new Response { Status = "Error", Message = "User Failed to Create" });
+                    }
+
+                    //Add Token to Verify the email....
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+
+                    scope.Complete();
+                    return Ok("user " + account.AccountId + " was created");
+                }
+                catch (Exception ex)
+                {
+                    scope.Dispose();
+                    return BadRequest($"{ex.Message}");
+                }
+
             }
-            var account = await _accountService.AddNewAccount(data);
-            IdentityUser user = new()
-            {
-                Email = account.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = null,
-                TwoFactorEnabled = false
-            };
-
-            var result = await _userManager.CreateAsync(user, account.Password);
-            if (!result.Succeeded)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new Response { Status = "Error", Message = "User Failed to Create" });
-            }
-
-            //Add Token to Verify the email....
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-
-
-            return Ok("user " + account.AccountId + " was created");
         }
 
 
@@ -341,8 +356,8 @@ namespace Pillsy.Controllers.Accounts
 
 
             List<AccountByMonthDTO> accountByMonths = new List<AccountByMonthDTO>();
-            
-            for(int i = 1; i <= 12; i++)
+
+            for (int i = 1; i <= 12; i++)
             {
                 var jan = data.Where(d => d.CreatedDate!.Value.Month.Equals(i));
                 var count = jan.Count();
