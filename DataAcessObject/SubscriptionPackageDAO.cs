@@ -30,7 +30,7 @@ namespace DataAcessObject
             try
             {
                 var context = new PillsyDBContext();
-                var subscriptionPackage = await context.SubscriptionPackages.FirstOrDefaultAsync(s => s.SubscriptionId.Equals(subscriptionPackageId));
+                var subscriptionPackage = await context.SubscriptionPackages!.FirstOrDefaultAsync(s => s.SubscriptionId.Equals(subscriptionPackageId));
                 return subscriptionPackage;
             }
             catch (Exception)

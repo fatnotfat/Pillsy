@@ -226,7 +226,7 @@ namespace Pillsy.Controllers.Patients
                         SubcriptionPackageId = package.SubscriptionId,
                         LastModifiedDate = DateTime.Now,
                         DateStart = DateTime.Now,
-                        DateEnd = DateTime.UtcNow.AddDays(90),
+                        DateEnd = DateTime.UtcNow.AddDays(30),
 
                     });
                     if (result != null)

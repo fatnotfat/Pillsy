@@ -241,7 +241,13 @@ namespace Pillsy.Controllers.Prescriptions
                     {
                         await _service.AddAsync(uploadPresDto.Prescription);
                         await UpdatePrescription(uploadPresDto.PrescriptionCreateDto);
-                        
+                        var customerPackage = await _customerPackageService.GetCustomerPackageByPatientId(uploadPresDto.Prescription.PatientID);
+                        if (customerPackage != null && customerPackage.SubscriptionPackage.PackageType.Equals("Basic"))
+                        {
+                            var number = Int32.Parse(customerPackage.NumberScan.Trim());
+                            number--;
+                            customerPackage.NumberScan = number.ToString();
+                        }
                         scope.Complete();
                         return Ok("Add successfully!");
                     }
@@ -399,34 +405,43 @@ namespace Pillsy.Controllers.Prescriptions
 
                     var patient = await _patientService.GetPatientByAccountIdAsync(Guid.Parse(userId));
 
-                    if (!String.IsNullOrEmpty(userId))
+
+                    var customerPackage = await _customerPackageService.GetCustomerPackageByPatientId(patient.PatientID);
+                    if(customerPackage != null && Int32.Parse(customerPackage.NumberScan) > 0)
                     {
+                        if (!String.IsNullOrEmpty(userId))
+                        {
 
 
 
-                        //predict ocr
-                        PrescriptionRequestOCRDto prescriptionRequestOCRDto = new PrescriptionRequestOCRDto();
-                        prescriptionRequestOCRDto.Prescription_Id = Guid.NewGuid();
-                        prescriptionRequestOCRDto.User_Id = patient.PatientID;
-                        prescriptionRequestOCRDto.Image = Convert.ToBase64String(imageBytes);
+                            //predict ocr
+                            PrescriptionRequestOCRDto prescriptionRequestOCRDto = new PrescriptionRequestOCRDto();
+                            prescriptionRequestOCRDto.Prescription_Id = Guid.NewGuid();
+                            prescriptionRequestOCRDto.User_Id = patient.PatientID;
+                            prescriptionRequestOCRDto.Image = Convert.ToBase64String(imageBytes);
 
 
-                        var json = JsonConvert.SerializeObject(prescriptionRequestOCRDto);
-                        var data = new StringContent(json, Encoding.UTF8, "application/json");
-                        var url = "http://35.232.72.106:8003/api/v1/predict-ocr/";
-                        using var client = new HttpClient();
-                        var response = await client.PostAsync(url, data);
-                        var result = await response.Content.ReadAsStringAsync();
+                            var json = JsonConvert.SerializeObject(prescriptionRequestOCRDto);
+                            var data = new StringContent(json, Encoding.UTF8, "application/json");
+                            var url = "http://35.232.72.106:8003/api/v1/predict-ocr/";
+                            using var client = new HttpClient();
+                            var response = await client.PostAsync(url, data);
+                            var result = await response.Content.ReadAsStringAsync();
 
-                        var bsObj = JsonConvert.DeserializeObject<PrescriptionResponseOCRDto>(result);
+                            var bsObj = JsonConvert.DeserializeObject<PrescriptionResponseOCRDto>(result);
 
-                        return Ok(bsObj);
+                            return Ok(bsObj);
+                        }
+                        else
+                        {
+                            scope.Dispose();
+                            return NotFound("User not found!");
+                        }
                     }
                     else
                     {
-                        scope.Dispose();
-                        return NotFound("User not found!");
-                    }
+                        return BadRequest("Your trial has expired, please register for another package to use!");
+                    }  
                 }
                 catch (Exception ex)
                 {
