@@ -23,6 +23,11 @@ namespace Service
             return await _repository.GetSubscriptionPackageByIdAsync(subscriptionPackageId);
         }
 
+        public async Task<SubscriptionPackage> GetSubscriptionPackageByNameAsync(string name)
+        {
+            return await _repository.GetSubscriptionPackageByNameAsync(name);
+        }
+
         public async Task<IEnumerable<SubscriptionPackage>> GetSubscriptionPackages()
         {
             return await _repository.GetSubscriptionPackages();

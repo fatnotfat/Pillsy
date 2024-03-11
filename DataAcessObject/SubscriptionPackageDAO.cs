@@ -52,5 +52,19 @@ namespace DataAcessObject
                 throw;
             }
         }
+
+        public async Task<SubscriptionPackage> GetSubscriptionPackageByNameAsync(string name)
+        {
+            try
+            {
+                var context = new PillsyDBContext();
+                var subscriptionPackage = await context.SubscriptionPackages.FirstOrDefaultAsync(s => s.PackageType.Contains(name.ToUpper()));
+                return subscriptionPackage;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

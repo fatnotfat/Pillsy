@@ -11,6 +11,7 @@ namespace Repository.Interfaces
     {
         public Task<SubscriptionPackage> GetSubscriptionPackageByIdAsync(Guid subscriptionPackageId);
         public Task<IEnumerable<SubscriptionPackage>> GetSubscriptionPackages();
+        public Task<SubscriptionPackage> GetSubscriptionPackageByNameAsync(string name);
 
     }
 }

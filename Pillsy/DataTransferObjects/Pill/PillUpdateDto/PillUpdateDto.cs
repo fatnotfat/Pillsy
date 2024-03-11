@@ -8,6 +8,7 @@
         public int? Quantity { get; set; }
         public int? QuantityPerDose { get; set; }
         public string? Period { get; set; }
+        public int? Status { get; set; }
         public string? Unit { get; set; }
         public int? Morning { get; set; }
         public int? Afternoon { get; set; }

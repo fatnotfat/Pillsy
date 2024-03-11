@@ -11,6 +11,8 @@ namespace Service.Interfaces
     {
         public Task<SubscriptionPackage> GetSubscriptionPackageById(Guid subscriptionPackageId);
         public Task<IEnumerable<SubscriptionPackage>> GetSubscriptionPackages();
+        public Task<SubscriptionPackage> GetSubscriptionPackageByNameAsync(string name);
+
 
     }
 }

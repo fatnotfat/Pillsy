@@ -28,6 +28,8 @@ namespace Pillsy.Controllers.Patients
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private readonly IAccountService _accountService;
+        private readonly ICustomerPackageService _customerPackageService;
+        private readonly ISubscriptionPackageService _subscriptionPackageService;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
@@ -209,6 +211,22 @@ namespace Pillsy.Controllers.Patients
                 try
                 {
                     var result = await _patientService.AddNewPatient(data);
+                    var package = await _subscriptionPackageService.GetSubscriptionPackageByNameAsync("Basic");
+                    var customerPackage = await _customerPackageService.AddNewCustomerPackage(new CustomerPackage
+                    {
+                        CustomerPackageId = Guid.NewGuid(),
+                        CustomerPackageName = package.PackageType,
+                        NumberScan = "2",
+                        AllowPillHistory = 0,
+                        Status = 1,
+                        PatientId = result.PatientID,
+                        CreatedDate = DateTime.Now,
+                        SubcriptionPackageId = package.SubscriptionId,
+                        LastModifiedDate = DateTime.Now,
+                        DateStart = DateTime.Now,
+                        DateEnd = DateTime.UtcNow.AddDays(90),
+
+                    });
                     if (result != null)
                     {
                         var account = await _accountService.GetAccountById(result.AccountId);

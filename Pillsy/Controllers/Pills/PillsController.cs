@@ -107,6 +107,10 @@ namespace Pillsy.Controllers.Pills
                     {
                         pill.Evening = (int)pillUpdateDto.Evening!;
                     }
+                    if (pillUpdateDto.Status != null)
+                    {
+                        pill.Status = (int)pillUpdateDto.Status;
+                    }
                     if (pillUpdateDto.DateStart != null)
                     {
                         pill.DateStart = pillUpdateDto.DateStart!;
