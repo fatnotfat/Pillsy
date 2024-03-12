@@ -40,8 +40,9 @@ namespace Pillsy.Controllers.Accounts
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
+        private readonly ICustomerPackageService _customerPackageService;
 
-        public AccountsController(IAccountService accountService, IConfiguration configuration, IMapper mapper, IPatientService patientService, IEmailService emailService, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AccountsController(IAccountService accountService, IConfiguration configuration, IMapper mapper, IPatientService patientService, IEmailService emailService, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, ICustomerPackageService customerPackageService)
         {
             _accountService = accountService;
             _configuration = configuration;
@@ -50,6 +51,7 @@ namespace Pillsy.Controllers.Accounts
             _emailService = emailService;
             _userManager = userManager;
             _roleManager = roleManager;
+            _customerPackageService = customerPackageService;
         }
 
         [Authorize(Roles = "Admin")]
@@ -119,6 +121,7 @@ namespace Pillsy.Controllers.Accounts
                     {
                         var account = _mapper.Map<AccountDTO>(data);
                         var patient = await _patientService.GetPatientByAccountIdAsync(data.AccountId);
+                        var customerPackage = await _customerPackageService.GetCustomerPackageByPatientId(patient.PatientID);
                         Claim[] claims = null;
                         if (patient != null)
                         {
@@ -129,6 +132,7 @@ namespace Pillsy.Controllers.Accounts
                         new Claim(ClaimTypes.Role, account.Role.ToString()),
                         new Claim("AccountId", data.AccountId.ToString()),
                         new Claim("PatientId", patient.PatientID.ToString()),
+                        new Claim("CustomerPackageId", customerPackage.CustomerPackageId.ToString()),
                         new Claim("Email", account.Email),
                         new Claim("Role", account.Role.ToString()),
                         new Claim("Username", patient.FirstName + " " + patient.LastName)
