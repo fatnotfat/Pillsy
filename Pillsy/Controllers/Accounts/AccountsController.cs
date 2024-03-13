@@ -121,10 +121,12 @@ namespace Pillsy.Controllers.Accounts
                     {
                         var account = _mapper.Map<AccountDTO>(data);
                         var patient = await _patientService.GetPatientByAccountIdAsync(data.AccountId);
-                        var customerPackage = await _customerPackageService.GetCustomerPackageByPatientId(patient.PatientID);
+
                         Claim[] claims = null;
                         if (patient != null)
                         {
+                            var customerPackage = await _customerPackageService.GetCustomerPackageByPatientId(patient.PatientID);
+
                             claims = new[] {
                         new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
