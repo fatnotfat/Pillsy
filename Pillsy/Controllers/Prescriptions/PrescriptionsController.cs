@@ -440,8 +440,9 @@ namespace Pillsy.Controllers.Prescriptions
                     }
                     else
                     {
-                        return BadRequest("Your trial has expired, please register for another package to use!");
-                    }  
+                        //return BadRequest("Your trial has expired, please register for another package to use!");
+                        return BadRequest("Please active!");
+                    }
                 }
                 catch (Exception ex)
                 {
