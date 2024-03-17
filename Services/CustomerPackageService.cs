@@ -37,6 +37,11 @@ namespace Service
             return await _customerPackageRepository.GetCustomerPackages();
         }
 
+        public async Task<IEnumerable<CustomerPackage>> GetListCustomerPackageByPatientId(Guid patientId)
+        {
+            return await _customerPackageRepository.GetListCustomerPackageByPatientId(patientId);
+        }
+
         public async Task<bool> UpdateCustomerPackage(CustomerPackage customerPackage)
         {
             return await _customerPackageRepository.UpdateCustomerPackage(customerPackage);

@@ -64,6 +64,20 @@ namespace DataAcessObject
             }
         }
 
+        public async Task<IEnumerable<CustomerPackage>> GetListCustomerPackageByPatientId(Guid patientId)
+        {
+            try
+            {
+                var context = new PillsyDBContext();
+                return await context.CustomerPackages!.Include(c => c.SubscriptionPackage).OrderByDescending(c => c.CreatedDate).ToListAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
         public async Task<bool> AddNewCustomerPackage(CustomerPackage customerPackage)
         {
             try

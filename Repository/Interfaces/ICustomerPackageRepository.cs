@@ -14,6 +14,7 @@ namespace Repository.Interfaces
         public Task<CustomerPackage> GetCustomerPackageByCustomerPackageId(Guid customerPackageId);
         public Task<IEnumerable<CustomerPackage>> GetCustomerPackages();
         public Task<CustomerPackage> GetCustomerPackageByPatientId(Guid patientId);
+        public Task<IEnumerable<CustomerPackage>> GetListCustomerPackageByPatientId(Guid patientId);
 
 
     }

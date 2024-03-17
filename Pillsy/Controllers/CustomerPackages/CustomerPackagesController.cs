@@ -67,7 +67,7 @@ namespace Pillsy.Controllers.CustomerPackages
         [Authorize(Roles = "Admin")]
         [HttpPut]
         [Route("update-success-status/{customerPackageId}/{orderId}")]
-        public async Task<IActionResult> UpdateCustomerPackage(Guid customerPackageId, Guid orderId)
+        public async Task<IActionResult> UpdateCustomerPackageByCustomerPackageId(Guid customerPackageId, Guid orderId)
         {
             try
             {
@@ -108,6 +108,37 @@ namespace Pillsy.Controllers.CustomerPackages
 
             return Ok("Update successfully!");
         }
+
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut]
+        [Route("update-success-status")]
+        public async Task<IActionResult> UpdateCustomerPackageByPatientId(Guid patientId)
+        {
+            try
+            {
+                var customerPackages = await _customerPackageService.GetListCustomerPackageByPatientId(patientId);
+                var customerPackage = customerPackages.OrderByDescending(c => c.CreatedDate).FirstOrDefault(c => c.CustomerPackageName.Equals("Premium"));
+                if (customerPackage != null)
+                {
+                    customerPackage.Status = 1;
+                    var result = await _customerPackageService.UpdateCustomerPackage(customerPackage);
+                    if (result) return Ok("Update successfully!");
+                    return BadRequest("Update fail!");
+                }
+                else
+                {
+                    return NotFound("Customer package not found!");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         // POST: api/CustomerPackages
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

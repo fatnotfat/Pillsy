@@ -73,7 +73,7 @@ namespace Pillsy.Controllers.Payments
                     var description = "Thanh toan chuyen khoan";
                     Random rnd = new Random();
                     var orderId = rnd.Next(0, 1000000000);
-                    
+
                     var totalPrice = price;
 
                     string patientId = User.FindFirst("PatientId")?.Value;
@@ -140,7 +140,8 @@ namespace Pillsy.Controllers.Payments
                                 NumberScan = "2",
                                 PatientId = Guid.Parse(patientId),
                                 Status = 0,
-                                SubcriptionPackageId = subscriptionId
+                                SubcriptionPackageId = subscriptionId,
+                                CreatedDate = DateTime.Now,
                             };
                         }
                         else
@@ -154,7 +155,8 @@ namespace Pillsy.Controllers.Payments
                                 NumberScan = "Infinity",
                                 PatientId = Guid.Parse(patientId),
                                 Status = 0,
-                                SubcriptionPackageId = subscriptionId
+                                SubcriptionPackageId = subscriptionId,
+                                CreatedDate = DateTime.Now,
                             };
                         }
                         await _customerPackageService.AddNewCustomerPackage(customerPackage);
@@ -180,7 +182,7 @@ namespace Pillsy.Controllers.Payments
                         ModifiedBy = null,
                         LastModifiedDate = DateTime.UtcNow,
                     };
-                    
+
 
                     var transaction = await _transactionHistoryService.AddNewTransactionHistory(transactionHistory);
 
