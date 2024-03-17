@@ -46,9 +46,9 @@ namespace Pillsy.Controllers.CustomerPackages
         }
 
         // GET: api/CustomerPackages/5
-        [Authorize(Roles = "Patient")]
+        [Authorize(Roles = "Patient, Admin")]
         [HttpGet]
-        [Route("patient/{patinetId}")]
+        [Route("patient")]
         public async Task<ActionResult<CustomerPackage>> GetCustomerPackageByPatientId(Guid patientId)
         {
 
