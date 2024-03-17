@@ -52,11 +52,12 @@ namespace Pillsy.Controllers.CustomerPackages
         public async Task<ActionResult<CustomerPackage>> GetCustomerPackageByPatientId(Guid patientId)
         {
 
-            var customerPackage = await _customerPackageService.GetCustomerPackageByPatientId(patientId);
+            var customerPackages = await _customerPackageService.GetListCustomerPackageByPatientId(patientId);
+            var customerPackage = customerPackages.OrderByDescending(c => c.CreatedDate).FirstOrDefault(c => c.CustomerPackageName.Equals("Premium"));
 
             if (customerPackage == null)
             {
-                return NotFound();
+                customerPackage = customerPackages.OrderByDescending(c => c.CreatedDate).FirstOrDefault(c => c.CustomerPackageName.Equals("Basic"));
             }
 
             return Ok(customerPackage);
