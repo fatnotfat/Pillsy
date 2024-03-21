@@ -201,16 +201,41 @@ namespace Pillsy.Controllers.TransactionHistories
             var transactions = await _transactionHistoryService.GetAllTransactions();
 
             // Get revenue by months
-            var revenueByMonthsResult = await GetTransactionHistoryRevenueMonths();
+            //var revenueByMonthsResult = await GetTransactionHistoryRevenueMonths();
 
-            // Parse revenue result to JSON
-            var revenueJson = revenueByMonthsResult.Value.ToJson();
 
-            // Parse JSON to list of DTOs
-            var expenseByMonths = JsonConvert.DeserializeObject<List<TransactionHistoryExpenseMonthsDto>>(revenueJson);
+            //var trans = await _transactionHistoryService.GetAllTransactions();
+            List<TransactionHistoryRevenueMonthsDto> revenueByMonths = new List<TransactionHistoryRevenueMonthsDto>();
+
+            for (int i = 1; i <= 12; i++)
+            {
+                //var jan = trans.Where(d => d.CreatedDate!.Value.Month.Equals(i));
+                //var count = jan.Count();
+                DateTime dateTime = new DateTime(DateTime.Now.Year, i, 1);
+                string month = dateTime.ToString("MMM");
+                double count = 0;
+                foreach (var tran in transactions.Where(t => t.Status == 1))
+                {
+                    if (tran.CreatedDate!.Value.Month == i)
+                    {
+                        count = count + tran.SubscriptionPackage.UnitPrice;
+                    }
+                }
+                revenueByMonths.Add(new TransactionHistoryRevenueMonthsDto
+                {
+                    X = month,
+                    Y = count,
+                });
+            }
+
+            //// Parse revenue result to JSON
+            //var revenueJson = revenueByMonthsResult.Value.ToJson();
+
+            //// Parse JSON to list of DTOs
+            //var expenseByMonths = JsonConvert.DeserializeObject<List<TransactionHistoryExpenseMonthsDto>>(revenueJson);
 
             // Calculate total expense
-            double totalExpense = expenseByMonths.Sum(expense => expense.Y);
+            double totalExpense = revenueByMonths.Sum(expense => expense.Y);
 
             // Round to 2 decimal places
             totalExpense = Math.Round(totalExpense, 2);
