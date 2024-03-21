@@ -58,7 +58,7 @@ namespace DataAcessObject
             try
             {
                 var context = new PillsyDBContext();
-                var subscriptionPackage = await context.SubscriptionPackages.FirstOrDefaultAsync(s => s.PackageType.Contains(name.ToUpper()));
+                var subscriptionPackage = await context.SubscriptionPackages.FirstOrDefaultAsync(s => s.PackageType.ToUpper().Contains(name.ToUpper()));
                 return subscriptionPackage;
             }
             catch (Exception)

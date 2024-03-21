@@ -172,6 +172,22 @@ namespace Pillsy.Controllers.Patients
                     patientExist.Address = patient.Address;
                 }
 
+
+                var subscription = await _subscriptionPackageService.GetSubscriptionPackageByNameAsync("Basic");
+
+                await _customerPackageService.AddNewCustomerPackage(new CustomerPackage
+                {
+                    CustomerPackageId = Guid.NewGuid(),
+                    CustomerPackageName = "Basic",
+                    Status = 1,
+                    NumberScan = "3",
+                    DateStart = DateTime.UtcNow,
+                    DateEnd = DateTime.UtcNow.AddDays(90),
+                    AllowPillHistory = 0,
+                    PatientId = patientExist.PatientID,
+                    SubcriptionPackageId =subscription.SubscriptionId
+                    });
+
                 var result = await _patientService.UpdatePatientAsync(patientExist);
                 if (result)
                     return Ok("Patient updated!");

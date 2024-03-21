@@ -212,7 +212,7 @@ namespace Pillsy.Controllers.Accounts
                     //Add Token to Verify the email....
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-
+                    
                     scope.Complete();
                     return Ok("user " + account.AccountId + " was created");
                 }
