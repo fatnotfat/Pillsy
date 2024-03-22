@@ -98,15 +98,18 @@ namespace Pillsy.Controllers.TransactionHistories
                 var transaction = await _transactionHistoryService.GetTransactionByTransactionId(transactionHistoryDto.TransactionHistoryId);
                 if (transaction != null)
                 {
-                    transaction.Status = 1;
+                    if(transactionHistoryDto.ISAllowed) transaction.Status = 1;
+                    else transaction.Status = 0;
                     var result = await _transactionHistoryService.UpdateTransactionHistory(transaction);
 
                     var customerPackages = await _customerPackageService.GetListCustomerPackageByPatientId(transaction.PatientId);
-                    var customerPackage = customerPackages.OrderByDescending(c => c.CreatedDate).FirstOrDefault(c => c.CustomerPackageName.Contains("Premium"));
+                    var customerPackage = customerPackages.OrderByDescending(c => c.CreatedDate).FirstOrDefault(c => c.CustomerPackageName.ToUpper().Contains("Premium".ToUpper()));
                     var orders = await _orderService.GetOrderByPatientId(transaction.PatientId);
                     if (customerPackage != null)
                     {
-                        customerPackage.Status = 1;
+                        if (transactionHistoryDto.ISAllowed)
+                            customerPackage.Status = 1;
+                        else transaction.Status = 0;
                         var order = orders.OrderByDescending(c => c.CreatedDate).FirstOrDefault();
                         order!.Status = true;
                         await _customerPackageService.UpdateCustomerPackage(customerPackage);
