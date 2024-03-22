@@ -41,7 +41,7 @@ namespace Pillsy.Controllers.CustomerPackages
         public async Task<ActionResult<IEnumerable<CustomerPackage>>> GetCustomerPackagesTotals()
         {
             var customerPackages = await _customerPackageService.GetCustomerPackages();
-            int totals = customerPackages.Where(c => c.Status == 1).Count();
+            int totals = customerPackages.Where(c => c.Status == 1 && c.CustomerPackageName.Contains("Premium")).Count();
             return Ok(totals);
         }
 
