@@ -44,9 +44,16 @@ namespace DataAcessObject
             try
             {
                 var context = new PillsyDBContext();
-                var result = await context.Orders!.ToListAsync();
+                var result = await context.Orders!.Include(o => o.Patient).ToListAsync();
+                foreach (var order in result)
+                {
+                    var patients = await context.Patients!.Include(p => p.Account).ToListAsync();
+                    var patient = patients.FirstOrDefault(p => p.PatientID.Equals(order.PatientId));
+                    order.Patient = patient;
+                }
                 return result;
-            }catch (Exception)
+            }
+            catch (Exception)
             {
                 throw;
             }
@@ -72,7 +79,7 @@ namespace DataAcessObject
             {
                 var context = new PillsyDBContext();
                 var result = await context.Orders!.Include(o => o.OrderDetails).Where(o => o.PatientId.Equals(patientId)).ToListAsync();
-                foreach(var o in result)
+                foreach (var o in result)
                 {
                     foreach (var o2 in o.OrderDetails)
                     {
@@ -110,7 +117,7 @@ namespace DataAcessObject
                 var context = new PillsyDBContext();
                 var result = context.Orders!.Add(order);
                 await context.SaveChangesAsync();
-                if(result != null)
+                if (result != null)
                 {
                     return true;
                 }

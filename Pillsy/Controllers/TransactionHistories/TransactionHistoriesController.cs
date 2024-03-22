@@ -162,6 +162,9 @@ namespace Pillsy.Controllers.TransactionHistories
         public async Task<ActionResult<List<TransactionHistoryRevenueMonthsDto>>> GetTransactionHistoryRevenueMonths()
         {
             var trans = await _transactionHistoryService.GetAllTransactions();
+            var orders = await _orderService.GetOrder();
+
+
             List<TransactionHistoryRevenueMonthsDto> revenueByMonths = new List<TransactionHistoryRevenueMonthsDto>();
 
             for (int i = 1; i <= 12; i++)
@@ -171,11 +174,11 @@ namespace Pillsy.Controllers.TransactionHistories
                 DateTime dateTime = new DateTime(DateTime.Now.Year, i, 1);
                 string month = dateTime.ToString("MMM");
                 double count = 0;
-                foreach (var tran in trans.Where(t => t.Status == 1))
+                foreach (var order in orders.Where(t => t.Status == true))
                 {
-                    if (tran.CreatedDate!.Value.Month == i)
+                    if (order.CreatedDate!.Value.Month == i)
                     {
-                        count = count + tran.SubscriptionPackage.UnitPrice;
+                        count = count + 2;
                     }
                 }
                 revenueByMonths.Add(new TransactionHistoryRevenueMonthsDto
@@ -220,6 +223,7 @@ namespace Pillsy.Controllers.TransactionHistories
         {
             // Get all transactions
             var transactions = await _transactionHistoryService.GetAllTransactions();
+            var orders = await _orderService.GetOrder();
 
             // Get revenue by months
             //var revenueByMonthsResult = await GetTransactionHistoryRevenueMonths();
@@ -235,11 +239,11 @@ namespace Pillsy.Controllers.TransactionHistories
                 DateTime dateTime = new DateTime(DateTime.Now.Year, i, 1);
                 string month = dateTime.ToString("MMM");
                 double count = 0;
-                foreach (var tran in transactions.Where(t => t.Status == 1))
+                foreach (var order in orders.Where(t => t.Status == true))
                 {
-                    if (tran.CreatedDate!.Value.Month == i)
+                    if (order.CreatedDate!.Value.Month == i)
                     {
-                        count = count + tran.SubscriptionPackage.UnitPrice;
+                        count = count + 2;
                     }
                 }
                 revenueByMonths.Add(new TransactionHistoryRevenueMonthsDto
