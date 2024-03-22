@@ -24,10 +24,13 @@ namespace Pillsy.Controllers.TransactionHistories
     public class TransactionHistoriesController : ControllerBase
     {
         private readonly ITransactionHistoryService _transactionHistoryService;
+        private readonly ICustomerPackageService _customerPackageService;
 
-        public TransactionHistoriesController(ITransactionHistoryService transactionHistoryService)
+
+        public TransactionHistoriesController(ITransactionHistoryService transactionHistoryService, ICustomerPackageService customerPackageService)
         {
             _transactionHistoryService = transactionHistoryService;
+            _customerPackageService = customerPackageService;
         }
 
         //GET: api/TransactionHistories
@@ -94,6 +97,13 @@ namespace Pillsy.Controllers.TransactionHistories
                 {
                     transaction.Status = 1;
                     var result = await _transactionHistoryService.UpdateTransactionHistory(transaction);
+
+                    var customerPackages = await _customerPackageService.GetListCustomerPackageByPatientId(transaction.PatientId);
+                    var customerPackage = customerPackages.OrderByDescending(c => c.CreatedDate).FirstOrDefault(c => c.CustomerPackageName.Contains("Premium"));
+                    if (customerPackage != null)
+                    {
+                        await _customerPackageService.UpdateCustomerPackage(customerPackage);
+                    }
                     if (result) return Ok("Update successfully!");
                     return BadRequest("Update failed!");
                 }
@@ -150,7 +160,7 @@ namespace Pillsy.Controllers.TransactionHistories
                 DateTime dateTime = new DateTime(DateTime.Now.Year, i, 1);
                 string month = dateTime.ToString("MMM");
                 double count = 0;
-                foreach (var tran in trans)
+                foreach (var tran in trans.Where(t => t.Status == 1))
                 {
                     if (tran.CreatedDate!.Value.Month == i)
                     {
