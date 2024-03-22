@@ -115,7 +115,7 @@ namespace Pillsy.Controllers.CustomerPackages
         [Authorize(Roles = "Admin")]
         [HttpPut]
         [Route("update-success-status")]
-        public async Task<IActionResult> UpdateCustomerPackageByPatientId(Guid patientId)
+        public async Task<IActionResult> UpdateCustomerPackageByPatientId([FromBody]Guid patientId)
         {
             try
             {
