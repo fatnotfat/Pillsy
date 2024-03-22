@@ -23,6 +23,11 @@ namespace Repository
             return await customerPackageDAO.AddNewCustomerPackage(customerPackage);
         }
 
+        public async Task<bool> DeleteCustomerPackage(CustomerPackage customerPackage)
+        {
+            return await customerPackageDAO.DeleteCustomerPackage(customerPackage);
+        }
+
         public async Task<CustomerPackage> GetCustomerPackageByCustomerPackageId(Guid customerPackageId)
         {
             return await customerPackageDAO.GetCustomerPackageByCustomerPackageId(customerPackageId);

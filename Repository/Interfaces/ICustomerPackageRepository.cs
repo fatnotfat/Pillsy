@@ -15,6 +15,7 @@ namespace Repository.Interfaces
         public Task<IEnumerable<CustomerPackage>> GetCustomerPackages();
         public Task<CustomerPackage> GetCustomerPackageByPatientId(Guid patientId);
         public Task<IEnumerable<CustomerPackage>> GetListCustomerPackageByPatientId(Guid patientId);
+        public Task<bool> DeleteCustomerPackage(CustomerPackage customerPackage);
 
 
     }

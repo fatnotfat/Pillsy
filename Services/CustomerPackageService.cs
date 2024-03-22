@@ -22,6 +22,11 @@ namespace Service
             return await _customerPackageRepository.AddNewCustomerPackage(customerPackage);
         }
 
+        public async Task<bool> DeleteCustomerPackage(CustomerPackage customerPackage)
+        {
+            return await _customerPackageRepository.DeleteCustomerPackage(customerPackage);
+        }
+
         public async Task<CustomerPackage> GetCustomerPackageByCustomerPackageId(Guid customerPackageId)
         {
             return await _customerPackageRepository.GetCustomerPackageByCustomerPackageId(customerPackageId);

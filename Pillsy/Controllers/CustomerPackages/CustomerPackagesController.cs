@@ -115,7 +115,7 @@ namespace Pillsy.Controllers.CustomerPackages
         [Authorize(Roles = "Admin")]
         [HttpPut]
         [Route("update-success-status")]
-        public async Task<IActionResult> UpdateCustomerPackageByPatientId([FromBody]Guid patientId)
+        public async Task<IActionResult> UpdateCustomerPackageByPatientId([FromBody] Guid patientId)
         {
             try
             {
@@ -150,6 +150,20 @@ namespace Pillsy.Controllers.CustomerPackages
             await _customerPackageService.AddNewCustomerPackage(customerPackage);
 
             return Ok("Add successfully!");
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete]
+
+        public async Task<ActionResult<string>> DeleteCustonmerPackage(Guid customerPackageId)
+        {
+            var customerPackage = await _customerPackageService.GetCustomerPackageByCustomerPackageId(customerPackageId);
+            if (customerPackage != null)
+            {
+                await _customerPackageService.DeleteCustomerPackage(customerPackage);
+                return Ok("Delete successfully!");
+            }
+            return NotFound("Customer package not found!");
         }
     }
 }

@@ -118,5 +118,26 @@ namespace DataAcessObject
                 throw;
             }
         }
+
+
+        public async Task<bool> DeleteCustomerPackage(CustomerPackage customerPackage)
+        {
+            try
+            {
+                var result = false;
+                var context = new PillsyDBContext();
+                var value = context.CustomerPackages.Remove(customerPackage);
+                if (value != null)
+                {
+                    result = true;
+                }
+                await context.SaveChangesAsync();
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
