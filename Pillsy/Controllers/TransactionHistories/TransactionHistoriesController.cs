@@ -25,12 +25,15 @@ namespace Pillsy.Controllers.TransactionHistories
     {
         private readonly ITransactionHistoryService _transactionHistoryService;
         private readonly ICustomerPackageService _customerPackageService;
+        private readonly IOrderService _orderService;
 
 
-        public TransactionHistoriesController(ITransactionHistoryService transactionHistoryService, ICustomerPackageService customerPackageService)
+
+        public TransactionHistoriesController(ITransactionHistoryService transactionHistoryService, ICustomerPackageService customerPackageService, IOrderService orderService)
         {
             _transactionHistoryService = transactionHistoryService;
             _customerPackageService = customerPackageService;
+            _orderService = orderService;
         }
 
         //GET: api/TransactionHistories
@@ -100,9 +103,14 @@ namespace Pillsy.Controllers.TransactionHistories
 
                     var customerPackages = await _customerPackageService.GetListCustomerPackageByPatientId(transaction.PatientId);
                     var customerPackage = customerPackages.OrderByDescending(c => c.CreatedDate).FirstOrDefault(c => c.CustomerPackageName.Contains("Premium"));
+                    var orders = await _orderService.GetOrderByPatientId(transaction.PatientId);
                     if (customerPackage != null)
                     {
+                        customerPackage.Status = 1;
+                        var order = orders.OrderByDescending(c => c.CreatedDate).FirstOrDefault();
+                        order!.Status = true;
                         await _customerPackageService.UpdateCustomerPackage(customerPackage);
+                        await _orderService.UpdateOrder(order);
                     }
                     if (result) return Ok("Update successfully!");
                     return BadRequest("Update failed!");
