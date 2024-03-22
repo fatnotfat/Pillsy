@@ -129,7 +129,9 @@ namespace Pillsy.Controllers.Accounts
                             {
                                 var customerPackage = await _customerPackageService.GetCustomerPackageByPatientId(patient.PatientID);
 
-                                claims = new[] {
+                                if (customerPackage != null)
+                                {
+                                    claims = new[] {
                         new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
@@ -141,6 +143,23 @@ namespace Pillsy.Controllers.Accounts
                         new Claim("Role", account.Role.ToString()),
                         new Claim("Username", patient.FirstName + " " + patient.LastName)
                             };
+                                }
+                                else
+                                {
+                                    claims = new[] {
+                        new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                        new Claim(ClaimTypes.Role, account.Role.ToString()),
+                        new Claim("AccountId", data.AccountId.ToString()),
+                        new Claim("PatientId", patient.PatientID.ToString()),
+                        new Claim("CustomerPackageId", ""),
+                        new Claim("Email", account.Email),
+                        new Claim("Role", account.Role.ToString()),
+                        new Claim("Username", patient.FirstName + " " + patient.LastName)
+                            };
+                                }
+
                             }
                             else
                             {
