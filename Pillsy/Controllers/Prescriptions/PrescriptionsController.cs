@@ -429,7 +429,7 @@ namespace Pillsy.Controllers.Prescriptions
                             var result = await response.Content.ReadAsStringAsync();
 
                             var bsObj = JsonConvert.DeserializeObject<PrescriptionResponseOCRDto>(result);
-
+                            scope.Complete();
                             return Ok(bsObj);
                         }
                         else
