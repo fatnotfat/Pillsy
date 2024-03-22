@@ -29,7 +29,7 @@ namespace DataAcessObject
         public async Task<IEnumerable<Patient>> GetPatientsAsync()
         {
             var _context = new PillsyDBContext();
-            var result = await _context.Patients.ToListAsync();
+            var result = await _context.Patients!.Include(p => p.Account).ToListAsync();
             if (result == null)
             {
                 throw new Exception("Patient not found!");
