@@ -69,7 +69,7 @@ namespace DataAcessObject
             try
             {
                 var context = new PillsyDBContext();
-                return await context.CustomerPackages!.Include(c => c.SubscriptionPackage).OrderByDescending(c => c.CreatedDate).ToListAsync();
+                return await context.CustomerPackages!.Include(c => c.SubscriptionPackage).OrderByDescending(c => c.CreatedDate).Where(c => c.PatientId.Equals(patientId)).ToListAsync();
             }
             catch (Exception)
             {
